@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ContentList<T>{
 
-    private Integer count;
-    private Integer page;
+    private Integer count=0;
+    private Integer page=0;
     private List<T> list;
 }

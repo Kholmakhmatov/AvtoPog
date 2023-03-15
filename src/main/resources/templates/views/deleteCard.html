@@ -29,7 +29,7 @@
     <link th:href="@{/vendor/select2/select2.min.css}" rel="stylesheet" media="all">
 
     <!-- Main CSS-->
-    <link th:href="@{/style/registr.css}" rel="stylesheet" media="all">
+    <link th:href="@{/style/deleteCard.css}" rel="stylesheet" media="all">
 </head>
 <body>
 
@@ -52,83 +52,106 @@
         <div class="page-wrapper bg-gra-02 p-t-20 p-b-100 font-poppins">
             <div class="wrapper wrapper--w680">
 
-
-
                 <div class="card card-4">
                     <div class="card-body">
-                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" th:text="${message.getMessage()}"
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                             class="alert alert-success align-content-center" role="alert"
+                             th:text="${message.getMessage()}"
                         ></div>
-                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" th:text="${message.getMessage()}"
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                             class="alert alert-danger align-content-center" role="alert"
+                             th:text="${message.getMessage()}"
                         ></div>
-                        <h2 class="title">YANGI KARTA ULASH</h2>
-                        <form th:action="@{/addCard}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">
-
-                            <div class="form-control" >
-                                <label class="label">FILIALNI TANLANG</label>
-                                <div class="rs-select2 js-select-simple select--no-search">
-                                    <select class="form-control" name="subject" th:field="*{branch}" >
-
-                                        <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
-                                                th:text="${branch.getBranch()}"></option>
-                                    </select>
-                                    <div class="select-dropdown"></div>
-                                </div>
-                            </div>
+                        <form th:action="@{'/deleteCard'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
+                              enctype="multipart/form-data">
 
                             <div class="row row-space">
                                 <div class="col-2">
+                                    <label class="label">FILIALNI TANLANG</label>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select class="form-control" name="subject" th:field="*{branch}">
+                                            <option th:value="${message.getObj()}" selected >Choose here</option>
+                                            <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
+                                                    th:text="${branch.getBranch()}"></option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                                <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">ANKETA NOMER</label>
-                                        <input class="input--style-4" type="number" th:field="*{id}" required min="1">
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="input-group">
-                                            <label class="label">Files</label>
-                                            <input  type="file" name="files" multiple>
-                                        </div>
+                                        <input class="input--style-4" type="number" th:field="*{id}">
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">KARTA RAQAMI</label>
-                                        <input class="input--style-4" type="number" th:field="*{cardNumber}" placeholder="8600 1234 4567 8912"   required min="1000000000000000" max="9999999999999999" >
+                                        <!--                                        required min="1000000000000000" max="9999999999999999"-->
+                                        <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                               placeholder="8600 1234 4567 8912">
 
                                     </div>
+                                </div>
+                                <div class="col-2">
 
-                                    <div class="row row-space">
-                                        <h6  style="text-align: center;padding-bottom: 15px;color: rebeccapurple">AMAL QILISH MUDDATI</h6>
-                                        <div class="col-2">
-                                            <h6>OYNI TANLANG</h6>
-                                            <div class="rs-select2 js-select-simple select--no-search">
-                                                <select class="form-control" name="subject" th:field="*{expiryMonth}"  >
-                                                    <option th:each="month: ${months}" th:value="${month}"
-                                                            th:text="${month}"></option>
-                                                </select>
-                                                <div class="select-dropdown"></div>
-                                            </div>
-                                        </div>
-                                        <div class="col-2">
-                                            <h6>YILNI TANLANG</h6>
-                                            <div class="rs-select2 js-select-simple select--no-search">
-                                                <select class="form-control" name="subject" th:field="*{expiryYear}" >
-
-                                                    <option th:each="year: ${years}" th:value="${year}"
-                                                            th:text="${year}"></option>
-                                                </select>
-                                                <div class="select-dropdown"></div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <button class="btn btn--radius btn--blue" type="submit" style="margin-top: 30px">
+                                        Search
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="p-t-15">
-                                <button class="btn btn--radius btn--blue" type="submit">Submit</button>
-                            </div>
+
                         </form>
+                        <div th:if="${cards.size()>0}" class="table-wrap">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr class="topline">
+                                    <th>Id</th>
+                                    <th>Branch</th>
+                                    <th>Card number</th>
+                                    <th>Exp date</th>
+                                    <th th:if="${user.getRole().toString()!='USER'}">Operation</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="card:${cards}">
+                                    <td scope="row" th:text="${card.getId()}"></td>
+                                    <td>
+                                        <label style="font-size: 14px" class="text-info"
+                                               th:text="${card.getBranch()}"></label>
+                                    </td>
+                                    <td>
+                                        <h6 style="color: darkblue;font-size: 16px"
+                                            th:text="${card.getCardNumber()}"></h6>
+                                    </td>
+
+                                    <td>
+
+                                        <label style="color: green;font-size: 16px"
+                                               th:text="${card.getExpiryDate().substring(0,2)+' / '+card.getExpiryDate().substring(2,4)}"></label>
+                                    </td>
+
+
+                                    <td th:if="${user.getRole().toString()!='USER'}">
+                                        <a th:if="${user.getRole().toString()!='USER'}"
+                                           th:href="'/deleteCardById/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
+                                           style="width: 160px;height: 45px;font-size: 16px">DELETE</a>
+
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                            <div class="counter">
+
+                                                        <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/deleteCard'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
+
         </div>
 
         <!-- Jquery JS-->
@@ -150,7 +173,7 @@
         <div class="profile">
             <div>
                 <!--                                <img th:src="'/user/avatar/'+${user.getAvatar().getId()}" alt="profile_picture">-->
-                <img src="/images/AgroBank_mini.png" alt="avatar" />
+                <img src="/images/AgroBank_mini.png" alt="avatar"/>
                 <!--                <img src="https://yt3.googleusercontent.com/ng-7exPku1wLi11zl-x2_Ps05p8XbYvhEEx-aSrz_BouxrvSsUTQTpFgozr9avGfoZZr0QaAoQ=s900-c-k-c0x00ffffff-no-rj"-->
                 <!--                     alt="profile_picture">-->
 

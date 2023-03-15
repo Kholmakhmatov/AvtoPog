@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
-
-
 import java.util.Optional;
 
 @Service

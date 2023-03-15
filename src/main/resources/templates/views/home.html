@@ -36,7 +36,7 @@
         <div class="profile">
             <div>
 <!--                                <img th:src="'/user/avatar/'+${user.getAvatar().getId()}" alt="profile_picture">-->
-                <img src="images/AgroBank_mini.png" alt="avatar" />
+                <img src="/images/AgroBank_mini.png" alt="avatar" />
 <!--                <img src="https://yt3.googleusercontent.com/ng-7exPku1wLi11zl-x2_Ps05p8XbYvhEEx-aSrz_BouxrvSsUTQTpFgozr9avGfoZZr0QaAoQ=s900-c-k-c0x00ffffff-no-rj"-->
 <!--                     alt="profile_picture">-->
 
@@ -72,7 +72,7 @@
                     <span class="icon"><i class="fas fa-plus-circle"></i></span>
                     <span class="item">Add new Card</span>
                 </a>
-                <a href="#"
+                <a href="/deleteCard"
                    th:if="${user.getRole().name()=='ADMIN' || user.getRole().name()=='BOSS'}">
                     <span class="icon"><i class="far fa-trash-alt"></i></span>
                     <span class="item">Delete Card</span>
