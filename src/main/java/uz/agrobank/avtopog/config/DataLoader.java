@@ -11,7 +11,7 @@ import uz.agrobank.avtopog.repository.UserRepository;
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
-    @Value(value = "${dataloader.status}")
+    @Value(value = "${spring.jpa.hibernate.ddl-auto}")
     private String ddl;
 
     private final MyPasswordEncoder passwordEncoder;
@@ -22,9 +22,9 @@ public class DataLoader implements CommandLineRunner {
         if (ddl!=null && ddl.contains("create")){
 
             User admin=new User(1L,passwordEncoder.passwordEncoder().encode("admin"),"Anvar","admin","+998997777777",true, RoleEnum.ADMIN);
-            User admin1=new User(1L,passwordEncoder.passwordEncoder().encode("user"),"Aziz","user","+998997777779",true, RoleEnum.USER);
+            User user=new User(2L,passwordEncoder.passwordEncoder().encode("user"),"Aziz","user","+998997777779",true, RoleEnum.USER);
              userRepository.save(admin);
-             userRepository.save(admin1);
+             userRepository.save(user);
 
         }
 

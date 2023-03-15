@@ -46,23 +46,36 @@ public class AddCardController {
        model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
        model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
         model.addAttribute("message","");
+        UserDto userDto = myBaseUtil.userDto();
+        model.addAttribute("user",userDto);
         return "addCard";
 
     }
 @PostMapping(path = "/addCard")
     public String addCard(Model model,@ModelAttribute(name = "addCard") LdSvGateAddCreate ldSvGateAddCreate){
     Long userId = myBaseUtil.userDto().getId();
-    Boolean response=addCardService.addCard(ldSvGateAddCreate,userId);
-    if (response){
+    ResponseDto<String> response=addCardService.addCard(ldSvGateAddCreate,userId);
+    if (response.getSuccess()){
         List<Branch> branchList=addCardService.getBranches();
         model.addAttribute("branches",branchList);
         model.addAttribute("addCard",new LdSvGateAddCreate() );
         model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
         model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
-        model.addAttribute("message","Add card");
-        return "addCard";
+        model.addAttribute("message",response);
+        UserDto userDto = myBaseUtil.userDto();
+        model.addAttribute("user",userDto);
+    }else {
+        List<Branch> branchList=addCardService.getBranches();
+        model.addAttribute("branches",branchList);
+        model.addAttribute("addCard",ldSvGateAddCreate );
+        model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
+        model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
+        model.addAttribute("message",response);
+        UserDto userDto = myBaseUtil.userDto();
+        model.addAttribute("user",userDto);
     }
-    return "redirect:/addCard";
+    return "addCard";
+
 }
 
 

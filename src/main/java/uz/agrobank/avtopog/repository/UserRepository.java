@@ -7,6 +7,6 @@ import uz.agrobank.avtopog.model.User;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
-    @Query(nativeQuery = true,value = "select * from USERS where USERNAME=?1  and ACTIVE='1'")
+    @Query(nativeQuery = true,value = "select * from USERS where USERNAME=?1  and ACTIVE=true")
     Optional<User>getUserByUsername(String userName);
 }
