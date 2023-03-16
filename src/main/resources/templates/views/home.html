@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
 </head>
 <body>
 
@@ -23,6 +23,7 @@
                     <i class="fa fa-sign-out">Sign out</i>
                 </a>
             </div>
+
         </div>
 
         <!-- Asosiy code qism -->
@@ -79,7 +80,7 @@
                 </a>
             </li>
             <li th:if="${user.getRole().name()=='ADMIN' || user.getRole().name()=='BOSS'}">
-                <a href="#">
+                <a href="/checkCard">
                     <span class="icon"><i class="fas fa-money-check"></i></span>
                     <span class="item">Check Card</span>
                 </a>
@@ -104,6 +105,7 @@
                     <span class="item">Contact</span>
                 </a>
             </li>
+
             <li>
                 <a href="#">
                     <span class="icon"><i class="fas fa-cog"></i></span>

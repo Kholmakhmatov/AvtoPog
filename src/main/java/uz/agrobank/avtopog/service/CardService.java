@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
+import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.Branch;
+import uz.agrobank.avtopog.model.LdSvGate;
 import uz.agrobank.avtopog.model.LdSvGateAdd;
 import uz.agrobank.avtopog.repository.BranchRepository;
 import uz.agrobank.avtopog.repository.LdSvGateAddRepository;
+import uz.agrobank.avtopog.repository.LdSvGateRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
+import uz.agrobank.avtopog.response.ResponseDtoList;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +30,8 @@ import java.util.Optional;
 public class CardService {
     private final BranchRepository branchRepository;
     private final LdSvGateAddRepository ldSvGateAddRepository;
+    private final LdSvGateRepository ldSvGateRepository;
+    private final MyMapper mapper;
     public List<Branch> getBranches() {
         return branchRepository.getBranchList();
     }
@@ -82,5 +88,18 @@ public class CardService {
             responseDto.setMessage("Card not found");
             return responseDto;
         }
+    }
+
+    public ResponseDtoList<LdSvGateAdd> getAll(Long id, String branch) {
+        ResponseDtoList<LdSvGateAdd>responseDtoList=new ResponseDtoList<>();
+        List<LdSvGateAdd> allByIdAndBranch0 = ldSvGateAddRepository.findAllByIdAndBranch(id, branch);
+        List<LdSvGate> allByIdAndBranch1 = ldSvGateRepository.findAllByIdAndBranch(id, branch);
+        List<LdSvGateAdd> ldSvGateAdds = mapper.fromLdSvList(allByIdAndBranch1);
+        allByIdAndBranch0.addAll(ldSvGateAdds);
+        responseDtoList.setList(allByIdAndBranch0);
+        if(allByIdAndBranch0.isEmpty()){
+            responseDtoList.setMessage("Not found");
+        }
+        return responseDtoList;
     }
 }

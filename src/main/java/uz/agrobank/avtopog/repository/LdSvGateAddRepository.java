@@ -7,6 +7,7 @@ import uz.agrobank.avtopog.model.LdSvGateAdd;
 import java.util.List;
 
 public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd,Long> {
+    List<LdSvGateAdd>findAllByIdAndBranch(Long id,String branch);
     @Query(nativeQuery = true,value = "select * from ld_sv_gate_add where state=1 and \n" +
             "    case when (?1 is not null and ?2 is null  and ?3 is null ) then  id=?1 \n" +
             "         when (?1 is not null and ?2 is not null  and ?3 is null ) then (id=?1 and branch=?2) \n" +

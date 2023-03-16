@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ResponseDtoList<T>{
     private Boolean success=true;
-    private String message;
+    private String message="";
     private List<T> list;
 }

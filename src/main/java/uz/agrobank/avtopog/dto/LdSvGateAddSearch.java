@@ -5,7 +5,6 @@ package uz.agrobank.avtopog.dto;
 //import jakarta.persistence.Id;
 //import jakarta.persistence.Table;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,16 +19,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 
-public class LdSvGateSearch {
+public class LdSvGateAddSearch {
     private Long id;
 
     private String branch;
 
     private String cardNumber;
 
-    public LdSvGateSearch(Long id, String branch, String cardNumber) {
+    public LdSvGateAddSearch(Long id, String branch, String cardNumber) {
         this.id = id;
         this.branch = branch;
         this.cardNumber = cardNumber;
+    }
+
+    public LdSvGateAddSearch(Long id, String branch) {
+        this.id = id;
+        this.branch = branch;
     }
 }

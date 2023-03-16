@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
+    <title>dropdown Menu</title>
+</head>
+<body>
+<div class="menu-bar">
+    <h1 class="logo">Agro<span>bank.</span></h1>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li>
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Card <i
+                                class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="/addCard"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/deleteCard"><i class="fa-solid fa-trash"></i>&nbsp;Delete</a></li>
+                                <li><a href="/checkCard"><i class="fa-sharp fa-solid fa-check"></i>&nbsp;Check</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog <i class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="#">UzCard</a></li>
+                                <li><a href="#">Humo</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="#">Blog</a>
+        </li>
+        <li><a href="#">Contact us</a></li>
+        <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="/profile">My profile</a></li>
+                    <li><a href="/setting">Setting</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="hero">
+
+
+</div>
+</body>
+</html>

@@ -11,7 +11,7 @@ import uz.agrobank.avtopog.config.MyPasswordEncoder;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.exceptions.UniversalException;
-import uz.agrobank.avtopog.mapper.UserMapper;
+import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ResponseDto;
@@ -27,7 +27,7 @@ import static uz.agrobank.avtopog.config.SecretKeys.secretWord;
 public class JwtService {
     private final MyPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
+    private final MyMapper myMapper;
 
     public boolean validationToken(String token) {
 
@@ -59,7 +59,7 @@ public class JwtService {
             if (byEmailOrUserName.isPresent()) {
                 userResponseDto.setMessage("home");
                 userResponseDto.setSuccess(true);
-                UserDto userDto = userMapper.fromUser(byEmailOrUserName.get());
+                UserDto userDto = myMapper.fromUser(byEmailOrUserName.get());
                 userResponseDto.setObj(userDto);
                 return userResponseDto;
             }

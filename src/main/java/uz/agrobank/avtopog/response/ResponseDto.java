@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseDto <T>{
     private Boolean success=false;
-    private String message;
+    private String message="";
     private T obj;
 
     public ResponseDto(Boolean success) {

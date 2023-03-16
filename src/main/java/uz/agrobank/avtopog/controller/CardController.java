@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
-import uz.agrobank.avtopog.dto.LdSvGateSearch;
+import uz.agrobank.avtopog.dto.LdSvGateAddSearch;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.model.Branch;
 import uz.agrobank.avtopog.model.LdSvGateAdd;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
+import uz.agrobank.avtopog.response.ResponseDtoList;
 import uz.agrobank.avtopog.service.CardService;
 import uz.agrobank.avtopog.service.JwtService;
 
@@ -80,8 +81,6 @@ public class CardController {
     public String deleteCrad(Model model, @RequestParam(name = "id" ,required = false) Long id,@RequestParam(name = "branch", required = false) String branch,@RequestParam(name = "cardNumber",required = false) String cardNumber,@RequestParam(name = "page",defaultValue = SecretKeys.PAGE,required = false) Integer page ){
     List<Branch> branchList=cardService.getBranches();
     model.addAttribute("branches",branchList);
-    model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
-    model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
     model.addAttribute("message","");
     UserDto userDto = myBaseUtil.userDto();
     ResponseDto<String>response=new ResponseDto<>();
@@ -89,7 +88,7 @@ public class CardController {
     if (page > 0) page--;
     model.addAttribute("message",response);
     model.addAttribute("user",userDto);
-    model.addAttribute("searchCard",new LdSvGateSearch(id,branch,cardNumber) );
+    model.addAttribute("searchCard",new LdSvGateAddSearch(id,branch,cardNumber) );
 
     ContentList<LdSvGateAdd> allActive = cardService.getAllActive(id,branch,cardNumber,page);
     model.addAttribute("cards",allActive.getList());
@@ -104,12 +103,11 @@ public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model
        model.addAttribute("message",responseDto);
     List<Branch> branchList=cardService.getBranches();
     model.addAttribute("branches",branchList);
-    model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
-    model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
+
     UserDto userDto = myBaseUtil.userDto();
     if (page > 0) page--;
     model.addAttribute("user",userDto);
-    model.addAttribute("searchCard",new LdSvGateSearch(id,branch,cardNumber) );
+    model.addAttribute("searchCard",new LdSvGateAddSearch(id,branch,cardNumber) );
 
     ContentList<LdSvGateAdd> allActive = cardService.getAllActive(id,branch,cardNumber,page);
     model.addAttribute("cards",allActive.getList());
@@ -118,7 +116,56 @@ public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model
     return "deleteCard";
 
 }
+    @GetMapping(path = "/checkCard")
+    public String checkCard(Model model ){
+        List<Branch> branchList=cardService.getBranches();
+        model.addAttribute("branches",branchList);
+        model.addAttribute("message","");
+        UserDto userDto = myBaseUtil.userDto();
+        ResponseDto<String>response=new ResponseDto<>();
+        response.setMessage("");
+        model.addAttribute("message",response);
+        model.addAttribute("user",userDto);
+        model.addAttribute("searchCard",new LdSvGateAddSearch() );
 
+        List<LdSvGateAdd>list=new ArrayList<>();
+        model.addAttribute("cards",list);
+        return "checkCard";
 
+    }
+    @PostMapping(path = "/checkCard")
+    public String checkCard(Model model, @ModelAttribute (name = "searchCard" ) LdSvGateAddSearch svGateAddSearch ){
+        List<Branch> branchList=cardService.getBranches();
+        model.addAttribute("branches",branchList);
+        model.addAttribute("message","");
+        UserDto userDto = myBaseUtil.userDto();
+
+        model.addAttribute("user",userDto);
+        model.addAttribute("searchCard",new LdSvGateAddSearch(svGateAddSearch.getId(), svGateAddSearch.getBranch()) );
+
+        ResponseDtoList<LdSvGateAdd> allActive = cardService.getAll(svGateAddSearch.getId(), svGateAddSearch.getBranch());
+
+        model.addAttribute("message",allActive);
+        model.addAttribute("message",allActive);
+        model.addAttribute("cards",allActive.getList());
+        return "checkCard";
+
+    }
+    @GetMapping(path = "/navbar")
+    public String navbar(Model model, @CookieValue(value = "user",defaultValue = "") String token){
+        List<Branch> branchList=cardService.getBranches();
+        model.addAttribute("branches",branchList);
+        model.addAttribute("addCard",new LdSvGateAddCreate() );
+        model.addAttribute("months",List.of("01","02","03","04","05","06","07","08","09","10","11","12"));
+        model.addAttribute("years",List.of("23","24","25","26","27","28","29","30","31","32"));
+        model.addAttribute("message","");
+        UserDto userDto = myBaseUtil.userDto();
+        ResponseDto<String>response=new ResponseDto<>();
+        response.setMessage("");
+        model.addAttribute("message",response);
+        model.addAttribute("user",userDto);
+        return "navbar";
+
+    }
 
 }

@@ -44,7 +44,7 @@ public class Main {
             User user = new User();
             model.addAttribute("user", user);
             model.addAttribute("message", "");
-            return "index";
+            return "navbar";
         }
     }
 
@@ -66,7 +66,7 @@ public class Main {
         } else {
             model.addAttribute("user",user);
             model.addAttribute("message",responseDto.getMessage());
-            return "index";
+            return "navbar";
         }
     }
     @GetMapping("/logOut")

@@ -2,10 +2,9 @@ package uz.agrobank.avtopog.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 import uz.agrobank.avtopog.config.MyPasswordEncoder;
 import uz.agrobank.avtopog.dto.UserDto;
-import uz.agrobank.avtopog.mapper.UserMapper;
+import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ResponseDto;
@@ -24,7 +23,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final MyPasswordEncoder encoder;
-    private final UserMapper userMapper;
+    private final MyMapper myMapper;
     private final JwtService jwtService;
 
     public ResponseDto<UserDto> getUser(User userCreate) {
@@ -35,7 +34,7 @@ public class UserService {
             boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), user.getPassword());
             if (matches){
                 responseDto.setSuccess(true);
-                UserDto userDto = userMapper.fromUser(user);
+                UserDto userDto = myMapper.fromUser(user);
                 responseDto.setObj(userDto);
                 return responseDto;
             }
