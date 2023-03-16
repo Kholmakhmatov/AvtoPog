@@ -27,8 +27,6 @@ public class User implements UserDetails {
     private String firstName;
     @Column(nullable = false,unique = true)
     private String username;
-
-    @Column(nullable = false,unique = true)
     private String phone;
     @Column(name = "CREATEDAT")
     private LocalDateTime createdAt;
@@ -48,7 +46,15 @@ public class User implements UserDetails {
         this.role = role;
         createdAt=LocalDateTime.now();
     }
+    public User( String password, String firstName, String username,  Boolean active, RoleEnum role) {
 
+        this.password = password;
+        this.firstName = firstName;
+        this.username = username;
+        this.active = active;
+        this.role = role;
+        createdAt=LocalDateTime.now();
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority>grantedAuthorities=new HashSet<>();

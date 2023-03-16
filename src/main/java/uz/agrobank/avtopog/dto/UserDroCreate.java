@@ -9,25 +9,23 @@ import uz.agrobank.avtopog.model.enums.RoleEnum;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
+public class UserDroCreate  {
 
-public class UserDto {
-
-    private Long id;
+    private String password=" ";
 
     private String firstName;
-    private String username;
-    private String phone;
 
-    private LocalDateTime createdAt;
+    private String username=" ";
+    private Boolean active=true;
 
-
-    private Boolean active;
     @Enumerated(value = EnumType.STRING)
-    private RoleEnum role;
+    private RoleEnum role=RoleEnum.USER;
 
 
 }

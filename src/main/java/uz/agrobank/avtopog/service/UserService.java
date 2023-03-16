@@ -3,6 +3,7 @@ package uz.agrobank.avtopog.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.config.MyPasswordEncoder;
+import uz.agrobank.avtopog.dto.UserDroCreate;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
@@ -49,8 +50,32 @@ public class UserService {
             return jwtService.getUsernameByResponse(token);
         } else {
             usernameByResponse.setSuccess(false);
-            usernameByResponse.setMessage("index");
+            usernameByResponse.setMessage("ok");
             return usernameByResponse;
         }
+    }
+
+    public ResponseDto<String> addUser(UserDroCreate userDroCreate) {
+        ResponseDto<String>responseDto=new ResponseDto<>();
+        User user=parseToUser(userDroCreate);
+        // check username
+        Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
+        if (byUsername.isEmpty()) {
+                Long maxId = userRepository.findMaxId();
+                user.setId(++maxId);
+                userRepository.save(user);
+                responseDto.setMessage("addUser");
+                responseDto.setSuccess(true);
+
+        }else {
+            responseDto.setMessage("Username already exist");
+        }
+        return responseDto;
+    }
+
+    private User parseToUser(UserDroCreate userDroCreate) {
+        userDroCreate.setPassword(userDroCreate.getPassword().replaceAll(" ",""));
+        userDroCreate.setUsername(userDroCreate.getUsername().replaceAll(" ",""));
+        return new User(encoder.passwordEncoder().encode(userDroCreate.getPassword()), userDroCreate.getFirstName(), userDroCreate.getUsername(), userDroCreate.getActive(), userDroCreate.getRole());
     }
 }

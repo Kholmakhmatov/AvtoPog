@@ -38,13 +38,13 @@ public class Main {
         if (responseDto.getSuccess()) {
             UserDto userDto = myBaseUtil.userDto();
             model.addAttribute("user",userDto);
-            return responseDto.getMessage();
+            return "navbar";
 
         }else {
             User user = new User();
             model.addAttribute("user", user);
             model.addAttribute("message", "");
-            return "navbar";
+            return "index";
         }
     }
 
@@ -61,18 +61,16 @@ public class Main {
             model.addAttribute("user",responseDto.getObj());
             model.addAttribute("message","");
 
-            return "home";
+            return "navbar";
 
         } else {
             model.addAttribute("user",user);
             model.addAttribute("message",responseDto.getMessage());
-            return "navbar";
+            return "index";
         }
     }
     @GetMapping("/logOut")
-    @CheckRole({RoleEnum.USER,RoleEnum.ADMIN})
-    public String getCookie(HttpServletRequest request, HttpServletResponse response) {
-
+    public String deleteCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("user")) {

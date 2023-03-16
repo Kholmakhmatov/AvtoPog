@@ -9,4 +9,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User,Long> {
     @Query(nativeQuery = true,value = "select * from USERS where USERNAME=?1  and ACTIVE=true")
     Optional<User>getUserByUsername(String userName);
+    Optional<User>findByUsername(String userName);
+    Optional<User>findByPhone(String phone);
+    @Query(nativeQuery = true,value = "select max(id) from users")
+    Long findMaxId();
 }
