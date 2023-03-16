@@ -88,13 +88,13 @@
         <div class="wrapper wrapper--w680">
 
             <div class="card card-4">
-                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
+                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" th:text="${message.getMessage()}"
                 ></div>
-                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
+                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" th:text="${message.getMessage()}"
                 ></div>
                 <div class="card-body">
-                    <h2 class="title">My personal info</h2>
-                    <form th:action="@{'/user/editeProfile/'+${userDto.getId()}}" method="POST" th:object="${userDto}">
+                    <h2 class="title">Registration User Form</h2>
+                    <form th:action="@{'/user/edite/'+${userDto.getId()}}" method="POST" th:object="${userDto}">
                         <div class="row row-space">
                             <div class="col-2">
                                 <div class="input-group">
@@ -123,7 +123,7 @@
                                     <input class="input--style-4" type="text"  required minlength="4" th:field="*{phone}">
                                 </div>
                             </div>
-                        <div class="col-2" style="display: none" multiple="multiple" >
+                        <div class="col-2" multiple="multiple" >
                             <label class="label">Roles</label>
                             <div class="rs-select2 js-select-simple select--no-search">
                                 <select  name="subject"  th:field="*{role}" >
@@ -133,7 +133,7 @@
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
-                        <div class="col-2" style="display: none">
+                        <div class="col-2">
                             <div class="input-group">
                                 <div class="p-t-10" >
                                     <label class="radio-container m-r-45">Active

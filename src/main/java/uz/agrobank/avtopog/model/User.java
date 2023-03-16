@@ -36,6 +36,12 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private RoleEnum role;
 
+    public User(Long id, String username, RoleEnum role) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+    }
+
     public User(Long id, String password, String firstName, String username, String phone, Boolean active, RoleEnum role) {
         this.id = id;
         this.password = password;

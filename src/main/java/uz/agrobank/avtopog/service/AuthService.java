@@ -17,10 +17,10 @@ public class AuthService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)  {
         Optional<User> byUserName = userRepository.getUserByUsername(username);
         if (byUserName.isPresent())
             return byUserName.get();
-        else throw new UniversalException("Not Found User", HttpStatus.NOT_FOUND);
+        else throw new UniversalException("Not Found User", HttpStatus.FORBIDDEN);
     }
 }
