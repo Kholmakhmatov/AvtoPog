@@ -8,11 +8,8 @@
     <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
     <title>Users table</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <link rel="stylesheet" th:href="@{/style/usersTable.css}">
 </head>
 <body>
@@ -86,15 +83,16 @@
     <section class="ftco-section">
         <div class="col-12">
             <div class="row">
-                <div class="col-md-12" >
+                <div class="col-md-12">
 
                     <div class="table-wrap">
                         <table class="table table-striped">
-                            <form th:action="@{'/user/all?name='+ ${search.getName()}+'&page='+${page}}" method="GET"  th:object="${search}">
+                            <form th:action="@{'/user/all?name='+ ${search.getName()}+'&page='+${page}}" method="GET"
+                                  th:object="${search}">
                                 <div class="col-5">
-                                    <div  >
+                                    <div>
                                         <label class="label">UserName</label>
-                                        <input class="input--style-4" type="text"  th:field="*{name}" value="">
+                                        <input class="input--style-4" type="text" th:field="*{name}" value="">
                                         <button class="submit" type="submit">Submit</button>
                                     </div>
                                 </div>
@@ -117,22 +115,25 @@
                                 <td th:text="${u.getUsername()}"></td>
                                 <td th:text="${u.getPhone()}"></td>
                                 <td>
-                                    <a th:if="${u.getRole().name()=='ADMIN'}" style="color: red" th:text="${u.getRole().name()}"></a>
-                                    <a th:if="${u.getRole().name()=='USER'}"   style="color: blue"  th:text="${u.getRole().name()}"></a>
+                                    <a th:if="${u.getRole().name()=='ADMIN'}" style="color: red"
+                                       th:text="${u.getRole().name()}"></a>
+                                    <a th:if="${u.getRole().name()=='USER'}" style="color: blue"
+                                       th:text="${u.getRole().name()}"></a>
                                 </td>
                                 <td th:if="${u.getActive()}">
-                                    <a href="#" class="btn btn-success ">Active</a >
+                                    <button class="btn btn-success ">Active</button>
                                     <a th:href="'/user/edite/'+${u.getId()}" class="btn btn-primary">Edite</a>
                                 </td>
                                 <td th:if="${!u.getActive()}">
-                                    <a href="#" class="btn btn-danger ">Passive</a>
-                                    <a th:href="'/user/edite/'+${u.getId()}"  class="btn btn-primary">Edite</a>
+                                    <button class="btn btn-danger ">Passive</button>
+                                    <a th:href="'/user/edite/'+${u.getId()}" class="btn btn-primary">Edite</a>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
-                        <div class="counter" >
-                            <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/user/all/?page='+${i}+'&name='+${search.getName()}" th:text="${i+'  '}"></a>
+                        <div class="counter">
+                            <a th:each="i:${#numbers.sequence(1,count)}"
+                               th:href="'/user/all/?page='+${i}+'&name='+${search.getName()}" th:text="${i+'  '}"></a>
                         </div>
                     </div>
                 </div>

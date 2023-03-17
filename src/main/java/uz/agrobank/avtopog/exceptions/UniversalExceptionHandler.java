@@ -16,7 +16,7 @@ public class UniversalExceptionHandler  {
     }
     @ExceptionHandler(Exception.class)
     public String exception(Exception e, WebRequest request, Model model) {
-        model.addAttribute("message","Server error call us");
+        model.addAttribute("message",e.getMessage());
         return "/error/error";
     }
 

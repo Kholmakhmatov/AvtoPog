@@ -101,28 +101,37 @@
                          class="alert alert-danger align-content-center" role="alert"
                          th:text="${message.getMessage()}"
                     ></div>
-                    <form th:action="@{'/checkCard'}" method="POST" th:object="${searchCard}"
+                    <form th:action="@{'/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
                           enctype="multipart/form-data">
 
                         <div class="row row-space">
-                            <div class="col-3">
+                            <div class="col-2">
                                 <label class="label">FILIALNI TANLANG</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-                                    <select class="form-control" name="subject" th:field="*{branch}" required >
-                                        <option th:value="${searchCard.getBranch()}" selected >Choose here</option>
+                                    <select class="form-control" name="subject" th:field="*{branch}">
+                                        <option th:value="${message.getObj()}" selected >Choose here</option>
                                         <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
                                                 th:text="${branch.getBranch()}"></option>
                                     </select>
                                     <div class="select-dropdown"></div>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">ANKETA NOMER</label>
-                                    <input class="input--style-4" type="number" th:field="*{id}" required min="1">
+                                    <input class="input--style-4" type="number" th:field="*{id}">
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">KARTA RAQAMI</label>
+                                    <!--                                        required min="1000000000000000" max="9999999999999999"-->
+                                    <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                           placeholder="8600 1234 4567 8912">
+
+                                </div>
+                            </div>
+                            <div class="col-2">
 
                                 <button class="btn btn--radius btn--blue" type="submit" style="margin-top: 30px">
                                     Search
@@ -140,8 +149,8 @@
                                 <th>Branch</th>
                                 <th>Card number</th>
                                 <th>Exp date</th>
-                                <th th:if="${user.getRole().toString()!='USER'}">Status</th>
-                                <th th:if="${user.getRole().toString()!='USER'}">Operation</th>
+                                <th>Status</th>
+                                <th>Operation</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -164,19 +173,29 @@
 
                                 <td th:if="${user.getRole().toString()!='USER'}">
                                     <a th:if="${card.getState().toString()=='0'}" class="btn btn-danger"
-                                       style="width: 160px;height: 45px;font-size: 14px">Not Active</a>
+                                       style="width: 160px;height: 45px;font-size: 14px">Passive</a>
                                     <a th:if="${card.getState().toString()=='1'}" class="btn btn-info"
                                        style="width: 160px;height: 45px;font-size: 14px">Active</a>
 
                                 </td>
                                 <td th:if="${user.getRole().toString()!='USER'}">
+                                    <a th:if="${user.getRole().toString()!='USER'}"
+                                       th:href="'/deleteCardById/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
+                                       style="width: 160px;height: 45px;font-size: 16px">DELETE</a>
+
                                     <a th:href="'/editeCardById/'+${card.getId()}" class="btn btn-success"
                                        style="width: 160px;height: 45px;font-size: 16px">Edite</a>
+
                                 </td>
+
                             </tr>
 
                             </tbody>
                         </table>
+                        <div class="counter">
+
+                            <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/deleteCard'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
+                        </div>
                     </div>
                 </div>
             </div>

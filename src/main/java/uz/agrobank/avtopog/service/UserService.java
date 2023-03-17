@@ -73,7 +73,7 @@ public class UserService {
             Long maxId = userRepository.findMaxId();
             user.setId(++maxId);
             userRepository.save(user);
-            responseDto.setMessage("addUser");
+            responseDto.setMessage("Add new user");
             responseDto.setSuccess(true);
 
         } else {

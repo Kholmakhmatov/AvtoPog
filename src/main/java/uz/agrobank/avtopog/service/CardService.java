@@ -15,6 +15,7 @@ import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.response.ResponseDtoList;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,17 +58,21 @@ public class CardService {
 
     }
 
-    public ContentList<LdSvGateAdd> getAllActive(Long id, String brach, String cardNumber,Integer page) {
-        ContentList<LdSvGateAdd>contentList=new ContentList<>();
+    public ContentList<LdSvGate> getAllActive(Long id, String brach, String cardNumber,Integer page) {
+        ContentList<LdSvGate>contentList=new ContentList<>();
         Integer size=Integer.parseInt(SecretKeys.SIZE);
        if (brach==null || brach.isEmpty()) brach=null;
        if (id==null || id==-1) id=null;
        if (cardNumber == null || cardNumber.length() < 14) cardNumber=null;
        Integer offset=size*page;
-        List<LdSvGateAdd> allActive = ldSvGateAddRepository.findAllActive(id, brach, cardNumber, size, offset);
+        List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber,id, brach, cardNumber, size, offset);
         contentList.setPage(page);
-        Integer allActiveCount = ldSvGateAddRepository.findAllActiveCount(id, brach, cardNumber);
+        List<Integer> allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber,id, brach, cardNumber);
         contentList.setList(allActive);
+        Integer allActiveCount=0;
+        for (Integer integer : allActiveCountList) {
+            allActiveCount+=integer;
+        }
         double div=allActiveCount/10.0;
         Integer a= (int) Math.ceil(div);
         contentList.setCount(a);
@@ -90,16 +95,5 @@ public class CardService {
         }
     }
 
-    public ResponseDtoList<LdSvGateAdd> getAll(Long id, String branch) {
-        ResponseDtoList<LdSvGateAdd>responseDtoList=new ResponseDtoList<>();
-        List<LdSvGateAdd> allByIdAndBranch0 = ldSvGateAddRepository.findAllByIdAndBranch(id, branch);
-        List<LdSvGate> allByIdAndBranch1 = ldSvGateRepository.findAllByIdAndBranch(id, branch);
-        List<LdSvGateAdd> ldSvGateAdds = mapper.fromLdSvList(allByIdAndBranch1);
-        allByIdAndBranch0.addAll(ldSvGateAdds);
-        responseDtoList.setList(allByIdAndBranch0);
-        if(allByIdAndBranch0.isEmpty()){
-            responseDtoList.setMessage("Not found");
-        }
-        return responseDtoList;
-    }
+
 }

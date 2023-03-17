@@ -1,5 +1,6 @@
 package uz.agrobank.avtopog.repository;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import uz.agrobank.avtopog.model.LdSvGateAdd;
@@ -34,4 +35,6 @@ public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd,Long> {
             "         when (?1 is not null and ?2 is  null  and ?3 is not null )  then (id=?1  and card_number=?3)\n" +
             "         end  ")
     Integer findAllActiveCount(Long id, String branch, String cardNumber);
+
+
 }

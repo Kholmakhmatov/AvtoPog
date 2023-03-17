@@ -57,11 +57,7 @@ public class Main {
             Cookie cookie = new Cookie("user", token);
             cookie.setMaxAge(3600);
             response.addCookie(cookie);
-
-            model.addAttribute("user",responseDto.getObj());
-            model.addAttribute("message","");
-
-            return "navbar";
+            return "redirect:/";
 
         } else {
             model.addAttribute("user",user);
@@ -76,7 +72,6 @@ public class Main {
             if (cookie.getName().equals("user")) {
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
-                break;
             }
         }
 

@@ -53,7 +53,7 @@ public class SecurityConfig {
                        "/resources/**"
                 )
                 .permitAll()
-                .antMatchers("/","/login").permitAll()
+                .antMatchers("/*").permitAll()
                 .antMatchers(staticResources).permitAll()
  //               .antMatchers("/auth/*", "/today/*", "/today").permitAll()
                 .anyRequest().authenticated();

@@ -109,7 +109,6 @@
                             <label class="label">FILIALNI TANLANG</label>
                             <div class="rs-select2 js-select-simple select--no-search">
                                 <select class="form-control" name="subject" th:field="*{branch}" >
-
                                     <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
                                             th:text="${branch.getBranch()}"></option>
                                 </select>

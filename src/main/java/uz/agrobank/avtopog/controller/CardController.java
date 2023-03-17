@@ -10,14 +10,13 @@ import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
 import uz.agrobank.avtopog.dto.LdSvGateAddSearch;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.model.Branch;
+import uz.agrobank.avtopog.model.LdSvGate;
 import uz.agrobank.avtopog.model.LdSvGateAdd;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
-import uz.agrobank.avtopog.response.ResponseDtoList;
 import uz.agrobank.avtopog.service.CardService;
 import uz.agrobank.avtopog.service.JwtService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -77,7 +76,7 @@ public class CardController {
     return "addCard";
 
 }
-@GetMapping(path = "/deleteCard")
+@GetMapping(path = "/operation")
     public String deleteCrad(Model model, @RequestParam(name = "id" ,required = false) Long id,@RequestParam(name = "branch", required = false) String branch,@RequestParam(name = "cardNumber",required = false) String cardNumber,@RequestParam(name = "page",defaultValue = SecretKeys.PAGE,required = false) Integer page ){
     List<Branch> branchList=cardService.getBranches();
     model.addAttribute("branches",branchList);
@@ -90,12 +89,12 @@ public class CardController {
     model.addAttribute("user",userDto);
     model.addAttribute("searchCard",new LdSvGateAddSearch(id,branch,cardNumber) );
 
-    ContentList<LdSvGateAdd> allActive = cardService.getAllActive(id,branch,cardNumber,page);
+    ContentList<LdSvGate> allActive = cardService.getAllActive(id,branch,cardNumber,page);
     model.addAttribute("cards",allActive.getList());
     model.addAttribute("count",allActive.getCount());
     model.addAttribute("page",page+1);
 
-    return "deleteCard";
+    return "cardsOperation";
 }
 @GetMapping(path = "/deleteCardById/{id}")
 public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model, @RequestParam(name = "id" ,required = false) Long id,@RequestParam(name = "branch", required = false) String branch,@RequestParam(name = "cardNumber",required = false) String cardNumber,@RequestParam(name = "page",defaultValue = SecretKeys.PAGE,required = false) Integer page ){
@@ -109,48 +108,15 @@ public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model
     model.addAttribute("user",userDto);
     model.addAttribute("searchCard",new LdSvGateAddSearch(id,branch,cardNumber) );
 
-    ContentList<LdSvGateAdd> allActive = cardService.getAllActive(id,branch,cardNumber,page);
+    ContentList<LdSvGate> allActive = cardService.getAllActive(id,branch,cardNumber,page);
     model.addAttribute("cards",allActive.getList());
     model.addAttribute("count",allActive.getCount());
     model.addAttribute("page",page+1);
-    return "deleteCard";
+    return "cardsOperation";
 
 }
-    @GetMapping(path = "/checkCard")
-    public String checkCard(Model model ){
-        List<Branch> branchList=cardService.getBranches();
-        model.addAttribute("branches",branchList);
-        model.addAttribute("message","");
-        UserDto userDto = myBaseUtil.userDto();
-        ResponseDto<String>response=new ResponseDto<>();
-        response.setMessage("");
-        model.addAttribute("message",response);
-        model.addAttribute("user",userDto);
-        model.addAttribute("searchCard",new LdSvGateAddSearch() );
 
-        List<LdSvGateAdd>list=new ArrayList<>();
-        model.addAttribute("cards",list);
-        return "checkCard";
 
-    }
-    @PostMapping(path = "/checkCard")
-    public String checkCard(Model model, @ModelAttribute (name = "searchCard" ) LdSvGateAddSearch svGateAddSearch ){
-        List<Branch> branchList=cardService.getBranches();
-        model.addAttribute("branches",branchList);
-        model.addAttribute("message","");
-        UserDto userDto = myBaseUtil.userDto();
-
-        model.addAttribute("user",userDto);
-        model.addAttribute("searchCard",new LdSvGateAddSearch(svGateAddSearch.getId(), svGateAddSearch.getBranch()) );
-
-        ResponseDtoList<LdSvGateAdd> allActive = cardService.getAll(svGateAddSearch.getId(), svGateAddSearch.getBranch());
-
-        model.addAttribute("message",allActive);
-        model.addAttribute("message",allActive);
-        model.addAttribute("cards",allActive.getList());
-        return "checkCard";
-
-    }
     @GetMapping(path = "/navbar")
     public String navbar(Model model, @CookieValue(value = "user",defaultValue = "") String token){
         List<Branch> branchList=cardService.getBranches();
