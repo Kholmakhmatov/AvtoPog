@@ -15,17 +15,17 @@ import java.util.Set;
 
 @Data
 @NoArgsConstructor
-public class UserDroCreate  {
+public class UserDroCreate {
 
-    private String password=" ";
+    private String password = " ";
 
     private String firstName;
 
-    private String username=" ";
-    private Boolean active=true;
+    private String username = " ";
+    private Boolean active = true;
 
     @Enumerated(value = EnumType.STRING)
-    private RoleEnum role=RoleEnum.USER;
+    private RoleEnum role = RoleEnum.USER;
 
 
 }

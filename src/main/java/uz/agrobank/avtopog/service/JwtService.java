@@ -49,8 +49,9 @@ public class JwtService {
         }
 
     }
+
     public ResponseDto<UserDto> getUsernameByResponse(String token) {
-        ResponseDto<UserDto>userResponseDto=new ResponseDto<>();
+        ResponseDto<UserDto> userResponseDto = new ResponseDto<>();
         try {
 
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();

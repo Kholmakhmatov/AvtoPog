@@ -36,15 +36,15 @@ public class UserController {
     public String myProfile(Model model) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.findById(userDto.getId());
-            model.addAttribute("userDto", userDtoResponseDto.getObj());
-            model.addAttribute("user", userDto);
-            List<String> roles = new ArrayList<>();
-            for (RoleEnum value : RoleEnum.values()) {
-                roles.add(value.name());
-            }
-            model.addAttribute("roles", roles);
-            model.addAttribute("message", new ResponseDto<String>());
-            return "myProfile";
+        model.addAttribute("userDto", userDtoResponseDto.getObj());
+        model.addAttribute("user", userDto);
+        List<String> roles = new ArrayList<>();
+        for (RoleEnum value : RoleEnum.values()) {
+            roles.add(value.name());
+        }
+        model.addAttribute("roles", roles);
+        model.addAttribute("message", new ResponseDto<String>());
+        return "myProfile";
 
 
     }
@@ -120,7 +120,7 @@ public class UserController {
     @PostMapping(path = "/edite/{id}")
     public String editeUser(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
-        ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto,response);
+        ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
         model.addAttribute("userDto", userDtoResponseDto.getObj());
         model.addAttribute("user", userDtoResponseDto.getObj());
         List<String> roles = new ArrayList<>();
@@ -132,10 +132,11 @@ public class UserController {
         return "editeUser";
 
     }
+
     @PostMapping(path = "/editeProfile/{id}")
     public String editeUserProfile(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
-        ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto,response);
+        ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
         model.addAttribute("userDto", userDtoResponseDto.getObj());
         model.addAttribute("user", userDtoResponseDto.getObj());
         List<String> roles = new ArrayList<>();

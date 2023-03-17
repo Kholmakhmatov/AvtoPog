@@ -25,13 +25,13 @@ public class User implements UserDetails {
     private String password;
     @Column(name = "FIRSTNAME")
     private String firstName;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
     private String phone;
     @Column(name = "CREATEDAT")
     private LocalDateTime createdAt;
 
-   @Column(nullable = false)
+    @Column(nullable = false)
     private Boolean active;
     @Enumerated(value = EnumType.STRING)
     private RoleEnum role;
@@ -50,21 +50,23 @@ public class User implements UserDetails {
         this.phone = phone;
         this.active = active;
         this.role = role;
-        createdAt=LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
-    public User( String password, String firstName, String username,  Boolean active, RoleEnum role) {
+
+    public User(String password, String firstName, String username, Boolean active, RoleEnum role) {
 
         this.password = password;
         this.firstName = firstName;
         this.username = username;
         this.active = active;
         this.role = role;
-        createdAt=LocalDateTime.now();
+        createdAt = LocalDateTime.now();
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority>grantedAuthorities=new HashSet<>();
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
+        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority(role.name()));
 
         return grantedAuthorities;
     }

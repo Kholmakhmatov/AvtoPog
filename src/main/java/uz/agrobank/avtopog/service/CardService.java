@@ -1,9 +1,11 @@
 package uz.agrobank.avtopog.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
+import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.Branch;
 import uz.agrobank.avtopog.model.LdSvGate;
@@ -33,12 +35,13 @@ public class CardService {
     private final LdSvGateAddRepository ldSvGateAddRepository;
     private final LdSvGateRepository ldSvGateRepository;
     private final MyMapper mapper;
+
     public List<Branch> getBranches() {
         return branchRepository.getBranchList();
     }
 
     public ResponseDto<String> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
-        ResponseDto<String>responseDto=new ResponseDto<>();
+        ResponseDto<String> responseDto = new ResponseDto<>();
         try {
             Optional<LdSvGateAdd> byId = ldSvGateAddRepository.findById(ldSvGateAddCreate.getId());
             if (byId.isPresent()) {
@@ -46,11 +49,11 @@ public class CardService {
                 return responseDto;
             }
             responseDto.setSuccess(true);
-            LdSvGateAdd ldSvGateAdd=new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth()+ldSvGateAddCreate.getExpiryYear(), userId);
+            LdSvGateAdd ldSvGateAdd = new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth() + ldSvGateAddCreate.getExpiryYear(), userId);
             ldSvGateAddRepository.save(ldSvGateAdd);
             responseDto.setMessage("Add new card");
             return responseDto;
-        } catch (Exception e){
+        } catch (Exception e) {
             responseDto.setMessage("Serverda nosozlik adminga murojaat qiling");
             return responseDto;
         }
@@ -58,29 +61,29 @@ public class CardService {
 
     }
 
-    public ContentList<LdSvGate> getAllActive(Long id, String brach, String cardNumber,Integer page) {
-        ContentList<LdSvGate>contentList=new ContentList<>();
-        Integer size=Integer.parseInt(SecretKeys.SIZE);
-       if (brach==null || brach.isEmpty()) brach=null;
-       if (id==null || id==-1) id=null;
-       if (cardNumber == null || cardNumber.length() < 14) cardNumber=null;
-       Integer offset=size*page;
-        List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber,id, brach, cardNumber, size, offset);
+    public ContentList<LdSvGate> getAllActive(Long id, String brach, String cardNumber, Integer page) {
+        ContentList<LdSvGate> contentList = new ContentList<>();
+        Integer size = Integer.parseInt(SecretKeys.SIZE);
+        if (brach == null || brach.isEmpty()) brach = null;
+        if (id == null || id == -1) id = null;
+        if (cardNumber == null || cardNumber.length() < 14) cardNumber = null;
+        Integer offset = size * page;
+        List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber, id, brach, cardNumber, size, offset);
         contentList.setPage(page);
-        List<Integer> allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber,id, brach, cardNumber);
+        List<Integer> allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber, id, brach, cardNumber);
         contentList.setList(allActive);
-        Integer allActiveCount=0;
+        Integer allActiveCount = 0;
         for (Integer integer : allActiveCountList) {
-            allActiveCount+=integer;
+            allActiveCount += integer;
         }
-        double div=allActiveCount/10.0;
-        Integer a= (int) Math.ceil(div);
+        double div = allActiveCount / 10.0;
+        Integer a = (int) Math.ceil(div);
         contentList.setCount(a);
         return contentList;
     }
 
     public ResponseDto<String> deleteCadById(Long id) {
-        ResponseDto<String>responseDto=new ResponseDto<>();
+        ResponseDto<String> responseDto = new ResponseDto<>();
         Optional<LdSvGateAdd> byId = ldSvGateAddRepository.findById(id);
         if (byId.isPresent()) {
             LdSvGateAdd ldSvGateAdd = byId.get();
@@ -89,11 +92,32 @@ public class CardService {
             responseDto.setSuccess(true);
             responseDto.setMessage("Delete card");
             return responseDto;
-        }else {
+        } else {
             responseDto.setMessage("Card not found");
             return responseDto;
         }
     }
 
+
+    public LdSvGateAddCreate getCardById(Long id) {
+        Optional<LdSvGate> byId = ldSvGateRepository.findById(id);
+        if (byId.isPresent()) {
+            LdSvGate ldSvGate = byId.get();
+            LdSvGateAddCreate ldSvGateAddCreate = mapper.fromLdSvGateToCreate(ldSvGate);
+            ldSvGateAddCreate.setExpiryMonth(ldSvGate.getExpiryDate().substring(0, 2));
+            ldSvGateAddCreate.setExpiryYear(ldSvGate.getExpiryDate().substring(2, 4));
+            return ldSvGateAddCreate;
+        } else {
+            Optional<LdSvGateAdd> byId1 = ldSvGateAddRepository.findById(id);
+            if (byId1.isPresent()) {
+                LdSvGateAdd ldSvAdd = byId1.get();
+                LdSvGateAddCreate ldSvGateAddCreate = mapper.fromLdSvAddToCreate(ldSvAdd);
+                ldSvGateAddCreate.setExpiryMonth(ldSvAdd.getExpiryDate().substring(0, 2));
+                ldSvGateAddCreate.setExpiryYear(ldSvAdd.getExpiryDate().substring(2, 4));
+                return ldSvGateAddCreate;
+            }
+        }
+        throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
+    }
 
 }

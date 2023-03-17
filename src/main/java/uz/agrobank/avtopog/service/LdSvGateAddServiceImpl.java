@@ -16,12 +16,12 @@ public class LdSvGateAddServiceImpl implements LdSvGateAddService {
     private final JdbcTemplate jdbcTemplate;
 
 
-
-
     @Override
-    public List<Map<String, Object>> getByIdAndBranch(Long  id, String branch) {
-        return jdbcTemplate.queryForList("select * from ld_sv_gate where id = ? and branch = ?", id,branch);
-    };
+    public List<Map<String, Object>> getByIdAndBranch(Long id, String branch) {
+        return jdbcTemplate.queryForList("select * from ld_sv_gate where id = ? and branch = ?", id, branch);
+    }
+
+    ;
 
     @Override
     public LdSvGate getByBranchAndCardNumber(LdSvGateDto ldSvGateDto) {

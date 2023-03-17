@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class UniversalException  extends RuntimeException {
+public class UniversalException extends RuntimeException {
     private String message;
     private HttpStatus status;
 

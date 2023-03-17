@@ -7,16 +7,17 @@ import org.springframework.web.context.request.WebRequest;
 
 
 @ControllerAdvice
-public class UniversalExceptionHandler  {
+public class UniversalExceptionHandler {
     @ExceptionHandler(UniversalException.class)
     public String exceptionHandler(UniversalException e, WebRequest request, Model model) {
-        model.addAttribute("message",e.getMessage());
+        model.addAttribute("message", e.getMessage());
         int value = e.getStatus().value();
-        return "/error/"+value;
+        return "/error/" + value;
     }
+
     @ExceptionHandler(Exception.class)
     public String exception(Exception e, WebRequest request, Model model) {
-        model.addAttribute("message",e.getMessage());
+        model.addAttribute("message", e.getMessage());
         return "/error/error";
     }
 

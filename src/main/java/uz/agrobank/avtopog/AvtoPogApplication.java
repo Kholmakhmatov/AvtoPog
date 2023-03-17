@@ -20,16 +20,17 @@ public class AvtoPogApplication {
             System.out.println("Dastur quladi sababi ma'lumotlar o'chib ketishi mumkin");
         }
     }
+
     @Bean
     public static boolean isStart() {
-        Scanner scanner=new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         Properties props = new Properties();
         try {
             props.load(new ClassPathResource("/application.properties").getInputStream());
             if (props.getProperty("spring.jpa.hibernate.ddl-auto").equals("none")) {
                 return true;
             } else {
-              //  String confirm = JOptionPane.showInputDialog("Ma'lumotlarni o'chirib yuborma yoki o'zgartirma! Keyin bilmay qoldim dema !!!");
+                //  String confirm = JOptionPane.showInputDialog("Ma'lumotlarni o'chirib yuborma yoki o'zgartirma! Keyin bilmay qoldim dema !!!");
                 System.out.println("\"Ma'lumotlarni o'chirib yuborma yoki o'zgartirma! Keyin bilmay qoldim dema !!!\"");
                 System.out.print("Parol: ");
                 String confirm = scanner.nextLine();

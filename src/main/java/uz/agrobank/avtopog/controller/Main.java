@@ -32,15 +32,16 @@ public class Main {
     private final UserService userService;
     private final MyBaseUtil myBaseUtil;
     private final JwtService jwtService;
+
     @GetMapping(path = "/")
-    public String homePage(Model model, @CookieValue(value = "user",defaultValue = "") String token){
+    public String homePage(Model model, @CookieValue(value = "user", defaultValue = "") String token) {
         ResponseDto<UserDto> responseDto = userService.hasUser(token);
         if (responseDto.getSuccess()) {
             UserDto userDto = myBaseUtil.userDto();
-            model.addAttribute("user",userDto);
+            model.addAttribute("user", userDto);
             return "navbar";
 
-        }else {
+        } else {
             User user = new User();
             model.addAttribute("user", user);
             model.addAttribute("message", "");
@@ -50,9 +51,9 @@ public class Main {
 
 
     @PostMapping(path = "/login")
-    public String login(@ModelAttribute(name = "user") User user, HttpServletResponse response, Model model){
-        ResponseDto<UserDto> responseDto= userService.getUser(user);
-        if(responseDto.getSuccess()){
+    public String login(@ModelAttribute(name = "user") User user, HttpServletResponse response, Model model) {
+        ResponseDto<UserDto> responseDto = userService.getUser(user);
+        if (responseDto.getSuccess()) {
             String token = jwtService.createToken(user);
             Cookie cookie = new Cookie("user", token);
             cookie.setMaxAge(3600);
@@ -60,11 +61,12 @@ public class Main {
             return "redirect:/";
 
         } else {
-            model.addAttribute("user",user);
-            model.addAttribute("message",responseDto.getMessage());
+            model.addAttribute("user", user);
+            model.addAttribute("message", responseDto.getMessage());
             return "index";
         }
     }
+
     @GetMapping("/logOut")
     public String deleteCookie(HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();

@@ -16,15 +16,16 @@ public class DataLoader implements CommandLineRunner {
 
     private final MyPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+
     @Override
     public void run(String... args) throws Exception {
 
-        if (ddl!=null && ddl.contains("create")){
+        if (ddl != null && ddl.contains("create")) {
 
-            User admin=new User(1L,passwordEncoder.passwordEncoder().encode("admin"),"Anvar","admin","+998997777777",true, RoleEnum.ADMIN);
-            User user=new User(2L,passwordEncoder.passwordEncoder().encode("user"),"Aziz","user","+998997777779",true, RoleEnum.USER);
-             userRepository.save(admin);
-             userRepository.save(user);
+            User admin = new User(1L, passwordEncoder.passwordEncoder().encode("admin"), "Anvar", "admin", "+998997777777", true, RoleEnum.ADMIN);
+            User user = new User(2L, passwordEncoder.passwordEncoder().encode("user"), "Aziz", "user", "+998997777779", true, RoleEnum.USER);
+            userRepository.save(admin);
+            userRepository.save(user);
 
         }
 

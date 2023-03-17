@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
+
 import java.util.Optional;
 
 @Service
@@ -17,7 +18,7 @@ public class AuthService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username)  {
+    public UserDetails loadUserByUsername(String username) {
         Optional<User> byUserName = userRepository.getUserByUsername(username);
         if (byUserName.isPresent())
             return byUserName.get();

@@ -7,9 +7,9 @@ import lombok.Data;
 @Builder
 public class SearchDto {
 
-   private String name;
+    private String name;
 
-   public SearchDto(String name) {
-      this.name = name;
-   }
+    public SearchDto(String name) {
+        this.name = name;
+    }
 }

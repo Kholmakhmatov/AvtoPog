@@ -29,15 +29,18 @@ public class LdSvGateController {
         LdSvGateAdd byIdAndBranchAdd = ldSvGateAddService.getByIdAndBranchAdd(ldSvGateDto);
         return byIdAndBranchAdd;
     }
+
     @GetMapping("/ldbranch")
     public List<Map<String, Object>> getByIdAndBranch(@RequestParam Long id, @RequestParam String branch) {
-        return ldSvGateAddService.getByIdAndBranch(id,branch);
+        return ldSvGateAddService.getByIdAndBranch(id, branch);
     }
+
     @GetMapping("/ldcardadd")
     public LdSvGateAdd getByBranchAndCardNumberAdd(LdSvGateDto ldSvGateDto) {
         LdSvGateAdd byBranchAndCardNumberAdd = ldSvGateAddService.getByBranchAndCardNumberAdd(ldSvGateDto);
         return byBranchAndCardNumberAdd;
     }
+
     @GetMapping("/ldcard")
     public LdSvGate getByBranchAndCardNumber(LdSvGateDto ldSvGateDto) {
         LdSvGate byBranchAndCardNumber = ldSvGateAddService.getByBranchAndCardNumber(ldSvGateDto);
@@ -55,7 +58,6 @@ public class LdSvGateController {
         LdSvGateAdd ldSvGateAdd = ldSvGateAddService.addNewCard(ldSvGateDto);
         return ldSvGateAdd;
     }
-
 
 
 }

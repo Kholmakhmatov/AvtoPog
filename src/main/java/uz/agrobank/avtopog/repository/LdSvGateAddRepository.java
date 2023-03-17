@@ -7,9 +7,10 @@ import uz.agrobank.avtopog.model.LdSvGateAdd;
 
 import java.util.List;
 
-public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd,Long> {
-    List<LdSvGateAdd>findAllByIdAndBranch(Long id,String branch);
-    @Query(nativeQuery = true,value = "select * from ld_sv_gate_add where state=1 and \n" +
+public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd, Long> {
+    List<LdSvGateAdd> findAllByIdAndBranch(Long id, String branch);
+
+    @Query(nativeQuery = true, value = "select * from ld_sv_gate_add where state=1 and \n" +
             "    case when (?1 is not null and ?2 is null  and ?3 is null ) then  id=?1 \n" +
             "         when (?1 is not null and ?2 is not null  and ?3 is null ) then (id=?1 and branch=?2) \n" +
             "         when (?1 is not null and ?2 is not null  and ?3 is not null )" +
@@ -22,7 +23,8 @@ public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd,Long> {
             "         when (?1 is not null and ?2 is  null  and ?3 is not null )  then (id=?1  and card_number=?3)\n" +
             "         end  order by id limit ?4 offset ?5")
     List<LdSvGateAdd> findAllActive(Long id, String branch, String cardNumber, Integer size, Integer offset);
-    @Query(nativeQuery = true,value = "select count(id) from ld_sv_gate_add where state=1 and \n" +
+
+    @Query(nativeQuery = true, value = "select count(id) from ld_sv_gate_add where state=1 and \n" +
             "    case when (?1 is not null and ?2 is null  and ?3 is null ) then  id=?1 \n" +
             "         when (?1 is not null and ?2 is not null  and ?3 is null ) then (id=?1 and branch=?2) \n" +
             "         when (?1 is not null and ?2 is not null  and ?3 is not null )" +
@@ -36,5 +38,7 @@ public interface LdSvGateAddRepository extends JpaRepository<LdSvGateAdd,Long> {
             "         end  ")
     Integer findAllActiveCount(Long id, String branch, String cardNumber);
 
+    @Query(nativeQuery = true, value = "select exists(select id from ld_sv_gate where id=?1 union select id from ld_sv_gate_add where id=?2)")
+    boolean existsById(Long id, Long id2);
 
 }

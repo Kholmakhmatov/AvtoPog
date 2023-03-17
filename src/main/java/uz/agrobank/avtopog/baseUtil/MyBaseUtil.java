@@ -12,9 +12,9 @@ import uz.agrobank.avtopog.model.User;
 public class MyBaseUtil {
     private final MyMapper myMapper;
 
-    public UserDto userDto(){
+    public UserDto userDto() {
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-       return myMapper.fromUser(principal);
+        return myMapper.fromUser(principal);
     }
 
 

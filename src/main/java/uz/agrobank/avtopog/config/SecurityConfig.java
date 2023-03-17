@@ -50,12 +50,12 @@ public class SecurityConfig {
                         "/v2/",
                         "/csrf",
                         "/webjars/",
-                       "/resources/**"
+                        "/resources/**"
                 )
                 .permitAll()
                 .antMatchers("/*").permitAll()
                 .antMatchers(staticResources).permitAll()
- //               .antMatchers("/auth/*", "/today/*", "/today").permitAll()
+                //               .antMatchers("/auth/*", "/today/*", "/today").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();

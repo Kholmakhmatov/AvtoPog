@@ -126,20 +126,20 @@ public class UserService {
             User user = byId.get();
             //check username
 
-                Optional<User> byUsernameAndIdNot = userRepository.findByUsernameAndIdNot(userUpdate.getUsername(), userUpdate.getId());
-                if (byUsernameAndIdNot.isPresent()) {
-                    responseDto.setMessage("This username already exist");
-                    responseDto.setObj(userUpdate);
-                    return responseDto;
-                }
+            Optional<User> byUsernameAndIdNot = userRepository.findByUsernameAndIdNot(userUpdate.getUsername(), userUpdate.getId());
+            if (byUsernameAndIdNot.isPresent()) {
+                responseDto.setMessage("This username already exist");
+                responseDto.setObj(userUpdate);
+                return responseDto;
+            }
 
             //check phone
-                Optional<User> byPhoneAndIdNot = userRepository.findByPhoneAndIdNot(userUpdate.getPhone(), userUpdate.getId());
-                if (byPhoneAndIdNot.isPresent()) {
-                    responseDto.setMessage("This phone already exist");
-                    responseDto.setObj(userUpdate);
-                    return responseDto;
-                }
+            Optional<User> byPhoneAndIdNot = userRepository.findByPhoneAndIdNot(userUpdate.getPhone(), userUpdate.getId());
+            if (byPhoneAndIdNot.isPresent()) {
+                responseDto.setMessage("This phone already exist");
+                responseDto.setObj(userUpdate);
+                return responseDto;
+            }
 
             User userSave = toUser(userUpdate, user);
             User save = userRepository.save(userSave);
@@ -149,12 +149,12 @@ public class UserService {
             responseDto.setMessage("Edite user info");
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
-           if (userSave.getId().equals(userDto.getId())){
-               String token = jwtService.createToken(save);
-               Cookie cookie = new Cookie("user", token);
-               cookie.setMaxAge(3600);
-               response.addCookie(cookie);
-           }
+            if (userSave.getId().equals(userDto.getId())) {
+                String token = jwtService.createToken(save);
+                Cookie cookie = new Cookie("user", token);
+                cookie.setMaxAge(3600);
+                response.addCookie(cookie);
+            }
         } else {
             throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
         }
