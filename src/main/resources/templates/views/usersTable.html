@@ -22,8 +22,8 @@
 
             <div class="dropdown-menu">
                 <ul>
-                    <li>
-                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Admin <i
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
                                 class="fas fa-caret-right"></i></a>
 
                         <div class="dropdown-menu-1">
@@ -40,8 +40,8 @@
 
                         <div class="dropdown-menu-1">
                             <ul>
-                                <li><a href="/addCard"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
                             </ul>
                         </div>
                     </li>
@@ -55,11 +55,10 @@
                             </ul>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </li>
-        <li><a href="#">Contact us</a></li>
+        <li><a href="/contact/us">Contact us</a></li>
         <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">

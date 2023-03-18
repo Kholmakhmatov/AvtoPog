@@ -45,8 +45,8 @@
 
             <div class="dropdown-menu">
                 <ul>
-                    <li>
-                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Admin <i
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
                                 class="fas fa-caret-right"></i></a>
 
                         <div class="dropdown-menu-1">
@@ -63,8 +63,8 @@
 
                         <div class="dropdown-menu-1">
                             <ul>
-                                <li><a href="/addCard"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
                             </ul>
                         </div>
                     </li>
@@ -78,11 +78,10 @@
                             </ul>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </li>
-        <li><a href="#">Contact us</a></li>
+        <li><a href="/contact/us">Contact us</a></li>
         <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
@@ -109,7 +108,7 @@
                     <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
                     <h2 class="title">YANGI KARTA ULASH</h2>
-                    <form th:action="@{/addCard}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">
+                    <form th:action="@{/card/add}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">
 
                         <div class="form-control" >
                             <label class="label">FILIALNI TANLANG</label>
@@ -122,20 +121,8 @@
                             </div>
                         </div>
 
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">ANKETA NOMER</label>
-                                    <input class="input--style-4" type="number" th:field="*{id}" required min="1">
-                                </div>
-                                <div class="col-2">
-                                    <div class="input-group">
-                                        <label class="label">Files</label>
-                                        <input  type="file" name="files" multiple>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">
+                        <div class="row row-space" >
+                            <div class="col-2" style="margin-top: 10px">
                                 <div class="input-group">
                                     <label class="label">KARTA RAQAMI</label>
                                     <input class="input--style-4" type="number" th:field="*{cardNumber}" placeholder="8600 1234 4567 8912"   required min="1000000000000000" max="9999999999999999" >
@@ -167,11 +154,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-2">
+                                <div class="input-group" style="margin-top: 10px">
+                                    <label class="label">ANKETA NOMER</label>
+                                    <input class="input--style-4" type="number" th:field="*{id}" required min="1">
+                                </div>
+                                    <button class="btn btn--radius btn--blue" style="margin-top: 40px" type="submit">Add card</button>
+                            </div>
                         </div>
-
-                        <div class="p-t-15">
-                            <button class="btn btn--radius btn--blue" type="submit">Submit</button>
-                        </div>
+                    </form>
+                    <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
+                    <form th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
+                       <div class="row row-space">
+                           <div class="col-2">
+                               <div class="input-group">
+                                   <label class="label">Select excel file</label>
+                                   <input  type="file" name="files" accept=".xlsx, .xls, .csv" required>
+                               </div>
+                           </div >
+                           <div class="col-2">
+                               <button style="border-radius: 5px;width: 90px;height: 45px;background: #01d28e" type="submit">Send file</button>
+                           </div>
+                           </div>
                     </form>
                 </div>
             </div>

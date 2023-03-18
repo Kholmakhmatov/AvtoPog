@@ -42,8 +42,8 @@
 
             <div class="dropdown-menu">
                 <ul>
-                    <li>
-                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Admin <i
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
                                 class="fas fa-caret-right"></i></a>
 
                         <div class="dropdown-menu-1">
@@ -60,8 +60,8 @@
 
                         <div class="dropdown-menu-1">
                             <ul>
-                                <li><a href="/addCard"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
                             </ul>
                         </div>
                     </li>
@@ -75,11 +75,10 @@
                             </ul>
                         </div>
                     </li>
-
                 </ul>
             </div>
         </li>
-        <li><a href="#">Contact us</a></li>
+        <li><a href="/contact/us">Contact us</a></li>
         <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
@@ -102,7 +101,7 @@
                     ></div>
                     <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
-                    <form th:action="@{'/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
+                    <form th:action="@{'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
                           enctype="multipart/form-data">
 
                         <div class="row row-space">
@@ -181,7 +180,7 @@
                                 </td>
                                 <td th:if="${user.getRole().toString()!='USER'}">
                                     <a th:if="${card.getState().toString()=='1'}"
-                                       th:href="'/deleteCard/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
+                                       th:href="'/cared/delete/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
                                        style="width: 160px;height: 45px;font-size: 16px">DELETE</a>
                                 </td>
 
@@ -190,8 +189,7 @@
                             </tbody>
                         </table>
                         <div class="counter">
-
-                            <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/deleteCard'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
+                            <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
                         </div>
                     </div>
                 </div>

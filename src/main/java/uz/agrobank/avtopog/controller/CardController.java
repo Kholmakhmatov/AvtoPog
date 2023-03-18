@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
@@ -17,6 +18,7 @@ import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.CardService;
 import uz.agrobank.avtopog.service.JwtService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -28,14 +30,16 @@ import java.util.List;
  **/
 @Controller
 @RequiredArgsConstructor
+@RequestMapping(path = "/card")
 public class CardController {
 
     private final CardService cardService;
     private final MyBaseUtil myBaseUtil;
     private final JwtService jwtService;
 
-    @GetMapping(path = "/addCard")
-    public String addCardPage(Model model, @CookieValue(value = "user", defaultValue = "") String token) {
+    @GetMapping(path = "/add")
+    public String addCardPage(Model model) {
+
         List<Branch> branchList = cardService.getBranches();
         model.addAttribute("branches", branchList);
         model.addAttribute("addCard", new LdSvGateAddCreate());
@@ -51,13 +55,13 @@ public class CardController {
 
     }
 
-    @PostMapping(path = "/addCard")
+    @PostMapping(path = "/add")
     public String addCard(Model model, @ModelAttribute(name = "addCard") LdSvGateAddCreate ldSvGateAddCreate) {
         Long userId = myBaseUtil.userDto().getId();
         ResponseDto<LdSvGateAdd> response = cardService.addCard(ldSvGateAddCreate, userId);
         if (response.getSuccess()) {
             LdSvGateAdd obj = response.getObj();
-            return "redirect:/operation?id="+obj.getId()+"&branch="+obj.getBranch();
+            return "redirect:/card/operation?id=" + obj.getId() + "&branch=" + obj.getBranch();
         } else {
             List<Branch> branchList = cardService.getBranches();
             model.addAttribute("branches", branchList);
@@ -71,6 +75,12 @@ public class CardController {
         }
         return "addCard";
 
+    }
+
+    @PostMapping(path = "/addCardFromFile")
+    public void addCardFromFile(MultipartFile[] files, HttpServletResponse response) {
+        UserDto userDto = myBaseUtil.userDto();
+        cardService.addCardFromFile(files, response, userDto.getId());
     }
 
     @GetMapping(path = "/operation")
@@ -94,7 +104,7 @@ public class CardController {
         return "cardsOperation";
     }
 
-    @GetMapping(path = "/deleteCard/{id}")
+    @GetMapping(path = "/delete/{id}")
     public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model, @RequestParam(name = "id", required = false) Long id, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "cardNumber", required = false) String cardNumber, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page) {
         ResponseDto<String> responseDto = cardService.deleteCadById(cardId);
         model.addAttribute("message", responseDto);
@@ -113,7 +123,6 @@ public class CardController {
         return "cardsOperation";
 
     }
-
 
 
 }
