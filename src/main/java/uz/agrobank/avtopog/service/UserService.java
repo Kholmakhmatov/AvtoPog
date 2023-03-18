@@ -16,6 +16,7 @@ import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
@@ -64,16 +65,17 @@ public class UserService {
         }
     }
 
-    public ResponseDto<String> addUser(UserDroCreate userDroCreate) {
-        ResponseDto<String> responseDto = new ResponseDto<>();
+    public ResponseDto<User> addUser(UserDroCreate userDroCreate) {
+        ResponseDto<User> responseDto = new ResponseDto<>();
         User user = parseToUser(userDroCreate);
         // check username
         Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
         if (byUsername.isEmpty()) {
             Long maxId = userRepository.findMaxId();
             user.setId(++maxId);
-            userRepository.save(user);
+            User save = userRepository.save(user);
             responseDto.setMessage("Add new user");
+            responseDto.setObj(save);
             responseDto.setSuccess(true);
 
         } else {
@@ -150,6 +152,7 @@ public class UserService {
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
             if (userSave.getId().equals(userDto.getId())) {
+
                 String token = jwtService.createToken(save);
                 Cookie cookie = new Cookie("user", token);
                 cookie.setMaxAge(3600);
@@ -167,9 +170,11 @@ public class UserService {
         }
         user.setFirstName(userUpdate.getFirstName());
         user.setUsername(userUpdate.getUsername());
-        user.setPhone(userUpdate.getPhone());
         if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()) {
             user.setPassword(encoder.passwordEncoder().encode(userUpdate.getPassword()));
+        }
+        if (userUpdate.getPhone() != null && !userUpdate.getPhone().isEmpty()) {
+            user.setPhone(userUpdate.getPhone());
         }
         user.setCreatedAt(user.getCreatedAt());
         user.setActive(userUpdate.getActive());

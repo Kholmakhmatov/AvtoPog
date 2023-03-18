@@ -54,16 +54,10 @@ public class CardController {
     @PostMapping(path = "/addCard")
     public String addCard(Model model, @ModelAttribute(name = "addCard") LdSvGateAddCreate ldSvGateAddCreate) {
         Long userId = myBaseUtil.userDto().getId();
-        ResponseDto<String> response = cardService.addCard(ldSvGateAddCreate, userId);
+        ResponseDto<LdSvGateAdd> response = cardService.addCard(ldSvGateAddCreate, userId);
         if (response.getSuccess()) {
-            List<Branch> branchList = cardService.getBranches();
-            model.addAttribute("branches", branchList);
-            model.addAttribute("addCard", new LdSvGateAddCreate());
-            model.addAttribute("months", List.of("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
-            model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32"));
-            model.addAttribute("message", response);
-            UserDto userDto = myBaseUtil.userDto();
-            model.addAttribute("user", userDto);
+            LdSvGateAdd obj = response.getObj();
+            return "redirect:/operation?id="+obj.getId()+"&branch="+obj.getBranch();
         } else {
             List<Branch> branchList = cardService.getBranches();
             model.addAttribute("branches", branchList);
@@ -120,22 +114,6 @@ public class CardController {
 
     }
 
-    @GetMapping(path = "/navbar")
-    public String navbar(Model model, @CookieValue(value = "user", defaultValue = "") String token) {
-        List<Branch> branchList = cardService.getBranches();
-        model.addAttribute("branches", branchList);
-        model.addAttribute("addCard", new LdSvGateAddCreate());
-        model.addAttribute("months", List.of("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
-        model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32"));
-        model.addAttribute("message", "");
-        UserDto userDto = myBaseUtil.userDto();
-        ResponseDto<String> response = new ResponseDto<>();
-        response.setMessage("");
-        model.addAttribute("message", response);
-        model.addAttribute("user", userDto);
-        return "navbar";
-
-    }
 
 
 }

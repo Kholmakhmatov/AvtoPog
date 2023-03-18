@@ -104,9 +104,9 @@
 
             <div class="card card-4">
                 <div class="card-body">
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" th:text="${message.getMessage()}"
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
                     ></div>
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" th:text="${message.getMessage()}"
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
                     <h2 class="title">YANGI KARTA ULASH</h2>
                     <form th:action="@{/addCard}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">

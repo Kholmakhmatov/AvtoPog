@@ -8,10 +8,12 @@ import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.repository.UserRepository;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class DataLoader implements CommandLineRunner {
-    @Value(value = "${spring.jpa.hibernate.ddl-auto}")
+    @Value(value = "${dataloader.status}")
     private String ddl;
 
     private final MyPasswordEncoder passwordEncoder;
@@ -21,11 +23,11 @@ public class DataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         if (ddl != null && ddl.contains("create")) {
-
-            User admin = new User(1L, passwordEncoder.passwordEncoder().encode("admin"), "Anvar", "admin", "+998997777777", true, RoleEnum.ADMIN);
-            User user = new User(2L, passwordEncoder.passwordEncoder().encode("user"), "Aziz", "user", "+998997777779", true, RoleEnum.USER);
-            userRepository.save(admin);
-            userRepository.save(user);
+            Optional<User> byId = userRepository.findById(1L);
+            if (byId.isEmpty()) {
+                User admin = new User(1L, passwordEncoder.passwordEncoder().encode("admin"), "Anvar", "admin", "+998997777777", true, RoleEnum.ADMIN);
+                userRepository.save(admin);
+            }
 
         }
 

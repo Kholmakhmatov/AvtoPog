@@ -16,13 +16,11 @@ import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
-import uz.agrobank.avtopog.service.JwtService;
 import uz.agrobank.avtopog.service.UserService;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -66,21 +64,22 @@ public class UserController {
 
     @PostMapping(path = "/add")
     public String addUser(Model model, @ModelAttribute(name = "userDto") UserDroCreate userDroCreate) {
-        ResponseDto<String> responseDto = userService.addUser(userDroCreate);
+        ResponseDto<User> responseDto = userService.addUser(userDroCreate);
         UserDto userDto = myBaseUtil.userDto();
         model.addAttribute("user", userDto);
-        if (responseDto.getSuccess())
-            model.addAttribute("userDto", new UserDroCreate());
-        else
+        if (responseDto.getSuccess()) {
+            User obj = responseDto.getObj();
+            return "redirect:/user/all?name=" + obj.getUsername();
+        } else {
             model.addAttribute("userDto", userDroCreate);
-        List<String> roles = new ArrayList<>();
-        for (RoleEnum value : RoleEnum.values()) {
-            roles.add(value.name());
+            List<String> roles = new ArrayList<>();
+            for (RoleEnum value : RoleEnum.values()) {
+                roles.add(value.name());
+            }
+            model.addAttribute("roles", roles);
+            model.addAttribute("message", responseDto);
+            return "addUser";
         }
-        model.addAttribute("roles", roles);
-        model.addAttribute("message", responseDto);
-
-        return "addUser";
     }
 
     @GetMapping(path = "/all")
@@ -121,8 +120,12 @@ public class UserController {
     public String editeUser(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
-        model.addAttribute("userDto", userDtoResponseDto.getObj());
-        model.addAttribute("user", userDtoResponseDto.getObj());
+        UserUpdate obj = userDtoResponseDto.getObj();
+        if (userDtoResponseDto.getSuccess()) {
+            return "redirect:/user/all?name=" + obj.getUsername();
+        }
+        model.addAttribute("userDto", obj);
+        model.addAttribute("user", userDto);
         List<String> roles = new ArrayList<>();
         for (RoleEnum value : RoleEnum.values()) {
             roles.add(value.name());
@@ -137,6 +140,9 @@ public class UserController {
     public String editeUserProfile(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
+        if (userDtoResponseDto.getSuccess()) {
+            return "redirect:/";
+        }
         model.addAttribute("userDto", userDtoResponseDto.getObj());
         model.addAttribute("user", userDtoResponseDto.getObj());
         List<String> roles = new ArrayList<>();

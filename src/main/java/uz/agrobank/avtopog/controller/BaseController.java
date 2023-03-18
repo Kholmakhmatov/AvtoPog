@@ -4,11 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import uz.agrobank.avtopog.annotation.CheckRole;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
+import uz.agrobank.avtopog.dto.SendMailDto;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.model.User;
-import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.JwtService;
 import uz.agrobank.avtopog.service.UserService;
@@ -16,7 +15,6 @@ import uz.agrobank.avtopog.service.UserService;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * Created by Kholmakhmatov_A on 2/21/2023
@@ -27,7 +25,7 @@ import java.util.List;
  **/
 @Controller
 @RequiredArgsConstructor
-public class Main {
+public class BaseController {
 
     private final UserService userService;
     private final MyBaseUtil myBaseUtil;
@@ -42,13 +40,17 @@ public class Main {
             return "navbar";
 
         } else {
-            User user = new User();
-            model.addAttribute("user", user);
-            model.addAttribute("message", "");
             return "index";
         }
     }
 
+    @GetMapping("/login")
+    public String index(Model model) {
+        User user = new User();
+        model.addAttribute("user", user);
+        model.addAttribute("message", "");
+        return "loginPage";
+    }
 
     @PostMapping(path = "/login")
     public String login(@ModelAttribute(name = "user") User user, HttpServletResponse response, Model model) {
@@ -63,7 +65,7 @@ public class Main {
         } else {
             model.addAttribute("user", user);
             model.addAttribute("message", responseDto.getMessage());
-            return "index";
+            return "loginPage";
         }
     }
 
@@ -76,7 +78,21 @@ public class Main {
                 response.addCookie(cookie);
             }
         }
-
         return "redirect:/";
+    }
+
+    @GetMapping("/contact")
+    public String contact(Model model) {
+        model.addAttribute("sendDto", new SendMailDto());
+        model.addAttribute("message", new ResponseDto<String>());
+        return "contact";
+    }
+    @GetMapping("/contact/us")
+    public String contactUs(Model model) {
+        UserDto userDto = myBaseUtil.userDto();
+        model.addAttribute("user", userDto);
+        model.addAttribute("sendDto", new SendMailDto());
+        model.addAttribute("message", new ResponseDto<String>());
+        return "contactUs";
     }
 }

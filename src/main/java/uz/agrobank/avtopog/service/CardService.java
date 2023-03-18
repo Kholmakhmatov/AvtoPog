@@ -40,8 +40,8 @@ public class CardService {
         return branchRepository.getBranchList();
     }
 
-    public ResponseDto<String> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
-        ResponseDto<String> responseDto = new ResponseDto<>();
+    public ResponseDto<LdSvGateAdd> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
+        ResponseDto<LdSvGateAdd> responseDto = new ResponseDto<>();
         try {
             Optional<LdSvGateAdd> byId = ldSvGateAddRepository.findById(ldSvGateAddCreate.getId());
             if (byId.isPresent()) {
@@ -50,8 +50,9 @@ public class CardService {
             }
             responseDto.setSuccess(true);
             LdSvGateAdd ldSvGateAdd = new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth() + ldSvGateAddCreate.getExpiryYear(), userId);
-            ldSvGateAddRepository.save(ldSvGateAdd);
+            LdSvGateAdd save = ldSvGateAddRepository.save(ldSvGateAdd);
             responseDto.setMessage("Add new card");
+            responseDto.setObj(save);
             return responseDto;
         } catch (Exception e) {
             responseDto.setMessage("Serverda nosozlik adminga murojaat qiling");
@@ -90,12 +91,21 @@ public class CardService {
             ldSvGateAdd.setState(0);
             ldSvGateAddRepository.save(ldSvGateAdd);
             responseDto.setSuccess(true);
-            responseDto.setMessage("Delete card");
+            responseDto.setMessage("Card position is passive");
             return responseDto;
         } else {
-            responseDto.setMessage("Card not found");
-            return responseDto;
+            Optional<LdSvGate> byIdGate = ldSvGateRepository.findById(id);
+            if (byIdGate.isPresent()) {
+                LdSvGate ldSvGate = byIdGate.get();
+                ldSvGate.setState(0);
+                ldSvGateRepository.save(ldSvGate);
+                responseDto.setSuccess(true);
+                responseDto.setMessage("Card position is passive");
+                return responseDto;
+            }
         }
+        responseDto.setMessage("Card not found");
+        return responseDto;
     }
 
 

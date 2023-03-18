@@ -10,4 +10,5 @@ public interface SecretKeys {
     String PHOTO_PATH = "D:\\jbData\\photo";
     String DOCUMENT_PATH = "D:\\jbData\\document";
     String PHOTO_ANONIM = "src/main/resources/static/img/anonimUser.png";
+    String TO_EMAIL = "javohirbekrakhimov@gmail.com";
 }

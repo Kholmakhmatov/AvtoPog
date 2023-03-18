@@ -10,7 +10,4 @@ public class ResponseDto<T> {
     private String message = "";
     private T obj;
 
-    public ResponseDto(Boolean success) {
-        this.success = success;
-    }
 }

@@ -13,7 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String userName);
 
-    Optional<User> findByPhone(String phone);
 
     @Query(nativeQuery = true, value = "select max(id) from users")
     Long findMaxId();
