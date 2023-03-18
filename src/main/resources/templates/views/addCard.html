@@ -6,7 +6,7 @@
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
     <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
-    <title>dropdown Menu</title>
+    <title>Add card</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,6 +36,7 @@
     <link th:href="@{/style/registr.css}" rel="stylesheet" media="all">
 </head>
 <body>
+<div id="preloader"></div>
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
@@ -164,16 +165,17 @@
                         </div>
                     </form>
                     <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
-                    <form th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
+                    <form id="form" th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
                        <div class="row row-space">
                            <div class="col-2">
                                <div class="input-group">
                                    <label class="label">Select excel file</label>
                                    <input  type="file" name="files" accept=".xlsx, .xls, .csv" required>
+                                   <a href="/card/downloadTemplate" style="color: red;font-size: 14px;margin-top: 10px">Na'muna excel file uchun !!!</a>
                                </div>
                            </div >
                            <div class="col-2">
-                               <button style="border-radius: 5px;width: 90px;height: 45px;background: #01d28e" type="submit">Send file</button>
+                               <button id="submit-button" style="border-radius: 5px;width: 90px;height: 45px;background: #01d28e" type="submit" onclick="submitClicked()">Send file</button>
                            </div>
                            </div>
                     </form>
@@ -191,11 +193,28 @@
 
     <!-- Main JS-->
     <script th:src="@{/js/documentGlobal.js}"></script>
-
-
     <!-- Asosiy code qism tugashi  -->
 
 </div>
+<script>
+    var loader=document.getElementById("preloader");
+    window.addEventListener("load",function (){
+        loader.style.display="none";
+    })
+
+    function submitClicked(){
+        setTimeout(function(){
+            $("#submit-button").prop("disabled", true).val("Wait...");
+            loader.style.display="block";
+        }, 100);
+
+
+        setTimeout(function(){
+            $("#submit-button").prop("disabled", false).val("Try again?");
+            loader.style.display="none";
+        }, 15000);
+    }
+</script>
 </body>
 </html>
 

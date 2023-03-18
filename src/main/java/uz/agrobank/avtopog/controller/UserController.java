@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.agrobank.avtopog.annotation.CheckRole;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.SearchDto;
@@ -31,6 +32,7 @@ public class UserController {
     private final MyBaseUtil myBaseUtil;
 
     @GetMapping(path = "/profile")
+    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
     public String myProfile(Model model) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.findById(userDto.getId());
@@ -48,6 +50,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/add")
+    @CheckRole({RoleEnum.ADMIN})
     public String addPage(Model model) {
         model.addAttribute("userDto", new UserDroCreate());
         UserDto userDto = myBaseUtil.userDto();
@@ -63,6 +66,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/add")
+    @CheckRole({RoleEnum.ADMIN})
     public String addUser(Model model, @ModelAttribute(name = "userDto") UserDroCreate userDroCreate) {
         ResponseDto<User> responseDto = userService.addUser(userDroCreate);
         UserDto userDto = myBaseUtil.userDto();
@@ -83,6 +87,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/all")
+    @CheckRole({RoleEnum.ADMIN})
     public String users(Model model, @RequestParam(name = "name", required = false) String username, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE) Integer page) {
 
         UserDto userDto = myBaseUtil.userDto();
@@ -98,6 +103,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/edite/{id}")
+    @CheckRole({RoleEnum.ADMIN})
     public String editeUserPage(Model model, @PathVariable(name = "id") Long id) {
         ResponseDto<UserUpdate> userDtoResponseDto = userService.findById(id);
         if (userDtoResponseDto.getSuccess()) {
@@ -117,6 +123,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/edite/{id}")
+    @CheckRole({RoleEnum.ADMIN})
     public String editeUser(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
@@ -137,6 +144,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/editeProfile/{id}")
+    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
     public String editeUserProfile(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);

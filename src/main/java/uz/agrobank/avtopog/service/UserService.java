@@ -41,11 +41,16 @@ public class UserService {
         Optional<User> userByUsername = userRepository.getUserByUsername(userCreate.getUsername());
         if (userByUsername.isPresent()) {
             User user = userByUsername.get();
-            boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), user.getPassword());
-            if (matches) {
-                responseDto.setSuccess(true);
-                UserDto userDto = myMapper.fromUser(user);
-                responseDto.setObj(userDto);
+            if (user.getActive()) {
+                boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), user.getPassword());
+                if (matches) {
+                    responseDto.setSuccess(true);
+                    UserDto userDto = myMapper.fromUser(user);
+                    responseDto.setObj(userDto);
+                    return responseDto;
+                }
+            }else {
+                responseDto.setMessage("Your account is blocked");
                 return responseDto;
             }
         }

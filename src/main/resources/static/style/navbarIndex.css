@@ -96,4 +96,12 @@ body {
   background-repeat: no-repeat, repeat;
   /*background-color: whitesmoke;*/
 }
-
+#preloader{
+  background: #000 url(/images/circle-loader-gif-2.gif) no-repeat center center;
+  height: 100vh;
+  background-size: 25%;
+  width: 100%;
+  position: fixed;
+  z-index: 100;
+  animation-delay: 2s;
+}

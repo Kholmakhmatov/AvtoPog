@@ -30,6 +30,7 @@
     <link th:href="@{/style/registr.css}" rel="stylesheet" media="all">
 </head>
 <body>
+<div id="preloader"></div>
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
@@ -165,5 +166,12 @@
     <script th:src="@{/js/global.js}"></script>
 
 </div>
+<script>
+    var loader=document.getElementById("preloader");
+    window.addEventListener("load",function (){
+        loader.style.display="none";
+    })
+
+</script>
 </body>
 </html>

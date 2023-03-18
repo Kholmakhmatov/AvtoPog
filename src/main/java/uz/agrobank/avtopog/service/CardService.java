@@ -45,6 +45,7 @@ public class CardService {
     private final LdSvGateAddRepository ldSvGateAddRepository;
     private final LdSvGateRepository ldSvGateRepository;
     private final MyMapper mapper;
+    private final FileService fileService;
 
     public List<Branch> getBranches() {
         return branchRepository.getBranchList();
@@ -142,9 +143,8 @@ public class CardService {
         throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
     }
 
-    public ResponseDto<String> addCardFromFile(MultipartFile[] files, HttpServletResponse response,Long userId) {
-        ResponseDto<String>stringResponseDto=new ResponseDto<>();
-        List<LdSvGateAddCreate> ldSvGateAddCreateList = excelToList(files,userId);
+    public void addCardFromFile(MultipartFile[] files, HttpServletResponse response,Long userId) {
+        List<LdSvGateAddCreate> ldSvGateAddCreateList = excelToList(files);
         List<ResponseDto<LdSvGateAdd>>responseDtoList=new ArrayList<>();
         for (LdSvGateAddCreate ldSvGateAdd : ldSvGateAddCreateList) {
             ResponseDto<LdSvGateAdd> responseDto=addCard(ldSvGateAdd,userId);
@@ -162,16 +162,12 @@ public class CardService {
         try {
             generator.generateExcelFile(response);
         } catch (IOException e) {
-            stringResponseDto.setMessage("Server error ");
-           return stringResponseDto;
+           throw new UniversalException("Server error",HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        stringResponseDto.setMessage("Add card");
-        stringResponseDto.setSuccess(true);
-        return stringResponseDto;
 
     }
 
-    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files, Long userId) {
+    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files) {
         List<LdSvGateAddCreate> ldSvGateAddCreateList=new ArrayList<>();
         MultipartFile file = files[0];
         XSSFWorkbook workbook = null;
@@ -197,5 +193,9 @@ public class CardService {
             ldSvGateAddCreateList.add(ldSvGateAdd);
         }
         return ldSvGateAddCreateList;
+    }
+
+    public void downloadTemplate(HttpServletResponse response) {
+        fileService.download(SecretKeys.PATH_DOC,SecretKeys.TEM_EXCEL,response);
     }
 }

@@ -56,7 +56,7 @@ public class JwtService {
 
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();
             String subject = body.getSubject();
-            Optional<User> byEmailOrUserName = userRepository.getUserByUsername(subject);
+            Optional<User> byEmailOrUserName = userRepository.getUserByUsernameAndActive(subject,true);
             if (byEmailOrUserName.isPresent()) {
                 userResponseDto.setMessage("home");
                 userResponseDto.setSuccess(true);

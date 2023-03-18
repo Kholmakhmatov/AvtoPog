@@ -13,6 +13,8 @@
     <link rel="stylesheet" th:href="@{/style/usersTable.css}">
 </head>
 <body>
+<div id="preloader">
+</div>
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
@@ -139,5 +141,11 @@
 
 
 </div>
+<script>
+    var loader=document.getElementById("preloader");
+    window.addEventListener("load",function (){
+        loader.style.display="none";
+    })
+</script>
 </body>
 </html>

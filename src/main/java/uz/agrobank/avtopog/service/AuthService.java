@@ -19,7 +19,7 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> byUserName = userRepository.getUserByUsername(username);
+        Optional<User> byUserName = userRepository.getUserByUsernameAndActive(username,true);
         if (byUserName.isPresent())
             return byUserName.get();
         else throw new UniversalException("Not Found User", HttpStatus.FORBIDDEN);

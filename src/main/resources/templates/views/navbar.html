@@ -6,9 +6,11 @@
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
     <link rel="stylesheet" th:href="@{/style/navbarHome.css}"/>
-    <title>dropdown Menu</title>
+    <title>Home</title>
 </head>
 <body>
+<div id="preloader">
+</div>
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
@@ -37,7 +39,8 @@
                         <div class="dropdown-menu-1">
                             <ul>
                                 <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -71,5 +74,11 @@
 
 
 </div>
+<script>
+    var loader = document.getElementById("preloader");
+    window.addEventListener("load", function () {
+        loader.style.display = "none";
+    })
+</script>
 </body>
 </html>

@@ -1,13 +1,18 @@
 package uz.agrobank.avtopog.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import uz.agrobank.avtopog.annotation.CheckRole;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.dto.SendMailDto;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.model.User;
+import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.JwtService;
 import uz.agrobank.avtopog.service.UserService;
@@ -26,7 +31,6 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequiredArgsConstructor
 public class BaseController {
-
     private final UserService userService;
     private final MyBaseUtil myBaseUtil;
     private final JwtService jwtService;
@@ -71,6 +75,8 @@ public class BaseController {
 
     @GetMapping("/logOut")
     public String deleteCookie(HttpServletRequest request, HttpServletResponse response) {
+        UserDto userDto = myBaseUtil.userDto();
+
         Cookie[] cookies = request.getCookies();
         for (Cookie cookie : cookies) {
             if (cookie.getName().equals("user")) {
@@ -88,6 +94,7 @@ public class BaseController {
         return "contact";
     }
     @GetMapping("/contact/us")
+    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
     public String contactUs(Model model) {
         UserDto userDto = myBaseUtil.userDto();
         model.addAttribute("user", userDto);

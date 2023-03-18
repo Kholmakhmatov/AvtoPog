@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import uz.agrobank.avtopog.annotation.CheckRole;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
@@ -13,6 +14,7 @@ import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.model.Branch;
 import uz.agrobank.avtopog.model.LdSvGate;
 import uz.agrobank.avtopog.model.LdSvGateAdd;
+import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.CardService;
@@ -78,9 +80,10 @@ public class CardController {
     }
 
     @PostMapping(path = "/addCardFromFile")
-    public void addCardFromFile(MultipartFile[] files, HttpServletResponse response) {
+    public String addCardFromFile(MultipartFile[] files, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         cardService.addCardFromFile(files, response, userDto.getId());
+        return "index";
     }
 
     @GetMapping(path = "/operation")
@@ -105,6 +108,7 @@ public class CardController {
     }
 
     @GetMapping(path = "/delete/{id}")
+    @CheckRole({RoleEnum.ADMIN})
     public String deleteCradById(@PathVariable(name = "id") Long cardId, Model model, @RequestParam(name = "id", required = false) Long id, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "cardNumber", required = false) String cardNumber, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page) {
         ResponseDto<String> responseDto = cardService.deleteCadById(cardId);
         model.addAttribute("message", responseDto);
@@ -122,6 +126,11 @@ public class CardController {
         model.addAttribute("page", page + 1);
         return "cardsOperation";
 
+    }
+    @GetMapping(path = "/downloadTemplate")
+    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
+    public void downloadTemplate(HttpServletResponse response){
+        cardService.downloadTemplate(response);
     }
 
 
