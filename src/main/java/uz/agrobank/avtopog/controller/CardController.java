@@ -105,13 +105,12 @@ public class CardController {
     @CheckRole({RoleEnum.ADMIN})
     public String deleteCardById(@PathVariable(name = "id") Long cardId, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page) {
         cardService.deleteCadById(cardId);
-        return "redirect:/card/operation?page=" + page + "&branch=" + branch + "&id=" + cardId;
+        return "redirect:/card/operation?page="+page+"&branch="+branch+"&id="+cardId;
 
     }
-
     @GetMapping(path = "/downloadTemplate")
-    @CheckRole({RoleEnum.ADMIN, RoleEnum.USER})
-    public void downloadTemplate(HttpServletResponse response) {
+    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
+    public void downloadTemplate(HttpServletResponse response){
         cardService.downloadTemplate(response);
     }
 

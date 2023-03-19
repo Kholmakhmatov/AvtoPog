@@ -67,8 +67,8 @@ public class BaseController {
     }
 
     @GetMapping("/logOut")
-    public String deleteCookie(HttpServletRequest request, HttpServletResponse response) {
-        jwtService.removeCookies(request, response);
+    public String deleteCookie( HttpServletRequest request,HttpServletResponse response) {
+        jwtService.removeCookies(request,response);
         return "redirect:/";
     }
 
