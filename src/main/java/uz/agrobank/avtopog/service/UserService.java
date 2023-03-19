@@ -11,6 +11,7 @@ import uz.agrobank.avtopog.dto.UserUpdate;
 import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
+import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
@@ -144,7 +145,21 @@ public class UserService {
                 responseDto.setObj(userUpdate);
                 return responseDto;
             }
-
+            /// Agar adminga o'zgartirmoqchi bo'lsa boshqa active admin borligiga tekshirish kerak
+            boolean hasAnotherAdmin=hasAnotherAdmin(user,userUpdate);
+            if (!hasAnotherAdmin){
+                responseDto.setMessage("Siz Role ni almashtira olmaysiz szdan boshqa ADMIN yo'q");
+                userUpdate.setRole(RoleEnum.ADMIN);
+                responseDto.setObj(userUpdate);
+                return responseDto;
+            }
+            /// Agar Activligini almashtirmoqchi bo'lsa
+             hasAnotherAdmin=hasAnotherAdmin(user,userUpdate.getActive());
+            if (!hasAnotherAdmin){
+                responseDto.setMessage("Active holatizni o'zgartira olmaysiz sababi sizdan boshqa admin yo'q");
+                responseDto.setObj(userUpdate);
+                return responseDto;
+            }
             User userSave = toUser(userUpdate, user);
             User save = userRepository.save(userSave);
             userUpdate = myMapper.toUpdate(save);
@@ -153,7 +168,7 @@ public class UserService {
             responseDto.setMessage("Edite user info");
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
-            if (userSave.getId().equals(userDto.getId())) {
+            if (userSave.getId().equals(userDto.getId()) ) {
                 jwtService.createTokenAndSaveCookies(save, response);
             }
         } else {
@@ -162,6 +177,18 @@ public class UserService {
         return responseDto;
     }
 
+    private boolean hasAnotherAdmin(User userLast, UserUpdate userNow) {
+        if ( userLast.getRole().equals(RoleEnum.ADMIN) && userNow.getRole().equals(RoleEnum.USER)){
+           return userRepository.hasAnotherAdmin(userNow.getId());
+        }
+        return true;
+    }
+    private boolean hasAnotherAdmin(User userLast, Boolean userNow) {
+        if (userLast.getRole().equals(RoleEnum.ADMIN) && !userNow){
+            return userRepository.hasAnotherAdmin(userLast.getId());
+        }
+        return true;
+    }
     public User toUser(UserUpdate userUpdate, User user) {
         if (userUpdate == null) {
             return null;

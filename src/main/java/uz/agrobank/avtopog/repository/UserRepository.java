@@ -31,4 +31,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(nativeQuery = true, value = "select * from users where id!=?2 and phone=?1")
     Optional<User> findByPhoneAndIdNot(String username, Long id);
+    @Query(nativeQuery = true,value = "select case when exists\n" +
+            "    (select id from users where id!=?1 and role='ADMIN' and active=true) then true else false end")
+    Boolean hasAnotherAdmin(Long id);
 }

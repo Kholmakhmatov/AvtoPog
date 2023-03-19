@@ -128,24 +128,22 @@
                                     <input class="input--style-4" type="text"  required minlength="4" th:field="*{phone}">
                                 </div>
                             </div>
-                        <div class="col-2" style="display: none" multiple="multiple" >
+                        <div class="col-2" th:style="${user.getRole().name()=='USER'?'displey:none':'displey:bloack'}"  multiple="multiple" >
                             <label class="label">Roles</label>
                             <div class="rs-select2 js-select-simple select--no-search">
-                                <select  name="subject"  th:field="*{role}" >
-
+                                <select  name="subject"  th:field="*{role}">
                                     <option   th:each="role: ${roles}" th:value="${role}" th:text="${role}" ></option>
                                 </select>
                                 <div class="select-dropdown"></div>
                             </div>
                         </div>
-                        <div class="col-2" style="display: none">
+                        <div class="col-2" >
                             <div class="input-group">
                                 <div class="p-t-10" >
                                     <label class="radio-container m-r-45">Active
                                         <input type="checkbox" checked="checked" name="gender"  th:field="*{active}">
                                         <span class="checkmark"></span>
                                     </label>
-
                                 </div>
                             </div>
                         </div>

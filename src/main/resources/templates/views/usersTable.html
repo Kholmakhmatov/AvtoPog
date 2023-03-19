@@ -114,7 +114,7 @@
                                 </td>
                                 <td th:if="${u.getActive()}">
                                     <button class="btn btn-success ">Active</button>
-                                    <a th:href="'/user/edite/'+${u.getId()}" class="btn btn-primary">Edite</a>
+                                    <a th:if="${u.getRole().name()!='ADMIN'}" th:href="'/user/edite/'+${u.getId()}" class="btn btn-primary">Edite</a>
                                 </td>
                                 <td th:if="${!u.getActive()}">
                                     <button class="btn btn-danger ">Passive</button>
