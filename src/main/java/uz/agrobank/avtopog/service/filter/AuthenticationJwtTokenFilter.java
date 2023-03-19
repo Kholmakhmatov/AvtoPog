@@ -31,7 +31,8 @@ public class AuthenticationJwtTokenFilter extends OncePerRequestFilter {
         assert request != null;
         Cookie[] cookies = request.getCookies();
         StringBuffer contextPath = request.getRequestURL();
-        if (!(contextPath.indexOf(".js") > 0 || contextPath.indexOf(".css") > 0)) {
+
+        if (!(contextPath.indexOf(".js") > 0 || contextPath.indexOf(".css") > 0 || contextPath.indexOf("gif") > 0 || contextPath.indexOf(".woff2") > 0)) {
             if (cookies != null) {
 
                 List<Cookie> user = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("user")).toList();
