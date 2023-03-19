@@ -103,7 +103,7 @@
                             <tbody class="topline">
                             <tr th:each="u:${users}">
                                 <td scope="row" class="text-danger" th:text="${u.getId()}"></td>
-                                <td class="text-info" th:text="${u.getFirstName()}"></td>
+                                <td class="text-info" style="color: blue;font-size: 16px" th:text="${u.getFirstName()}"></td>
                                 <td th:text="${u.getUsername()}"></td>
                                 <td th:text="${u.getPhone()}"></td>
                                 <td>

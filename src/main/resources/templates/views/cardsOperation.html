@@ -31,7 +31,6 @@
 
     <!-- Main CSS-->
     <link th:href="@{/style/deleteCard.css}" rel="stylesheet" media="all">
-    <link th:href="@{/style/usersTable.css}" rel="stylesheet" media="all">
 </head>
 <body>
 <div id="preloader"></div>
@@ -150,7 +149,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr class="topline">
-                                <th>Id</th>
+                                <th>Anketa</th>
                                 <th>Branch</th>
                                 <th>Card number</th>
                                 <th>Exp date</th>
@@ -162,7 +161,7 @@
                             <tr th:each="card:${cards}">
                                 <td scope="row" th:text="${card.getId()}"></td>
                                 <td>
-                                    <label style="font-size: 14px" class="text-info"
+                                    <label style="font-size: 16px" class="text-info"
                                            th:text="${card.getBranch()}"></label>
                                 </td>
                                 <td>

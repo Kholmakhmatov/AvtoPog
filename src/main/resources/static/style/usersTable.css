@@ -11388,14 +11388,7 @@ a.text-dark:hover, a.text-dark:focus {
     }
 }
 
-body {
-    font-family: "Poppins", Arial, sans-serif;
-    font-size: 16px;
-    line-height: 1.8;
-    font-weight: normal;
-    background: #fafafa;
-    color: gray;
-}
+
 
 a {
     -webkit-transition: .3s all ease;
@@ -11513,4 +11506,12 @@ h1, h2, h3, h4, h5,
 }
 .search{
     margin-left: 70%;
+}
+.counter a{
+    padding-left: 5px;
+    text-decoration: none;
+}
+.counter a:hover{
+    font-size: 25px;
+    color: red;
 }
