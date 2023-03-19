@@ -12,6 +12,7 @@ import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ResponseDto;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import static uz.agrobank.avtopog.config.SecretKeys.secretWord;
 @RequiredArgsConstructor
 public class JwtService {
     private final UserRepository userRepository;
+
     public boolean validationToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
@@ -36,13 +38,11 @@ public class JwtService {
 
     public String getUsername(String token) {
         try {
-
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();
             return body.getSubject();
         } catch (Exception e) {
             throw new UniversalException("Access_token invalid", HttpStatus.FORBIDDEN);
         }
-
     }
 
     public ResponseDto<String> getUsernameByResponse(String token) {
@@ -50,7 +50,7 @@ public class JwtService {
         try {
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();
             String subject = body.getSubject();
-            Optional<User> byEmailOrUserName = userRepository.getUserByUsernameAndActive(subject,true);
+            Optional<User> byEmailOrUserName = userRepository.getUserByUsernameAndActive(subject, true);
             if (byEmailOrUserName.isPresent()) {
                 userResponseDto.setMessage("Find User");
                 userResponseDto.setSuccess(true);
@@ -63,7 +63,6 @@ public class JwtService {
         userResponseDto.setSuccess(false);
         return userResponseDto;
     }
-
 
     public String createToken(User user) {
         String accessToken = "";
@@ -82,9 +81,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + SecretKeys.accessTokenDate))
                 .signWith(SignatureAlgorithm.HS512, secretWord).compact();
-
     }
-
 
     public void createTokenAndSaveCookies(User user, HttpServletResponse response) {
         String token = createToken(user);

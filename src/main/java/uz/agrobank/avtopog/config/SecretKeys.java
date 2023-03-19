@@ -6,6 +6,6 @@ public interface SecretKeys {
     String SIZE = "10";
     String PAGE = "0";
     String TO_EMAIL = "javohirbekrakhimov@gmail.com";
-    String PATH_DOC="src/main/resources/static/doc";
-    String TEM_EXCEL="Template for add card.xlsx";
+    String PATH_DOC = "src/main/resources/static/doc";
+    String TEM_EXCEL = "Template for add card.xlsx";
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.agrobank.avtopog.service.AuthService;
 import uz.agrobank.avtopog.service.JwtService;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -45,11 +46,11 @@ public class AuthenticationJwtTokenFilter extends OncePerRequestFilter {
                                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                             }
                         } catch (Exception e) {
-                          jwtService.removeCookies(request,response);
+                            jwtService.removeCookies(request, response);
                         }
 
                     } else
-                        jwtService.removeCookies(request,response);
+                        jwtService.removeCookies(request, response);
                 }
             }
         }

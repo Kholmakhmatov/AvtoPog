@@ -1,7 +1,5 @@
 package uz.agrobank.avtopog.service;
 
-import org.aspectj.bridge.Message;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -18,12 +16,12 @@ public class EmailSenderService {
     }
 
     public ResponseDto<String> sendSimpleEmail(SendMailDto sendMailDto) {
-        ResponseDto<String> responseDto=new ResponseDto<>();
+        ResponseDto<String> responseDto = new ResponseDto<>();
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(sendMailDto.getEmail());
             message.setTo(SecretKeys.TO_EMAIL);
-            message.setText("Sender: "+sendMailDto.getEmail()+"\n"+sendMailDto.getMessage());
+            message.setText("Sender: " + sendMailDto.getEmail() + "\n" + sendMailDto.getMessage());
             message.setSubject(sendMailDto.getSubject());
             mailSender.send(message);
             responseDto.setMessage("Send your message");
@@ -31,10 +29,10 @@ public class EmailSenderService {
             SimpleMailMessage message2 = new SimpleMailMessage();
             message2.setTo(sendMailDto.getEmail());
             message2.setFrom(SecretKeys.TO_EMAIL);
-            message2.setText("We have received your question and will respond shortly\nYour question : "+sendMailDto.getMessage());
+            message2.setText("We have received your question and will respond shortly\nYour question : " + sendMailDto.getMessage());
             message2.setSubject(sendMailDto.getSubject());
             mailSender.send(message2);
-        }catch (Exception e){
+        } catch (Exception e) {
             responseDto.setMessage("Server error try again or your email address not found");
         }
         return responseDto;

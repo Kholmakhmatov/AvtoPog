@@ -21,8 +21,6 @@ public class LdSvGateAddServiceImpl implements LdSvGateAddService {
         return jdbcTemplate.queryForList("select * from ld_sv_gate where id = ? and branch = ?", id, branch);
     }
 
-    ;
-
     @Override
     public LdSvGate getByBranchAndCardNumber(LdSvGateDto ldSvGateDto) {
         return null;

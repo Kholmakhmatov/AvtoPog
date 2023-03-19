@@ -29,7 +29,7 @@ public class SecurityConfig {
         String[] staticResources = {
                 "/style/**",
                 "/js/**",
-                "/vendor/**","/images/**"};
+                "/vendor/**", "/images/**"};
 
         http
                 .headers().defaultsDisabled().cacheControl();

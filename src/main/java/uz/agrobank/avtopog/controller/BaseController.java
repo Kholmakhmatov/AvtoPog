@@ -3,7 +3,10 @@ package uz.agrobank.avtopog.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import uz.agrobank.avtopog.annotation.CheckRole;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
 import uz.agrobank.avtopog.dto.SendMailDto;
@@ -13,6 +16,7 @@ import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.JwtService;
 import uz.agrobank.avtopog.service.UserService;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -63,8 +67,8 @@ public class BaseController {
     }
 
     @GetMapping("/logOut")
-    public String deleteCookie( HttpServletRequest request,HttpServletResponse response) {
-        jwtService.removeCookies(request,response);
+    public String deleteCookie(HttpServletRequest request, HttpServletResponse response) {
+        jwtService.removeCookies(request, response);
         return "redirect:/";
     }
 

@@ -62,7 +62,7 @@ public class CardService {
                 return responseDto;
             }
             boolean checkExpired = checkExpired(ldSvGateAddCreate);
-            if (!checkExpired){
+            if (!checkExpired) {
                 responseDto.setMessage("Check card Expired date");
                 return responseDto;
             }
@@ -81,12 +81,12 @@ public class CardService {
 
     private boolean checkExpired(LdSvGateAddCreate ldSvGateAddCreate) {
         int month = Integer.parseInt(ldSvGateAddCreate.getExpiryMonth());
-        int year = Integer.parseInt(ldSvGateAddCreate.getExpiryYear())+2000;
+        int year = Integer.parseInt(ldSvGateAddCreate.getExpiryYear()) + 2000;
         int yearNow = LocalDate.now().getYear();
         int monthNow = LocalDate.now().getMonthValue();
-        if (year==yearNow)
-            return month>monthNow;
-         else return year > yearNow;
+        if (year == yearNow)
+            return month > monthNow;
+        else return year > yearNow;
     }
 
     public ContentList<LdSvGate> getAllActive(Long id, String brach, String cardNumber, Integer page) {
@@ -126,7 +126,7 @@ public class CardService {
                 return true;
             }
         }
-        throw new UniversalException("Card not found",HttpStatus.NOT_FOUND);
+        throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
     }
 
 
@@ -175,7 +175,7 @@ public class CardService {
 
     }
 
-    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files)  {
+    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files) {
         try {
             List<LdSvGateAddCreate> ldSvGateAddCreateList = new ArrayList<>();
             MultipartFile file = files[0];

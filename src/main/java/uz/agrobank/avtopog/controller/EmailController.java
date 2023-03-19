@@ -13,14 +13,15 @@ import uz.agrobank.avtopog.service.EmailSenderService;
 @RequiredArgsConstructor
 public class EmailController {
     private final EmailSenderService emailSenderService;
+
     @PostMapping(path = "/sendMail")
-    public String sendMail(@ModelAttribute(name = "sendDto") SendMailDto sendMailDto, Model model){
+    public String sendMail(@ModelAttribute(name = "sendDto") SendMailDto sendMailDto, Model model) {
         ResponseDto<String> responseDto = emailSenderService.sendSimpleEmail(sendMailDto);
-        model.addAttribute("message",responseDto);
+        model.addAttribute("message", responseDto);
         if (responseDto.getSuccess())
             model.addAttribute("sendDto", new SendMailDto());
         else
-            model.addAttribute("sendDto",sendMailDto);
+            model.addAttribute("sendDto", sendMailDto);
 
         return "contact";
     }

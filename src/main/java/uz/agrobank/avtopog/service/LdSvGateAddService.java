@@ -1,6 +1,5 @@
 package uz.agrobank.avtopog.service;
 
-import org.w3c.dom.stylesheets.LinkStyle;
 import uz.agrobank.avtopog.dto.LdSvGateDto;
 import uz.agrobank.avtopog.model.LdSvGate;
 import uz.agrobank.avtopog.model.LdSvGateAdd;

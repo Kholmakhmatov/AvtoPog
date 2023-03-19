@@ -10,8 +10,9 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     @Query(nativeQuery = true, value = "select * from USERS where USERNAME=?1 ")
     Optional<User> getUserByUsername(String userName);
+
     @Query(nativeQuery = true, value = "select * from USERS where USERNAME=?1 and active=?2")
-    Optional<User> getUserByUsernameAndActive(String userName,Boolean active);
+    Optional<User> getUserByUsernameAndActive(String userName, Boolean active);
 
     Optional<User> findByUsername(String userName);
 

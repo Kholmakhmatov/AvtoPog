@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.model.User;
@@ -19,7 +18,7 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> byUserName = userRepository.getUserByUsernameAndActive(username,true);
+        Optional<User> byUserName = userRepository.getUserByUsernameAndActive(username, true);
         if (byUserName.isPresent())
             return byUserName.get();
         else throw new UniversalException("Not Found User", HttpStatus.FORBIDDEN);

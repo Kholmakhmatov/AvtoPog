@@ -1,6 +1,5 @@
 package uz.agrobank.avtopog.repository;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import uz.agrobank.avtopog.model.LdSvGateAdd;

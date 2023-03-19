@@ -15,14 +15,15 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExcelGeneratorService {
-    private List<ResponseDto<LdSvGateAdd>> responseDtoList;
-    private XSSFWorkbook workbook;
+    private final List<ResponseDto<LdSvGateAdd>> responseDtoList;
+    private final XSSFWorkbook workbook;
     private XSSFSheet sheet;
 
     public ExcelGeneratorService(List<ResponseDto<LdSvGateAdd>> responseDtoList) {
         this.responseDtoList = responseDtoList;
         workbook = new XSSFWorkbook();
     }
+
     private void writeHeader() {
         sheet = workbook.createSheet("Add card");
         Row row = sheet.createRow(0);
@@ -38,6 +39,7 @@ public class ExcelGeneratorService {
         createCell(row, 4, "Status", style);
         createCell(row, 5, "Reason", style);
     }
+
     private void createCell(Row row, int columnCount, Object valueOfCell, CellStyle style) {
         sheet.autoSizeColumn(columnCount);
         Cell cell = row.createCell(columnCount);
@@ -52,13 +54,14 @@ public class ExcelGeneratorService {
         }
         cell.setCellStyle(style);
     }
+
     private void write() {
         int rowCount = 1;
         CellStyle style = workbook.createCellStyle();
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
-        for (ResponseDto<LdSvGateAdd> record: responseDtoList) {
+        for (ResponseDto<LdSvGateAdd> record : responseDtoList) {
             LdSvGateAdd ldSvGateAdd = record.getObj();
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
@@ -70,6 +73,7 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, record.getMessage(), style);
         }
     }
+
     public void generateExcelFile(HttpServletResponse response) throws IOException {
         writeHeader();
         write();

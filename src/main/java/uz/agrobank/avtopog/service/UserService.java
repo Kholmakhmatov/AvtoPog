@@ -14,6 +14,7 @@ import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +46,7 @@ public class UserService {
                     responseDto.setMessage("User find");
                     return responseDto;
                 }
-            }else {
+            } else {
                 responseDto.setMessage("Your account is blocked");
                 return responseDto;
             }
@@ -153,7 +154,7 @@ public class UserService {
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
             if (userSave.getId().equals(userDto.getId())) {
-                jwtService.createTokenAndSaveCookies(save,response);
+                jwtService.createTokenAndSaveCookies(save, response);
             }
         } else {
             throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
