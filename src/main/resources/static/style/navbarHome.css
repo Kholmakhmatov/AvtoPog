@@ -30,6 +30,7 @@ body {
   height: 80px;
   width: 100%;
   display: flex;
+  border-radius: 5px;
   justify-content: space-between;
   align-items: center;
   padding: 0 5%;
@@ -71,13 +72,16 @@ body {
 /* dropdown menu style */
 .dropdown-menu {
   display: none;
+
 }
 
 .menu-bar ul li:hover .dropdown-menu {
+  padding-top: 10px;
   display: block;
   position: absolute;
   left: 0;
   top: 100%;
+  border-radius: 10px;
   background-color: var(--color-black);
 }
 
@@ -97,7 +101,9 @@ body {
 
 .dropdown-menu ul li:hover .dropdown-menu-1 {
   display: block;
+  padding-left: 15px;
   position: absolute;
+  border-radius: 10px;
   left: 150px;
   top: 0;
   background-color: var(--color-black);

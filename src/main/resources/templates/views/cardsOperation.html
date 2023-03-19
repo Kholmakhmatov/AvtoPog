@@ -194,7 +194,7 @@
                         </table>
                         <div  class="counter">
 
-                            <a th:each="i:${#numbers.sequence(1,count)}"  th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}" ></a>
+                            <a th:each="i:${count}"  th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}" ></a>
 
                         </div>
                     </div>

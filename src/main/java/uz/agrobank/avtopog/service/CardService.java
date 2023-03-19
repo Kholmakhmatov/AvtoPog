@@ -25,10 +25,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Kholmakhmatov_A on 3/13/2023
@@ -209,5 +206,37 @@ public class CardService {
 
     public void downloadTemplate(HttpServletResponse response) {
         fileService.download(SecretKeys.PATH_DOC, SecretKeys.TEM_EXCEL, response);
+    }
+
+    public TreeSet<Integer> generateCount(Integer count, Integer page) {
+        TreeSet<Integer> integerList = new TreeSet<>();
+        int counter = 4;
+        if (count < 15) {
+            for (Integer i = 1; i <= count; i++) {
+                integerList.add(i);
+            }
+            return integerList;
+        } else {
+            for (int i = 1; i < 4; i++) {
+                integerList.add(i);
+            }
+            for (int i = page; i > 0 && counter > 0; i--) {
+                integerList.add(i);
+                counter--;
+            }
+            for (int i = page; i < count && counter < 5; i++) {
+                integerList.add(i);
+                counter++;
+            }
+            for (Integer i = count - 4; i <= count; i++) {
+                integerList.add(i);
+            }
+            integerList.add(page);
+            integerList.add((int) (count * 0.20));
+            integerList.add((int) (count * 0.40));
+            integerList.add((int) (count * 0.60));
+            integerList.add((int) (count * 0.80));
+            return integerList;
+        }
     }
 }

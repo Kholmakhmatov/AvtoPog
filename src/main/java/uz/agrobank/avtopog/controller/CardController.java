@@ -21,6 +21,7 @@ import uz.agrobank.avtopog.service.CardService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by Kholmakhmatov_A on 2/21/2023
@@ -95,7 +96,8 @@ public class CardController {
 
         ContentList<LdSvGate> allActive = cardService.getAllActive(id, branch, cardNumber, page);
         model.addAttribute("cards", allActive.getList());
-        model.addAttribute("count", allActive.getCount());
+        TreeSet<Integer> integers = cardService.generateCount(allActive.getCount(), page+1);
+        model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
 
         return "cardsOperation";
