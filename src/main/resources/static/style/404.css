@@ -89,11 +89,19 @@ body {
             0 0 1px rgba(51, 255, 51, 0.4),
             0 0 2px rgba(255, 255, 255, 0.8);
 }
-
+.output a {
+color: blue;
+    font-size: 20px;
+    padding-left: 10px;
+    text-decoration: none;
+    font-family: "Roboto", "Arial", "Helvetica Neue", sans-serif;
+}
 .output::before {
     content: "> ";
 }
-
+.output a:hover{
+    cursor: pointer;
+}
 /*
 .input {
   color: rgba(192, 255, 192, 0.8);

@@ -163,7 +163,7 @@ public class CardService {
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=Cards" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=Cards_response" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         ExcelGeneratorService generator = new ExcelGeneratorService(responseDtoList);
@@ -175,32 +175,36 @@ public class CardService {
 
     }
 
-    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files) {
-        List<LdSvGateAddCreate> ldSvGateAddCreateList = new ArrayList<>();
-        MultipartFile file = files[0];
-        XSSFWorkbook workbook;
+    private List<LdSvGateAddCreate> excelToList(MultipartFile[] files)  {
         try {
-            workbook = new XSSFWorkbook(file.getInputStream());
-        } catch (IOException e) {
+            List<LdSvGateAddCreate> ldSvGateAddCreateList = new ArrayList<>();
+            MultipartFile file = files[0];
+            XSSFWorkbook workbook;
+            try {
+                workbook = new XSSFWorkbook(file.getInputStream());
+            } catch (IOException e) {
+                throw new UniversalException("Read excel exception", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            XSSFSheet worksheet = workbook.getSheetAt(0);
+
+            for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
+
+                XSSFRow row = worksheet.getRow(i);
+                Long id = (long) row.getCell(1).getNumericCellValue();
+                String branch = String.valueOf((long) row.getCell(0).getNumericCellValue());
+                int length = branch.length();
+                for (int j = length; j < 5; j++) {
+                    branch = "0".concat(branch);
+                }
+                String cardNumber = row.getCell(2).getStringCellValue();
+                String expiryDate = row.getCell(3).getStringCellValue();
+                LdSvGateAddCreate ldSvGateAdd = new LdSvGateAddCreate(id, branch, cardNumber, expiryDate.substring(0, 2), expiryDate.substring(2, 4));
+                ldSvGateAddCreateList.add(ldSvGateAdd);
+            }
+            return ldSvGateAddCreateList;
+        } catch (Exception e) {
             throw new UniversalException("Read excel exception", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        XSSFSheet worksheet = workbook.getSheetAt(0);
-
-        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
-
-            XSSFRow row = worksheet.getRow(i);
-            Long id = (long) row.getCell(1).getNumericCellValue();
-            String branch = String.valueOf((long) row.getCell(0).getNumericCellValue());
-            int length = branch.length();
-            for (int j = length; j < 5; j++) {
-                branch = "0".concat(branch);
-            }
-            String cardNumber = row.getCell(2).getStringCellValue();
-            String expiryDate = row.getCell(3).getStringCellValue();
-            LdSvGateAddCreate ldSvGateAdd = new LdSvGateAddCreate(id, branch, cardNumber, expiryDate.substring(0, 2), expiryDate.substring(2, 4));
-            ldSvGateAddCreateList.add(ldSvGateAdd);
-        }
-        return ldSvGateAddCreateList;
     }
 
     public void downloadTemplate(HttpServletResponse response) {

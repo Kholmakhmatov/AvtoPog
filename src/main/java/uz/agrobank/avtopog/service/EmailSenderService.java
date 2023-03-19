@@ -1,5 +1,6 @@
 package uz.agrobank.avtopog.service;
 
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,12 +28,12 @@ public class EmailSenderService {
             mailSender.send(message);
             responseDto.setMessage("Send your message");
             responseDto.setSuccess(true);
-            message = new SimpleMailMessage();
-            message.setTo(sendMailDto.getEmail());
-            message.setFrom(SecretKeys.TO_EMAIL);
-            message.setText("We have received your question and will respond shortly\nYour question : "+sendMailDto.getMessage());
-            message.setSubject(sendMailDto.getSubject());
-            mailSender.send(message);
+            SimpleMailMessage message2 = new SimpleMailMessage();
+            message2.setTo(sendMailDto.getEmail());
+            message2.setFrom(SecretKeys.TO_EMAIL);
+            message2.setText("We have received your question and will respond shortly\nYour question : "+sendMailDto.getMessage());
+            message2.setSubject(sendMailDto.getSubject());
+            mailSender.send(message2);
         }catch (Exception e){
             responseDto.setMessage("Server error try again or your email address not found");
         }

@@ -104,9 +104,11 @@
 
             <div class="card card-4">
                 <div class="card-body">
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                    <div id="info"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px"
                     ></div>
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
+                    <div  th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                    ></div>
+                    <div  th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
                     <h2 class="title">YANGI KARTA ULASH</h2>
                     <form th:action="@{/card/add}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">
@@ -158,14 +160,14 @@
                             <div class="col-2">
                                 <div class="input-group" style="margin-top: 10px">
                                     <label class="label">ANKETA NOMER</label>
-                                    <input class="input--style-4" type="number" th:field="*{id}" required min="1">
+                                    <input  class="input--style-4" type="number" th:field="*{id}" required min="1">
                                 </div>
                                     <button class="btn btn--radius btn--blue" style="margin-top: 40px" type="submit">Add card</button>
                             </div>
                         </div>
                     </form>
                     <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
-                    <form id="form" th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
+                    <form id="form" name="form" th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
                        <div class="row row-space">
                            <div class="col-2">
                                <div class="input-group">
@@ -198,21 +200,30 @@
 </div>
 <script>
     var loader=document.getElementById("preloader");
+    var info=document.getElementById("info");
+    var form=document.getElementById("form");
     window.addEventListener("load",function (){
         loader.style.display="none";
+        info.style.display="none";
     })
-
     function submitClicked(){
-        setTimeout(function(){
-            $("#submit-button").prop("disabled", true).val("Wait...");
-            loader.style.display="block";
-        }, 100);
-
-
-        setTimeout(function(){
-            $("#submit-button").prop("disabled", false).val("Try again?");
-            loader.style.display="none";
-        }, 15000);
+        let value = document.form.files.value;
+        if (value === ""){
+        }else {
+            setTimeout(function () {
+                $("#submit-button").prop("disabled", true).val("Wait...");
+                loader.style.display = "block";
+            }, 100);
+            setTimeout(function () {
+                $("#submit-button").prop("disabled", false).val("Try again?");
+                loader.style.display = "none";
+            }, 5000);
+            setTimeout(function () {
+                info.style.display = "block";
+                document.getElementById("info").innerHTML = "Waiting... response server please";
+                form.style.display = "none"
+            }, 5500);
+        }
     }
 </script>
 </body>
