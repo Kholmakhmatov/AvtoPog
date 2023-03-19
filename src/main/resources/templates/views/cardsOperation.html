@@ -120,15 +120,19 @@
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">ANKETA NOMER</label>
-                                    <input class="input--style-4" type="number" th:field="*{id}">
+                                    <label>
+                                        <input class="input--style-4" type="number" th:field="*{id}">
+                                    </label>
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">KARTA RAQAMI</label>
                                     <!--                                        required min="1000000000000000" max="9999999999999999"-->
-                                    <input class="input--style-4" type="number" th:field="*{cardNumber}"
-                                           placeholder="8600 1234 4567 8912">
+                                    <label>
+                                        <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                               placeholder="8600 1234 4567 8912">
+                                    </label>
 
                                 </div>
                             </div>
@@ -181,7 +185,7 @@
                                 </td>
                                 <td th:if="${user.getRole().toString()!='USER'}">
                                     <a th:if="${card.getState().toString()=='1'}"
-                                       th:href="'/cared/delete/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
+                                       th:href="'/card/delete/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
                                        style="width: 160px;height: 45px;font-size: 16px">DELETE</a>
                                 </td>
 

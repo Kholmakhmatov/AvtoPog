@@ -7,15 +7,14 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import uz.agrobank.avtopog.config.MyPasswordEncoder;
 import uz.agrobank.avtopog.config.SecretKeys;
-import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.exceptions.UniversalException;
-import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ResponseDto;
-
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,12 +24,8 @@ import static uz.agrobank.avtopog.config.SecretKeys.secretWord;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
-    private final MyPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final MyMapper myMapper;
-
     public boolean validationToken(String token) {
-
         try {
             Jwts.parser().setSigningKey(secretWord).parseClaimsJws(token);
             return true;
@@ -50,24 +45,21 @@ public class JwtService {
 
     }
 
-    public ResponseDto<UserDto> getUsernameByResponse(String token) {
-        ResponseDto<UserDto> userResponseDto = new ResponseDto<>();
+    public ResponseDto<String> getUsernameByResponse(String token) {
+        ResponseDto<String> userResponseDto = new ResponseDto<>();
         try {
-
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();
             String subject = body.getSubject();
             Optional<User> byEmailOrUserName = userRepository.getUserByUsernameAndActive(subject,true);
             if (byEmailOrUserName.isPresent()) {
-                userResponseDto.setMessage("home");
+                userResponseDto.setMessage("Find User");
                 userResponseDto.setSuccess(true);
-                UserDto userDto = myMapper.fromUser(byEmailOrUserName.get());
-                userResponseDto.setObj(userDto);
                 return userResponseDto;
             }
         } catch (Exception ignored) {
 
         }
-        userResponseDto.setMessage("index");
+        userResponseDto.setMessage("User not found");
         userResponseDto.setSuccess(false);
         return userResponseDto;
     }
@@ -94,4 +86,20 @@ public class JwtService {
     }
 
 
+    public void createTokenAndSaveCookies(User user, HttpServletResponse response) {
+        String token = createToken(user);
+        Cookie cookie = new Cookie("user", token);
+        cookie.setMaxAge(3600);
+        response.addCookie(cookie);
+    }
+
+    public void removeCookies(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("user")) {
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+            }
+        }
+    }
 }

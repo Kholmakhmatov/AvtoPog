@@ -1,32 +1,23 @@
 package uz.agrobank.avtopog.service.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jdk.jfr.ContentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
-import uz.agrobank.avtopog.exceptions.UniversalException;
 import uz.agrobank.avtopog.service.AuthService;
 import uz.agrobank.avtopog.service.JwtService;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Configuration
 @RequiredArgsConstructor
@@ -54,26 +45,11 @@ public class AuthenticationJwtTokenFilter extends OncePerRequestFilter {
                                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                             }
                         } catch (Exception e) {
-                            for (Cookie cookie : cookies) {
-                                if (cookie.getName().equals("user")) {
-                                    cookie.setMaxAge(0);
-                                    assert response != null;
-                                    response.addCookie(cookie);
-                                    break;
-                                }
-                            }
+                          jwtService.removeCookies(request,response);
                         }
 
-                    } else {
-                        for (Cookie cookie : cookies) {
-                            if (cookie.getName().equals("user")) {
-                                cookie.setMaxAge(0);
-                                assert response != null;
-                                response.addCookie(cookie);
-                            }
-                        }
-
-                    }
+                    } else
+                        jwtService.removeCookies(request,response);
                 }
             }
         }

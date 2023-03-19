@@ -25,7 +25,7 @@ public class DataLoader implements CommandLineRunner {
         if (ddl != null && ddl.contains("create")) {
             Optional<User> byId = userRepository.findById(1L);
             if (byId.isEmpty()) {
-                User admin = new User(1L, passwordEncoder.passwordEncoder().encode("admin"), "Anvar", "admin", "+998997777777", true, RoleEnum.ADMIN);
+                User admin = new User(1L, passwordEncoder.passwordEncoder().encode("admin"), "Anvar", "admin", "+998", true, RoleEnum.ADMIN);
                 userRepository.save(admin);
             }
 

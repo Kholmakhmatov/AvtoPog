@@ -19,7 +19,6 @@ import uz.agrobank.avtopog.repository.LdSvGateAddRepository;
 import uz.agrobank.avtopog.repository.LdSvGateRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
-import uz.agrobank.avtopog.response.ResponseDtoList;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -62,8 +61,13 @@ public class CardService {
                 responseDto.setObj(ldSvGateAdd);
                 return responseDto;
             }
-            responseDto.setSuccess(true);
+            boolean checkExpired = checkExpired(ldSvGateAddCreate);
+            if (!checkExpired){
+                responseDto.setMessage("Check card Expired date");
+                return responseDto;
+            }
             LdSvGateAdd save = ldSvGateAddRepository.save(ldSvGateAdd);
+            responseDto.setSuccess(true);
             responseDto.setMessage("Add new card");
             responseDto.setObj(save);
             return responseDto;
@@ -73,6 +77,16 @@ public class CardService {
         }
 
 
+    }
+
+    private boolean checkExpired(LdSvGateAddCreate ldSvGateAddCreate) {
+        int month = Integer.parseInt(ldSvGateAddCreate.getExpiryMonth());
+        int year = Integer.parseInt(ldSvGateAddCreate.getExpiryYear())+2000;
+        int yearNow = LocalDate.now().getYear();
+        int monthNow = LocalDate.now().getMonthValue();
+        if (year==yearNow)
+            return month>monthNow;
+         else return year > yearNow;
     }
 
     public ContentList<LdSvGate> getAllActive(Long id, String brach, String cardNumber, Integer page) {
@@ -96,29 +110,23 @@ public class CardService {
         return contentList;
     }
 
-    public ResponseDto<String> deleteCadById(Long id) {
-        ResponseDto<String> responseDto = new ResponseDto<>();
+    public boolean deleteCadById(Long id) {
         Optional<LdSvGateAdd> byId = ldSvGateAddRepository.findById(id);
         if (byId.isPresent()) {
             LdSvGateAdd ldSvGateAdd = byId.get();
             ldSvGateAdd.setState(0);
             ldSvGateAddRepository.save(ldSvGateAdd);
-            responseDto.setSuccess(true);
-            responseDto.setMessage("Card position is passive");
-            return responseDto;
+            return true;
         } else {
             Optional<LdSvGate> byIdGate = ldSvGateRepository.findById(id);
             if (byIdGate.isPresent()) {
                 LdSvGate ldSvGate = byIdGate.get();
                 ldSvGate.setState(0);
                 ldSvGateRepository.save(ldSvGate);
-                responseDto.setSuccess(true);
-                responseDto.setMessage("Card position is passive");
-                return responseDto;
+                return true;
             }
         }
-        responseDto.setMessage("Card not found");
-        return responseDto;
+        throw new UniversalException("Card not found",HttpStatus.NOT_FOUND);
     }
 
 
@@ -143,11 +151,11 @@ public class CardService {
         throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
     }
 
-    public void addCardFromFile(MultipartFile[] files, HttpServletResponse response,Long userId) {
+    public void addCardFromFile(MultipartFile[] files, HttpServletResponse response, Long userId) {
         List<LdSvGateAddCreate> ldSvGateAddCreateList = excelToList(files);
-        List<ResponseDto<LdSvGateAdd>>responseDtoList=new ArrayList<>();
+        List<ResponseDto<LdSvGateAdd>> responseDtoList = new ArrayList<>();
         for (LdSvGateAddCreate ldSvGateAdd : ldSvGateAddCreateList) {
-            ResponseDto<LdSvGateAdd> responseDto=addCard(ldSvGateAdd,userId);
+            ResponseDto<LdSvGateAdd> responseDto = addCard(ldSvGateAdd, userId);
             responseDtoList.add(responseDto);
         }
         response.setContentType("application/octet-stream");
@@ -162,15 +170,15 @@ public class CardService {
         try {
             generator.generateExcelFile(response);
         } catch (IOException e) {
-           throw new UniversalException("Server error",HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new UniversalException("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     private List<LdSvGateAddCreate> excelToList(MultipartFile[] files) {
-        List<LdSvGateAddCreate> ldSvGateAddCreateList=new ArrayList<>();
+        List<LdSvGateAddCreate> ldSvGateAddCreateList = new ArrayList<>();
         MultipartFile file = files[0];
-        XSSFWorkbook workbook = null;
+        XSSFWorkbook workbook;
         try {
             workbook = new XSSFWorkbook(file.getInputStream());
         } catch (IOException e) {
@@ -178,24 +186,24 @@ public class CardService {
         }
         XSSFSheet worksheet = workbook.getSheetAt(0);
 
-        for(int i=1;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+        for (int i = 1; i < worksheet.getPhysicalNumberOfRows(); i++) {
 
             XSSFRow row = worksheet.getRow(i);
-            Long id=(long) row.getCell(1).getNumericCellValue();
+            Long id = (long) row.getCell(1).getNumericCellValue();
             String branch = String.valueOf((long) row.getCell(0).getNumericCellValue());
             int length = branch.length();
-            for (int j = length; j <5 ; j++) {
-                branch="0".concat(branch);
+            for (int j = length; j < 5; j++) {
+                branch = "0".concat(branch);
             }
-            String cardNumber=row.getCell(2).getStringCellValue();
-            String expiryDate=row.getCell(3).getStringCellValue();
-            LdSvGateAddCreate ldSvGateAdd = new LdSvGateAddCreate(id,branch,cardNumber,expiryDate.substring(0,2),expiryDate.substring(2,4));
+            String cardNumber = row.getCell(2).getStringCellValue();
+            String expiryDate = row.getCell(3).getStringCellValue();
+            LdSvGateAddCreate ldSvGateAdd = new LdSvGateAddCreate(id, branch, cardNumber, expiryDate.substring(0, 2), expiryDate.substring(2, 4));
             ldSvGateAddCreateList.add(ldSvGateAdd);
         }
         return ldSvGateAddCreateList;
     }
 
     public void downloadTemplate(HttpServletResponse response) {
-        fileService.download(SecretKeys.PATH_DOC,SecretKeys.TEM_EXCEL,response);
+        fileService.download(SecretKeys.PATH_DOC, SecretKeys.TEM_EXCEL, response);
     }
 }

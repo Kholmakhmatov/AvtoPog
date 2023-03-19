@@ -19,7 +19,6 @@ import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.UserService;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +31,7 @@ public class UserController {
     private final MyBaseUtil myBaseUtil;
 
     @GetMapping(path = "/profile")
-    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
+    @CheckRole({RoleEnum.ADMIN, RoleEnum.USER})
     public String myProfile(Model model) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.findById(userDto.getId());
@@ -117,14 +116,13 @@ public class UserController {
             model.addAttribute("roles", roles);
             model.addAttribute("message", new ResponseDto<String>());
             return "editeUser";
-        } else
-            throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
+        } else throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
 
     }
 
     @PostMapping(path = "/edite/{id}")
     @CheckRole({RoleEnum.ADMIN})
-    public String editeUser(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
+    public String editeUser(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
         UserUpdate obj = userDtoResponseDto.getObj();
@@ -144,8 +142,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/editeProfile/{id}")
-    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
-    public String editeUserProfile(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, @PathVariable(name = "id") Long id, HttpServletResponse response) {
+    @CheckRole({RoleEnum.ADMIN, RoleEnum.USER})
+    public String editeUserProfile(Model model, @ModelAttribute(name = "userDto") UserUpdate userUpdate, HttpServletResponse response) {
         UserDto userDto = myBaseUtil.userDto();
         ResponseDto<UserUpdate> userDtoResponseDto = userService.updateUser(userUpdate, userDto, response);
         if (userDtoResponseDto.getSuccess()) {

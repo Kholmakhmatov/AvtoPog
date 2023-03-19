@@ -14,9 +14,6 @@ import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +33,8 @@ public class UserService {
     private final MyMapper myMapper;
     private final JwtService jwtService;
 
-    public ResponseDto<UserDto> getUser(User userCreate) {
-        ResponseDto<UserDto> responseDto = new ResponseDto<>();
+    public ResponseDto<String> hasUserForLogin(User userCreate) {
+        ResponseDto<String> responseDto = new ResponseDto<>();
         Optional<User> userByUsername = userRepository.getUserByUsername(userCreate.getUsername());
         if (userByUsername.isPresent()) {
             User user = userByUsername.get();
@@ -45,8 +42,7 @@ public class UserService {
                 boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), user.getPassword());
                 if (matches) {
                     responseDto.setSuccess(true);
-                    UserDto userDto = myMapper.fromUser(user);
-                    responseDto.setObj(userDto);
+                    responseDto.setMessage("User find");
                     return responseDto;
                 }
             }else {
@@ -58,9 +54,9 @@ public class UserService {
         return responseDto;
     }
 
-    public ResponseDto<UserDto> hasUser(String token) {
+    public ResponseDto<String> hasUser(String token) {
         boolean validationToken = jwtService.validationToken(token);
-        ResponseDto<UserDto> usernameByResponse = new ResponseDto<>();
+        ResponseDto<String> usernameByResponse = new ResponseDto<>();
         if (validationToken) {
             return jwtService.getUsernameByResponse(token);
         } else {
@@ -157,11 +153,7 @@ public class UserService {
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
             if (userSave.getId().equals(userDto.getId())) {
-
-                String token = jwtService.createToken(save);
-                Cookie cookie = new Cookie("user", token);
-                cookie.setMaxAge(3600);
-                response.addCookie(cookie);
+                jwtService.createTokenAndSaveCookies(save,response);
             }
         } else {
             throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
