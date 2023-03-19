@@ -31,6 +31,7 @@
 
     <!-- Main CSS-->
     <link th:href="@{/style/deleteCard.css}" rel="stylesheet" media="all">
+    <link th:href="@{/style/usersTable.css}" rel="stylesheet" media="all">
 </head>
 <body>
 <div id="preloader"></div>
@@ -192,8 +193,10 @@
 
                             </tbody>
                         </table>
-                        <div class="counter">
-                            <a th:each="i:${#numbers.sequence(1,count)}" th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
+                        <div  class="counter">
+
+                            <a th:each="i:${#numbers.sequence(1,count)}"  th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}" ></a>
+
                         </div>
                     </div>
                 </div>
