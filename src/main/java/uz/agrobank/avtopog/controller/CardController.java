@@ -99,7 +99,7 @@ public class CardController {
             model.addAttribute("firstPage",false);
         ContentList<LdSvGate> allActive = cardService.getAllActive(id, branch, cardNumber, page);
         model.addAttribute("cards", allActive.getList());
-        TreeSet<Integer> integers = cardService.generateCount(allActive.getCount(), page+1);
+        TreeSet<Integer> integers = myBaseUtil.generateCount(allActive.getCount(), page + 1);
         model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
         if (integers.size()>0 && !(branch==null && cardNumber==null && id==null))

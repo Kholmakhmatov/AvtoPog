@@ -127,7 +127,7 @@
                             </tbody>
                         </table>
                         <div class="counter">
-                            <a th:each="i:${#numbers.sequence(1,count)}"
+                            <a th:each="i:${count}"
                                th:href="'/user/all/?page='+${i}+'&name='+${search.getName()}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
                         </div>
                     </div>

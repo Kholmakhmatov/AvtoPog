@@ -95,8 +95,8 @@ public class UserController {
         model.addAttribute("message", new ResponseDto<String>());
         ContentList<UserDto> contentList = userService.getUserPage(username, page);
         model.addAttribute("users", contentList.getList());
-        TreeSet<Integer> integers = userService.generateCount(contentList.getCount(), page);
-        model.addAttribute("count", contentList.getCount());
+        TreeSet<Integer> integers = myBaseUtil.generateCount(contentList.getCount(), page);
+        model.addAttribute("count", integers);
         model.addAttribute("page", contentList.getPage()+1);
 
         return "usersTable";
