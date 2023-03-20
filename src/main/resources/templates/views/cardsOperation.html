@@ -106,7 +106,7 @@
                     ></div>
                     <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
-                    <div th:if="${cards.size()==0}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"
+                    <div th:if="${cards.size()==0 and firstPage.toString()!='true'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"
                     >Nothing not found</div>
                     <form th:action="@{'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
                           enctype="multipart/form-data">
