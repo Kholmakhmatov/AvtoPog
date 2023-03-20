@@ -103,7 +103,7 @@ public class CardController {
         TreeSet<Integer> integers = cardService.generateCount(allActive.getCount(), page+1);
         model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
-        if (integers.size()>0)
+        if (integers.size()>0 && !(branch==null && cardNumber==null && id==null))
             model.addAttribute("firstPage",true);
         else
             model.addAttribute("firstPage",false);
