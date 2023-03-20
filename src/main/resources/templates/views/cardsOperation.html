@@ -121,7 +121,7 @@
 <!--                                                th:text="${branch.getBranch()}"></option>-->
 <!--                                    </select>-->
                                     <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}" >
-                                        <option th:value="null" selected>Select a Branch or search...</option>
+                                        <option th:value="null" selected>Nothing</option>
                                         <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
                                                 th:text="${branch.getBranch()}"></option>
                                     </select>
