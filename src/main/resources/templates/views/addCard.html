@@ -141,9 +141,9 @@
                             <div class="col-2" style="margin-top: 10px">
                                 <div class="input-group">
                                     <label class="label">KARTA RAQAMI</label>
-                                    <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                    <input id="cardNumber" class="input--style-4" type="number" th:field="*{cardNumber}"
                                            placeholder="8600 1234 4567 8912" required min="1000000000000000"
-                                           max="9999999999999999">
+                                           max="9999999999999999" >
 
                                 </div>
 
@@ -242,18 +242,19 @@
             setTimeout(function () {
                 $("#submit-button").prop("disabled", false).val("Try again?");
                 loader.style.display = "none";
-            }, 5000);
+            }, 3000);
             setTimeout(function () {
                 info.style.display = "block";
                 document.getElementById("info").innerHTML = "Waiting... response server please";
-                form.style.display = "none"
-            }, 5500);
+                document.getElementById("form").reset();
+            }, 3500);
         }
     }
     $(document).ready(function () {
 //change selectboxes to selectize mode to be searchable
         $("select").select2();
     });
+
 </script>
 </body>
 </html>

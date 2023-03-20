@@ -32,10 +32,10 @@ public class ExcelGeneratorService {
         font.setBold(true);
         font.setFontHeight(16);
         style.setFont(font);
-        createCell(row, 0, "Anketa ID", style);
-        createCell(row, 1, "Branch", style);
-        createCell(row, 2, "Card number", style);
-        createCell(row, 3, "Expire date", style);
+        createCell(row, 0, "МФО", style);
+        createCell(row, 1, "АНКЕТА", style);
+        createCell(row, 2, "Карта раками", style);
+        createCell(row, 3, "муддати", style);
         createCell(row, 4, "Status", style);
         createCell(row, 5, "Reason", style);
     }
@@ -65,8 +65,8 @@ public class ExcelGeneratorService {
             LdSvGateAdd ldSvGateAdd = record.getObj();
             Row row = sheet.createRow(rowCount++);
             int columnCount = 0;
-            createCell(row, columnCount++, ldSvGateAdd.getId(), style);
             createCell(row, columnCount++, ldSvGateAdd.getBranch(), style);
+            createCell(row, columnCount++, ldSvGateAdd.getId(), style);
             createCell(row, columnCount++, ldSvGateAdd.getCardNumber(), style);
             createCell(row, columnCount++, ldSvGateAdd.getExpiryDate(), style);
             createCell(row, columnCount++, record.getSuccess(), style);

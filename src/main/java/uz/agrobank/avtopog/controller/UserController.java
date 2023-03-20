@@ -97,7 +97,7 @@ public class UserController {
         model.addAttribute("users", contentList.getList());
         TreeSet<Integer> integers = userService.generateCount(contentList.getCount(), page);
         model.addAttribute("count", contentList.getCount());
-        model.addAttribute("page", contentList.getPage() + 1);
+        model.addAttribute("page", contentList.getPage()+1);
 
         return "usersTable";
     }

@@ -126,28 +126,6 @@ public class CardService {
         throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
     }
 
-
-    public LdSvGateAddCreate getCardById(Long id) {
-        Optional<LdSvGate> byId = ldSvGateRepository.findById(id);
-        if (byId.isPresent()) {
-            LdSvGate ldSvGate = byId.get();
-            LdSvGateAddCreate ldSvGateAddCreate = mapper.fromLdSvGateToCreate(ldSvGate);
-            ldSvGateAddCreate.setExpiryMonth(ldSvGate.getExpiryDate().substring(0, 2));
-            ldSvGateAddCreate.setExpiryYear(ldSvGate.getExpiryDate().substring(2, 4));
-            return ldSvGateAddCreate;
-        } else {
-            Optional<LdSvGateAdd> byId1 = ldSvGateAddRepository.findById(id);
-            if (byId1.isPresent()) {
-                LdSvGateAdd ldSvAdd = byId1.get();
-                LdSvGateAddCreate ldSvGateAddCreate = mapper.fromLdSvAddToCreate(ldSvAdd);
-                ldSvGateAddCreate.setExpiryMonth(ldSvAdd.getExpiryDate().substring(0, 2));
-                ldSvGateAddCreate.setExpiryYear(ldSvAdd.getExpiryDate().substring(2, 4));
-                return ldSvGateAddCreate;
-            }
-        }
-        throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
-    }
-
     public void addCardFromFile(MultipartFile[] files, HttpServletResponse response, Long userId) {
         List<LdSvGateAddCreate> ldSvGateAddCreateList = excelToList(files);
         List<ResponseDto<LdSvGateAdd>> responseDtoList = new ArrayList<>();
@@ -215,7 +193,6 @@ public class CardService {
             for (Integer i = 1; i <= count; i++) {
                 integerList.add(i);
             }
-            return integerList;
         } else {
             for (int i = 1; i < 4; i++) {
                 integerList.add(i);
@@ -236,7 +213,7 @@ public class CardService {
             integerList.add((int) (count * 0.40));
             integerList.add((int) (count * 0.60));
             integerList.add((int) (count * 0.80));
-            return integerList;
         }
+        return integerList;
     }
 }
