@@ -89,7 +89,6 @@ public class UserController {
     @GetMapping(path = "/all")
     @CheckRole({RoleEnum.ADMIN})
     public String users(Model model, @RequestParam(name = "name", required = false) String username, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE) Integer page) {
-
         UserDto userDto = myBaseUtil.userDto();
         model.addAttribute("user", userDto);
         model.addAttribute("search", new SearchDto(username));
@@ -98,7 +97,7 @@ public class UserController {
         model.addAttribute("users", contentList.getList());
         TreeSet<Integer> integers = userService.generateCount(contentList.getCount(), page);
         model.addAttribute("count", contentList.getCount());
-        model.addAttribute("page", contentList.getPage());
+        model.addAttribute("page", contentList.getPage() + 1);
 
         return "usersTable";
     }
