@@ -34,6 +34,9 @@
 
     <!-- Main CSS-->
     <link th:href="@{/style/registr.css}" rel="stylesheet" media="all">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 </head>
 <body>
 <div id="preloader"></div>
@@ -65,7 +68,8 @@
                         <div class="dropdown-menu-1">
                             <ul>
                                 <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -101,43 +105,55 @@
         <div class="wrapper wrapper--w680">
 
 
-
             <div class="card card-4">
                 <div class="card-body">
-                    <div id="info"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px"
+                    <div id="info" class="alert alert-success align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px"
                     ></div>
-                    <div  th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                         class="alert alert-success align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
                     ></div>
-                    <div  th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                         class="alert alert-danger align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
                     ></div>
                     <h2 class="title">YANGI KARTA ULASH</h2>
-                    <form th:action="@{/card/add}" method="POST" th:object="${addCard}"   enctype="multipart/form-data">
+                    <form th:action="@{/card/add}" method="POST" th:object="${addCard}" enctype="multipart/form-data">
 
-                        <div class="form-control" >
+                        <div class="form-control">
                             <label class="label">FILIALNI TANLANG</label>
                             <div class="rs-select2 js-select-simple select--no-search">
-                                <select class="form-control" name="subject" th:field="*{branch}" >
+<!--                                <select class="form-control" name="subject" th:field="*{branch}">-->
+<!--                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+<!--                                            th:text="${branch.getBranch()}"></option>-->
+<!--                                </select>-->
+<!--                                <div class="select-dropdown"></div>-->
+                                <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}" required>
+                                    <option th:value="*{branch}" selected>Select a Branch or search...</option>
                                     <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
                                             th:text="${branch.getBranch()}"></option>
                                 </select>
-                                <div class="select-dropdown"></div>
                             </div>
                         </div>
 
-                        <div class="row row-space" >
+                        <div class="row row-space">
                             <div class="col-2" style="margin-top: 10px">
                                 <div class="input-group">
                                     <label class="label">KARTA RAQAMI</label>
-                                    <input class="input--style-4" type="number" th:field="*{cardNumber}" placeholder="8600 1234 4567 8912"   required min="1000000000000000" max="9999999999999999" >
+                                    <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                           placeholder="8600 1234 4567 8912" required min="1000000000000000"
+                                           max="9999999999999999">
 
                                 </div>
 
                                 <div class="row row-space">
-                                    <h6  style="text-align: center;padding-bottom: 15px;color: rebeccapurple">AMAL QILISH MUDDATI</h6>
+                                    <h6 style="text-align: center;padding-bottom: 15px;color: rebeccapurple">AMAL QILISH
+                                        MUDDATI</h6>
                                     <div class="col-2">
                                         <h6>OYNI TANLANG</h6>
                                         <div class="rs-select2 js-select-simple select--no-search">
-                                            <select class="form-control" name="subject" th:field="*{expiryMonth}"  >
+                                            <select class="form-control" name="subject" th:field="*{expiryMonth}">
                                                 <option th:each="month: ${months}" th:value="${month}"
                                                         th:text="${month}"></option>
                                             </select>
@@ -147,7 +163,7 @@
                                     <div class="col-2">
                                         <h6>YILNI TANLANG</h6>
                                         <div class="rs-select2 js-select-simple select--no-search">
-                                            <select class="form-control" name="subject" th:field="*{expiryYear}" >
+                                            <select class="form-control" name="subject" th:field="*{expiryYear}">
 
                                                 <option th:each="year: ${years}" th:value="${year}"
                                                         th:text="${year}"></option>
@@ -160,26 +176,34 @@
                             <div class="col-2">
                                 <div class="input-group" style="margin-top: 10px">
                                     <label class="label">ANKETA NOMER</label>
-                                    <input  class="input--style-4" type="number" th:field="*{id}" required min="1">
+                                    <input class="input--style-4" type="number" th:field="*{id}" required min="1">
                                 </div>
-                                    <button class="btn btn--radius btn--blue" style="margin-top: 40px" type="submit">Add card</button>
+                                <button class="btn btn--radius btn--blue" style="margin-top: 40px" type="submit">Add
+                                    card
+                                </button>
                             </div>
                         </div>
                     </form>
                     <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
-                    <form id="form" name="form" th:action="@{/card/addCardFromFile}" method="POST"  enctype="multipart/form-data">
-                       <div class="row row-space">
-                           <div class="col-2">
-                               <div class="input-group">
-                                   <label class="label">Select excel file</label>
-                                   <input  type="file" name="files" accept=".xlsx, .xls, .csv" required>
-                                   <a href="/card/downloadTemplate" style="color: red;font-size: 14px;margin-top: 10px">Na'muna excel file uchun !!!</a>
-                               </div>
-                           </div >
-                           <div class="col-2">
-                               <button id="submit-button" style="border-radius: 5px;width: 90px;height: 45px;background: #01d28e" type="submit" onclick="submitClicked()">Send file</button>
-                           </div>
-                           </div>
+                    <form id="form" name="form" th:action="@{/card/addCardFromFile}" method="POST"
+                          enctype="multipart/form-data">
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Select excel file</label>
+                                    <input type="file" name="files" accept=".xlsx, .xls, .csv" required>
+                                    <a href="/card/downloadTemplate"
+                                       style="color: red;font-size: 14px;margin-top: 10px">Na'muna excel file uchun
+                                        !!!</a>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <button id="submit-button"
+                                        style="border-radius: 5px;width: 90px;height: 45px;background: #01d28e"
+                                        type="submit" onclick="submitClicked()">Send file
+                                </button>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -199,17 +223,18 @@
 
 </div>
 <script>
-    var loader=document.getElementById("preloader");
-    var info=document.getElementById("info");
-    var form=document.getElementById("form");
-    window.addEventListener("load",function (){
-        loader.style.display="none";
-        info.style.display="none";
+    var loader = document.getElementById("preloader");
+    var info = document.getElementById("info");
+    var form = document.getElementById("form");
+    window.addEventListener("load", function () {
+        loader.style.display = "none";
+        info.style.display = "none";
     })
-    function submitClicked(){
+
+    function submitClicked() {
         let value = document.form.files.value;
-        if (value === ""){
-        }else {
+        if (value === "") {
+        } else {
             setTimeout(function () {
                 $("#submit-button").prop("disabled", true).val("Wait...");
                 loader.style.display = "block";
@@ -225,6 +250,10 @@
             }, 5500);
         }
     }
+    $(document).ready(function () {
+//change selectboxes to selectize mode to be searchable
+        $("select").select2();
+    });
 </script>
 </body>
 </html>

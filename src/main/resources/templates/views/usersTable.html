@@ -92,6 +92,7 @@
                             </div>
                             <thead class="topline" >
                             <tr >
+                                <th>T/r</th>
                                 <th>Id</th>
                                 <th>Full name</th>
                                 <th>Username</th>
@@ -101,7 +102,8 @@
                             </tr>
                             </thead>
                             <tbody class="topline">
-                            <tr th:each="u:${users}">
+                            <tr th:each="u,state:${users}">
+                                <td  th:text="${state.count + page*10 }"></td>
                                 <td scope="row" class="text-danger" th:text="${u.getId()}"></td>
                                 <td class="text-info" style="color: blue;font-size: 16px" th:text="${u.getFirstName()}"></td>
                                 <td th:text="${u.getUsername()}"></td>

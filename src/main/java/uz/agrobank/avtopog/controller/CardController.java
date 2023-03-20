@@ -19,6 +19,7 @@ import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.CardService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.TreeSet;
@@ -93,13 +94,19 @@ public class CardController {
         model.addAttribute("message", response);
         model.addAttribute("user", userDto);
         model.addAttribute("searchCard", new LdSvGateAddSearch(id, branch, cardNumber));
-
+        if (page==0)
+            model.addAttribute("firstPage",true);
+        else
+            model.addAttribute("firstPage",false);
         ContentList<LdSvGate> allActive = cardService.getAllActive(id, branch, cardNumber, page);
         model.addAttribute("cards", allActive.getList());
         TreeSet<Integer> integers = cardService.generateCount(allActive.getCount(), page+1);
         model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
-
+        if (integers.size()>0)
+            model.addAttribute("firstPage",true);
+        else
+            model.addAttribute("firstPage",false);
         return "cardsOperation";
     }
 

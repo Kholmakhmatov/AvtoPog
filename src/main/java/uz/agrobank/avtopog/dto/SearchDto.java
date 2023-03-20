@@ -7,9 +7,10 @@ import lombok.Data;
 @Builder
 public class SearchDto {
 
-    private String name;
+    private String name="";
 
     public SearchDto(String name) {
-        this.name = name;
+        if(name!=null)
+          this.name = name;
     }
 }

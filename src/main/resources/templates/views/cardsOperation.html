@@ -31,6 +31,10 @@
 
     <!-- Main CSS-->
     <link th:href="@{/style/deleteCard.css}" rel="stylesheet" media="all">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
 </head>
 <body>
 <div id="preloader"></div>
@@ -102,6 +106,8 @@
                     ></div>
                     <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
                     ></div>
+                    <div th:if="${cards.size()==0}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"
+                    >Nothing not found</div>
                     <form th:action="@{'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
                           enctype="multipart/form-data">
 
@@ -109,12 +115,17 @@
                             <div class="col-2">
                                 <label class="label">FILIALNI TANLANG</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-                                    <select class="form-control" name="subject" th:field="*{branch}">
-                                        <option th:value="${message.getObj()}" selected >Choose here</option>
+<!--                                    <select class="form-control" name="subject" th:field="*{branch}">-->
+<!--                                        <option th:value="${message.getObj()}" selected >Choose here</option>-->
+<!--                                        <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+<!--                                                th:text="${branch.getBranch()}"></option>-->
+<!--                                    </select>-->
+                                    <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}" >
+                                        <option th:value="null" selected>Select a Branch or search...</option>
                                         <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
                                                 th:text="${branch.getBranch()}"></option>
                                     </select>
-                                    <div class="select-dropdown"></div>
+<!--                                    <div class="select-dropdown"></div>-->
                                 </div>
                             </div>
                             <div class="col-2">
@@ -149,6 +160,7 @@
                         <table class="table table-striped">
                             <thead>
                             <tr class="topline">
+                                <th>T/r</th>
                                 <th>Anketa</th>
                                 <th>Branch</th>
                                 <th>Card number</th>
@@ -158,10 +170,11 @@
                             </tr>
                             </thead>
                             <tbody class="topline">
-                            <tr th:each="card:${cards}">
-                                <td scope="row" th:text="${card.getId()}"></td>
+                            <tr th:each="card,state:${cards}">
+                                <td  th:text="${state.count + page*10 - 10 }"></td>
+                                <td style="font-size: 18px;color: green" scope="row" th:text="${card.getId()}"></td>
                                 <td>
-                                    <label style="font-size: 16px" class="text-info"
+                                    <label style="font-size: 16px;color: #2c6ed5"
                                            th:text="${card.getBranch()}"></label>
                                 </td>
                                 <td>
@@ -223,6 +236,10 @@
     window.addEventListener("load",function (){
         loader.style.display="none";
     })
+    $(document).ready(function () {
+//change selectboxes to selectize mode to be searchable
+        $("select").select2();
+    });
 </script>
 </body>
 </html>
