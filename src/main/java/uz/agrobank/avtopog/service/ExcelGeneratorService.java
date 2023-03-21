@@ -1,8 +1,6 @@
 package uz.agrobank.avtopog.service;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -61,6 +59,11 @@ public class ExcelGeneratorService {
         XSSFFont font = workbook.createFont();
         font.setFontHeight(14);
         style.setFont(font);
+        CellStyle styleDanger = workbook.createCellStyle();
+        XSSFFont font2 = workbook.createFont();
+        font2.setFontHeight(14);
+        font2.setColor(IndexedColors.RED.index);
+        styleDanger.setFont(font2);
         for (ResponseDto<LdSvGateAdd> record : responseDtoList) {
             LdSvGateAdd ldSvGateAdd = record.getObj();
             Row row = sheet.createRow(rowCount++);
@@ -70,7 +73,10 @@ public class ExcelGeneratorService {
             createCell(row, columnCount++, ldSvGateAdd.getCardNumber(), style);
             createCell(row, columnCount++, ldSvGateAdd.getExpiryDate(), style);
             createCell(row, columnCount++, record.getSuccess(), style);
-            createCell(row, columnCount++, record.getMessage(), style);
+            if(record.getSuccess())
+                createCell(row, columnCount++, record.getMessage(), style);
+            else
+                createCell(row, columnCount++, record.getMessage(), styleDanger);
         }
     }
 

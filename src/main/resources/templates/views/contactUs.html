@@ -131,7 +131,7 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
-                                                    <input type="submit" value="Send Message" class="btn btn-primary">
+                                                    <input id="submit-button" type="submit" value="Send Message" class="btn btn-primary" onclick="submitClicked()">
                                                     <div class="submitting"></div>
                                                 </div>
                                             </div>
@@ -201,6 +201,15 @@
     window.addEventListener("load",function (){
         loader.style.display="none";
     })
+    function submitClicked() {
+            setTimeout(function () {
+                $("#submit-button").prop("disabled", true).val("Waiting...");
+            }, 100);
+            setTimeout(function () {
+                $("#submit-button").prop("disabled", false).val("Try again?");
+            }, 8000);
+
+    }
 </script>
 </body>
 </html>

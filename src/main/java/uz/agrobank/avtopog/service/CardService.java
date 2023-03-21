@@ -25,7 +25,10 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by Kholmakhmatov_A on 3/13/2023
@@ -50,10 +53,18 @@ public class CardService {
     public ResponseDto<LdSvGateAdd> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
         ResponseDto<LdSvGateAdd> responseDto = new ResponseDto<>();
         try {
-            boolean existsById = ldSvGateAddRepository.existsById(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getId());
+            ///Branch ga check
             LdSvGateAdd ldSvGateAdd = new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth() + ldSvGateAddCreate.getExpiryYear(), userId);
+            Optional<Branch> byBranch = branchRepository.findByBranch(ldSvGateAddCreate.getBranch());
+            if (byBranch.isEmpty()) {
+                responseDto.setMessage("Branch not found");
+                responseDto.setObj(ldSvGateAdd);
+                return responseDto;
+            }
+
+            Integer existsById = ldSvGateAddRepository.existsById(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getId());
             responseDto.setObj(ldSvGateAdd);
-            if (existsById) {
+            if (existsById > 0) {
                 responseDto.setMessage("Anketa Id avvaldan mavjud");
                 responseDto.setObj(ldSvGateAdd);
                 return responseDto;
@@ -95,13 +106,9 @@ public class CardService {
         Integer offset = size * page;
         List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber, id, brach, cardNumber, size, offset);
         contentList.setPage(page);
-        List<Integer> allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber, id, brach, cardNumber);
+        Integer allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber, id, brach, cardNumber);
         contentList.setList(allActive);
-        Integer allActiveCount = 0;
-        for (Integer integer : allActiveCountList) {
-            allActiveCount += integer;
-        }
-        double div = allActiveCount / 10.0;
+        double div = allActiveCountList / 10.0;
         Integer a = (int) Math.ceil(div);
         contentList.setCount(a);
         return contentList;

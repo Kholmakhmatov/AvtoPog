@@ -19,19 +19,23 @@ import java.util.Set;
 @Table(name = "USERS")
 public class User implements UserDetails {
     @Id
+    @Column(name = "ID")
     private Long id;
+    @Column(name = "PASSWORD")
     private String password;
     @Column(name = "FIRSTNAME")
     private String firstName;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true,name = "USERNAME")
     private String username;
+    @Column(name = "PHONE")
     private String phone;
     @Column(name = "CREATEDAT")
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
+    @Column(name = "ACTIVE")
     private Boolean active;
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false,name = "ROLE")
     private RoleEnum role;
 
     public User(Long id, String username, RoleEnum role) {
@@ -52,7 +56,6 @@ public class User implements UserDetails {
     }
 
     public User(String password, String firstName, String username, Boolean active, RoleEnum role) {
-
         this.password = password;
         this.firstName = firstName;
         this.username = username;

@@ -99,6 +99,7 @@ public class UserService {
         if (page > 0) page--;
         Integer size = Integer.parseInt(SecretKeys.SIZE);
         Integer offset = size * page;
+        if (username==null || username.isEmpty()) username=null;
         List<User> userList = userRepository.findAllByUsernameAndOffset(username, size, offset);
         Long userListCount = userRepository.findAllByUsernameCount(username);
         double div = userListCount / 10.0;
@@ -147,8 +148,8 @@ public class UserService {
                 return responseDto;
             }
             /// Agar adminga o'zgartirmoqchi bo'lsa boshqa active admin borligiga tekshirish kerak
-            boolean hasAnotherAdmin=hasAnotherAdmin(user,userUpdate);
-            if (!hasAnotherAdmin){
+            Integer hasAnotherAdmin=hasAnotherAdmin(user,userUpdate);
+            if (!(hasAnotherAdmin==1)){
                 responseDto.setMessage("Siz Role ni almashtira olmaysiz szdan boshqa ADMIN yo'q");
                 userUpdate.setRole(RoleEnum.ADMIN);
                 responseDto.setObj(userUpdate);
@@ -156,7 +157,7 @@ public class UserService {
             }
             /// Agar Activligini almashtirmoqchi bo'lsa
              hasAnotherAdmin=hasAnotherAdmin(user,userUpdate.getActive());
-            if (!hasAnotherAdmin){
+            if (!(hasAnotherAdmin==1)){
                 responseDto.setMessage("Active holatizni o'zgartira olmaysiz sababi sizdan boshqa admin yo'q");
                 responseDto.setObj(userUpdate);
                 return responseDto;
@@ -178,17 +179,17 @@ public class UserService {
         return responseDto;
     }
 
-    private boolean hasAnotherAdmin(User userLast, UserUpdate userNow) {
+    private Integer hasAnotherAdmin(User userLast, UserUpdate userNow) {
         if ( userLast.getRole().equals(RoleEnum.ADMIN) && userNow.getRole().equals(RoleEnum.USER)){
-           return userRepository.hasAnotherAdmin(userNow.getId());
+           return  userRepository.hasAnotherAdmin(userNow.getId());
         }
-        return true;
+        return 1;
     }
-    private boolean hasAnotherAdmin(User userLast, Boolean userNow) {
+    private Integer hasAnotherAdmin(User userLast, Boolean userNow) {
         if (userLast.getRole().equals(RoleEnum.ADMIN) && !userNow){
             return userRepository.hasAnotherAdmin(userLast.getId());
         }
-        return true;
+        return 1;
     }
     public User toUser(UserUpdate userUpdate, User user) {
         if (userUpdate == null) {
