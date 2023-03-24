@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/style/homeStatistic.css}"/>
+    <title>Home Statistic</title>
+    <script>
+        /// 1  //
+        window.onload = function () {
+            const valueFewDays = document.getElementById("fewDays").value;
+            var fewDays = JSON.parse(valueFewDays);
+            var listFewdats = [];
+            let list = fewDays.list;
+            list.forEach(element =>{
+             let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
+                listFewdats.push(obj)
+            })
+            // 2
+            const valueFewMonth = document.getElementById("fewMonth").value;
+            var fewMonth= JSON.parse(valueFewMonth);
+            var listFewMonth = [];
+            fewMonth.forEach(element =>{
+                let obj= { y: element.amount, label: element.label ,indexLabel:element.indexLabel}
+                listFewMonth.push(obj)
+            })
+
+           /// 3
+
+            const valueFewYear = document.getElementById("fewYear").value;
+            var fewYear= JSON.parse(valueFewYear);
+            var listFewYear = [];
+            fewYear.forEach(element =>{
+                let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
+                listFewYear.push(obj)
+            })
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+
+                exportEnabled: true,
+                animationEnabled: true,
+                title: {
+                    text: "Kunlar kesimida"
+                },
+                axisX: {
+                    minimum: new Date(fewDays.minimum[0]-1, fewDays.minimum[1]-1, fewDays.minimum[2]-1),
+                    maximum: new Date(fewDays.maximum[0]-1, fewDays.maximum[1]-1, fewDays.maximum[2]-1),
+                    valueFormatString: "DD MMM",
+
+                },
+                axisY: {
+                    title: "Umumiy miqdor",
+                    titleFontColor: "#4F81BC",
+                    includeZero: true,
+                    suffix: "mn"
+                },
+                data: [{
+                    indexLabelFontColor: "darkSlateGray",
+                    name: "views",
+                    type: "area",
+                    yValueFormatString: "#,##0.0mn",
+                    dataPoints:listFewdats
+                }]
+            });
+            chart.render();
+          // chart 2
+
+            var chart2 = new CanvasJS.Chart("chartContainer2", {
+                animationEnabled: true,
+                exportEnabled: true,
+                theme: "light2", // "light1", "light2", "dark1", "dark2"
+                title:{
+                    text: "Oylar kesimida"
+                },
+                axisY: {
+                    title: "Umumiy miqdor"
+                },
+                data: [{
+                    type: "column",
+                    showInLegend: true,
+                    legendMarkerColor: "grey",
+                    indexLabelFontColor: "#5A5757",
+                    legendText: "Qandeydur yozuv",
+                    dataPoints: listFewMonth
+                }]
+            });
+            chart2.render();
+
+
+            /// 3
+
+            var chart3 = new CanvasJS.Chart("chartContainer3", {
+                exportEnabled: true,
+                animationEnabled: true,
+                title:{
+                    text: "Yillar kesimida"
+                },
+                axisY: {
+                    title: "Revenue in USD",
+                    valueFormatString: "#,###,###,###",
+                    suffix: "mn",
+                    prefix: "$"
+                },
+                data: [{
+                    type: "splineArea",
+                    color: "rgba(54,158,173,.7)",
+                    markerSize: 5,
+                    xValueFormatString: "YYYY",
+                    yValueFormatString: "$#,##0.##",
+                    dataPoints: listFewYear
+                }]
+            });
+            chart3.render();
+        }
+    </script>
+
+</head>
+<body>
+<div id="preloader">
+</div>
+<div class="menu-bar">
+    <h1 class="logo">Agro<span>bank.</span></h1>
+    <ul>
+        <li><a href="/">Home</a></li>
+
+<!--        <li><a href="#">Statistic <i class="fas fa-caret-down"></i></a>-->
+
+<!--            <div class="dropdown-menu">-->
+<!--                <ul>-->
+<!--                    <li><a href="/statistic/operation">Optional</a></li>-->
+<!--                    <li><a href="/statistic/month">Shu oy</a></li>-->
+<!--                    <li><a href="/statistic/year">Shu yil</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
+<!--        </li>-->
+
+        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
+                                class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="/user/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add user</a></li>
+                                <li><a href="/user/all"><i class="fa-solid fa-users"></i>&nbsp;Users</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Card <i
+                                class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog <i class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="#">UzCard</a></li>
+                                <li><a href="#">Humo</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="/contact/us">Contact us</a></li>
+        <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="/user/profile">My profile</a></li>
+                    <li><a href="/logOut">Logout</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="hero">
+
+      <div id="div1">
+          <input id="fewDays" style="display: none" th:value="${fewDays}">
+          <div id="chartContainer" style="height: 98%; width: 98%;"></div>
+      </div>
+      <div id="div2">
+          <input id="fewMonth" style="display: none" th:value="${fewMonth}">
+          <div id="chartContainer2" style="height: 98%; width: 98%;"></div>
+      </div>
+      <div id="div3">
+          <input id="fewYear" style="display: none" th:value="${fewYear}">
+          <div id="chartContainer3" style="height: 98%; width: 99%;"></div>
+      </div>
+<!--      <div id="div4">-->
+<!--      </div>-->
+</div>
+<script>
+    var loader = document.getElementById("preloader");
+    window.addEventListener("load", function () {
+        loader.style.display = "none";
+    })
+</script>
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>

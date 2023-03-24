@@ -79,6 +79,7 @@ body {
     padding-top: 10px;
     display: block;
     position: absolute;
+    z-index: 9;
     left: 0;
     top: 100%;
     border-radius: 10px;
@@ -130,22 +131,23 @@ body {
 
 
 #div1 {
-    background: #DDD;
+    background-color: whitesmoke;
     width: 50%;
     height: 50%;
     float: left;
 }
 
 #div2 {
-    background: #a6a8a8;
+    background-color: whitesmoke;
     width: 50%;
+    display: block;
     height: 50%;
     float: left;
 }
 
 #div3 {
-    background: #777;
-    width: 50%;
+    background-color: whitesmoke;
+    width: 100%;
     height: 50%;
     float: left;
 }
