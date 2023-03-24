@@ -29,7 +29,6 @@
 
             const valueFewYear = document.getElementById("fewYear").value;
             var fewYear= JSON.parse(valueFewYear);
-            console.log(fewYear)
             var listFewYear = [];
             fewYear.forEach(element =>{
                 let obj= { x: new Date(element.localDate[0],element.localDate[1] ,element.localDate[2]), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
@@ -56,12 +55,13 @@
                     suffix: "mn"
                 },
                 data: [{
-                    indexLabelFontColor: "darkSlateGray",
+                    indexLabelFontColor: "dark",
+                    indexLabelFontSize: 18,
                     name: "views",
                     type: "area",
                     yValueFormatString: "#,##0.0mn",
                     markerSize: 8,
-                    dataPoints:listFewdats
+                    dataPoints:listFewdats,
 
                 }]
             });
@@ -81,8 +81,9 @@
                 data: [{
                     type: "column",
                     showInLegend: true,
+                    indexLabelFontSize: 14,
                     legendMarkerColor: "grey",
-                    indexLabelFontColor: "#5A5757",
+                    indexLabelFontColor: "dark",
                     legendText: "Qandeydur yozuv",
                     dataPoints: listFewMonth
                 }]
@@ -112,6 +113,7 @@
                     type: "splineArea",
                     color: "rgba(54,158,173,.7)",
                     markerSize: 10,
+                    indexLabelFontSize: 20,
                     xValueFormatString: "YYYY",
                     yValueFormatString: "$#,##0.##",
                     dataPoints: listFewYear
