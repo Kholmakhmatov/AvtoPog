@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-    <link rel="stylesheet" th:href="@{/style/homeStatistic.css}"/>
-    <title>Home Statistic</title>
     <script>
         /// 1  //
         window.onload = function () {
@@ -15,7 +13,7 @@
             var listFewdats = [];
             let list = fewDays.list;
             list.forEach(element =>{
-             let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
+                let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
                 listFewdats.push(obj)
             })
             // 2
@@ -27,13 +25,14 @@
                 listFewMonth.push(obj)
             })
 
-           /// 3
+            /// 3
 
             const valueFewYear = document.getElementById("fewYear").value;
             var fewYear= JSON.parse(valueFewYear);
+            console.log(fewYear)
             var listFewYear = [];
             fewYear.forEach(element =>{
-                let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
+                let obj= { x: new Date(element.localDate[0],element.localDate[1] ,element.localDate[2]), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
                 listFewYear.push(obj)
             })
 
@@ -61,11 +60,13 @@
                     name: "views",
                     type: "area",
                     yValueFormatString: "#,##0.0mn",
+                    markerSize: 8,
                     dataPoints:listFewdats
+
                 }]
             });
             chart.render();
-          // chart 2
+            // chart 2
 
             var chart2 = new CanvasJS.Chart("chartContainer2", {
                 animationEnabled: true,
@@ -97,6 +98,10 @@
                 title:{
                     text: "Yillar kesimida"
                 },
+                axisX: {
+                    valueFormatString: "YYYY",
+
+                },
                 axisY: {
                     title: "Revenue in USD",
                     valueFormatString: "#,###,###,###",
@@ -106,7 +111,7 @@
                 data: [{
                     type: "splineArea",
                     color: "rgba(54,158,173,.7)",
-                    markerSize: 5,
+                    markerSize: 10,
                     xValueFormatString: "YYYY",
                     yValueFormatString: "$#,##0.##",
                     dataPoints: listFewYear
@@ -115,6 +120,8 @@
             chart3.render();
         }
     </script>
+    <link rel="stylesheet" th:href="@{/style/homeStatistic.css}"/>
+    <title>Home Statistic</title>
 
 </head>
 <body>
