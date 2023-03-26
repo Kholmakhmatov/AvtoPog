@@ -1,5 +1,5 @@
 :root {
-    --color-primary: #0073ff;
+    --color-primary: #29a104;
     --color-white: #e9e9e9;
     --color-black: #141d28;
     --color-black-1: #212b38;
@@ -22,7 +22,7 @@ body {
 }
 
 .logo span {
-    color: var(--color-primary);
+    color: #0fd90f;
 }
 
 .menu-bar {
@@ -126,33 +126,4 @@ body {
     position: fixed;
     z-index: 100;
     animation-delay: 2s;
-}
-
-
-#div1 {
-    background: #DDD;
-    width: 50%;
-    height: 50%;
-    float: left;
-}
-
-#div2 {
-    background: #a6a8a8;
-    width: 50%;
-    height: 50%;
-    float: left;
-}
-
-#div3 {
-    background: #777;
-    width: 50%;
-    height: 50%;
-    float: left;
-}
-
-#div4 {
-    background: #444;
-    width: 50%;
-    height: 50%;
-    float: left;
 }

@@ -4,126 +4,10 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-    <script>
-        /// 1  //
-        window.onload = function () {
-            const valueFewDays = document.getElementById("fewDays").value;
-            var fewDays = JSON.parse(valueFewDays);
-            var listFewdats = [];
-            let list = fewDays.list;
-            list.forEach(element =>{
-                let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
-                listFewdats.push(obj)
-            })
-            // 2
-            const valueFewMonth = document.getElementById("fewMonth").value;
-            var fewMonth= JSON.parse(valueFewMonth);
-            var listFewMonth = [];
-            fewMonth.forEach(element =>{
-                let obj= { y: element.amount, label: element.label ,indexLabel:element.indexLabel}
-                listFewMonth.push(obj)
-            })
-
-            /// 3
-
-            const valueFewYear = document.getElementById("fewYear").value;
-            var fewYear= JSON.parse(valueFewYear);
-            var listFewYear = [];
-            fewYear.forEach(element =>{
-                let obj= { x: new Date(element.localDate[0],element.localDate[1] ,element.localDate[2]), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
-                listFewYear.push(obj)
-            })
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-
-                exportEnabled: true,
-                animationEnabled: true,
-                title: {
-                    text: "Kunlar kesimida"
-                },
-                axisX: {
-                    minimum: new Date(fewDays.minimum[0]-1, fewDays.minimum[1]-1, fewDays.minimum[2]-1),
-                    maximum: new Date(fewDays.maximum[0]-1, fewDays.maximum[1]-1, fewDays.maximum[2]-1),
-                    valueFormatString: "DD MMM",
-
-                },
-                axisY: {
-                    title: "Umumiy miqdor",
-                    titleFontColor: "#4F81BC",
-                    includeZero: true,
-                    suffix: "mn"
-                },
-                data: [{
-                    indexLabelFontColor: "dark",
-                    indexLabelFontSize: 18,
-                    name: "views",
-                    type: "area",
-                    yValueFormatString: "#,##0.0mn",
-                    markerSize: 8,
-                    dataPoints:listFewdats,
-
-                }]
-            });
-            chart.render();
-            // chart 2
-
-            var chart2 = new CanvasJS.Chart("chartContainer2", {
-                animationEnabled: true,
-                exportEnabled: true,
-                theme: "light2", // "light1", "light2", "dark1", "dark2"
-                title:{
-                    text: "Oylar kesimida"
-                },
-                axisY: {
-                    title: "Umumiy miqdor"
-                },
-                data: [{
-                    type: "column",
-                    showInLegend: true,
-                    indexLabelFontSize: 14,
-                    legendMarkerColor: "grey",
-                    indexLabelFontColor: "dark",
-                    legendText: "Qandeydur yozuv",
-                    dataPoints: listFewMonth
-                }]
-            });
-            chart2.render();
-
-
-            /// 3
-
-            var chart3 = new CanvasJS.Chart("chartContainer3", {
-                exportEnabled: true,
-                animationEnabled: true,
-                title:{
-                    text: "Yillar kesimida"
-                },
-                axisX: {
-                    valueFormatString: "YYYY",
-
-                },
-                axisY: {
-                    title: "Revenue in USD",
-                    valueFormatString: "#,###,###,###",
-                    suffix: "mn",
-                    prefix: "$"
-                },
-                data: [{
-                    type: "splineArea",
-                    color: "rgba(54,158,173,.7)",
-                    markerSize: 10,
-                    indexLabelFontSize: 20,
-                    xValueFormatString: "YYYY",
-                    yValueFormatString: "$#,##0.##",
-                    dataPoints: listFewYear
-                }]
-            });
-            chart3.render();
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"/>
+    <script th:src="@{/js/homeStatistic.js}"></script>
     <link rel="stylesheet" th:href="@{/style/homeStatistic.css}"/>
-    <title>Home Statistic</title>
+    <title>Home</title>
 
 </head>
 <body>
@@ -132,23 +16,28 @@
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
-        <li><a href="/">Home</a></li>
+        <li><a href="/"><i class="fa-solid fa-house"></i>&nbsp;Home</a></li>
+        <li><a href="/statistic/home"><i class="fa-solid fa-chart-line"></i>&nbsp;Statistic</a></li>
 
-<!--        <li><a href="#">Statistic <i class="fas fa-caret-down"></i></a>-->
+        <!--        <li><a href="#">Statistic <i class="fas fa-caret-down"></i></a>-->
 
-<!--            <div class="dropdown-menu">-->
-<!--                <ul>-->
-<!--                    <li><a href="/statistic/operation">Optional</a></li>-->
-<!--                    <li><a href="/statistic/month">Shu oy</a></li>-->
-<!--                    <li><a href="/statistic/year">Shu yil</a></li>-->
-<!--                </ul>-->
-<!--            </div>-->
-<!--        </li>-->
+        <!--            <div class="dropdown-menu">-->
+        <!--                <ul>-->
+        <!--                    <li><a href="/statistic/operation">Optional</a></li>-->
+        <!--                    <li><a href="/statistic/month">Shu oy</a></li>-->
+        <!--                    <li><a href="/statistic/year">Shu yil</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
 
-        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+        <li><a href="#">&nbsp;Pages <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
+                    <li>
+                        <a href="/avtoPog/start"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog </a>
+
+                    </li>
                     <li th:if="${user.getRole().name()=='ADMIN'}">
                         <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
                                 class="fas fa-caret-right"></i></a>
@@ -162,7 +51,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Card <i
+                        <a href="#"><i class="fa-regular fa-credit-card"></i>&nbsp;Card <i
                                 class="fas fa-caret-right"></i></a>
 
                         <div class="dropdown-menu-1">
@@ -173,26 +62,17 @@
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog <i class="fas fa-caret-right"></i></a>
 
-                        <div class="dropdown-menu-1">
-                            <ul>
-                                <li><a href="#">UzCard</a></li>
-                                <li><a href="#">Humo</a></li>
-                            </ul>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </li>
-        <li><a href="/contact/us">Contact us</a></li>
-        <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
+        <li><a href="/contact/us"><i class="fa-solid fa-address-book"></i>&nbsp;Contact us</a></li>
+        <li><a href="#"><i class="fa-regular fa-user"></i>&nbsp;Profile <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
                     <li><a href="/user/profile">My profile</a></li>
-                    <li><a href="/logOut">Logout</a></li>
+                    <li><a href="/logOut">Logout&nbsp;<i class="fa-solid fa-right-from-bracket"></i></a></li>
                 </ul>
             </div>
         </li>
@@ -200,9 +80,9 @@
 </div>
 
 <div class="hero">
-
-      <div id="div1">
+    <div id="div1">
           <input id="fewDays" style="display: none" th:value="${fewDays}">
+          <input id="fewDays2" style="display: none" th:value="${fewDays2}">
           <div id="chartContainer" style="height: 98%; width: 98%;"></div>
       </div>
       <div id="div2">

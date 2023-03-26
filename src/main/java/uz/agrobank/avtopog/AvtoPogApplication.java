@@ -19,7 +19,6 @@ public class AvtoPogApplication {
             System.out.println("Dastur quladi sababi ma'lumotlar o'chib ketishi mumkin");
         }
     }
-
     @Bean
     public static boolean isStart() {
         Scanner scanner = new Scanner(System.in);

@@ -94,10 +94,16 @@
         <div class="wrapper wrapper--w680">
 
             <div class="card card-4">
-                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
-                ></div>
-                <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
-                ></div>
+                <div id="message">
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                         class="alert alert-success align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                    ></div>
+                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                         class="alert alert-danger align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                    ></div>
+                </div>
                 <div class="card-body">
                     <h2 class="title">Registration User Form</h2>
                     <form th:action="@{'/user/edite/'+${userDto.getId()}}" method="POST" th:object="${userDto}">
@@ -176,6 +182,14 @@
     window.addEventListener("load",function (){
         loader.style.display="none";
     })
+    window.onload
+    {
+        setTimeout(() => {
+            let message = document.getElementById("message");
+            message.style.display = "none";
+        }, 8000);
+
+    }
 </script>
 </body>
 </html>

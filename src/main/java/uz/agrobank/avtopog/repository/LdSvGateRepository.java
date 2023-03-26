@@ -1,71 +1,127 @@
 package uz.agrobank.avtopog.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+import uz.agrobank.avtopog.exceptions.UniversalException;
+import uz.agrobank.avtopog.repository.imp.LdSvGateRepositoryImp;
+import uz.agrobank.avtopog.mapper.LdSvGateRowMapper;
 import uz.agrobank.avtopog.model.LdSvGate;
+import uz.agrobank.avtopog.model.LdSvGateAdd;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface LdSvGateRepository extends JpaRepository<LdSvGate, Long> {
-    @Query(nativeQuery = true,value = "SELECT id,\n" +
-            "       branch,\n" +
-            "       card_number,\n" +
-            "       expiry_date,\n" +
-            "       name,\n" +
-            "       phone,\n" +
-            "       sign_card,\n" +
-            "       sign_client,\n" +
-            "       sms,\n" +
-            "       state\n" +
-            "FROM ld_sv_gate_add la\n" +
-            "WHERE (?1 IS NOT NULL AND ?2 IS NULL AND ?3 IS NULL and id = ?1)\n" +
-            "   or (?1 IS NOT NULL AND ?2 IS NOT NULL AND ?3 IS NULL and id = ?1 AND branch = ?2)\n" +
-            "   or (?1 IS NOT NULL AND ?2 IS NOT NULL AND ?3 IS NOT NULL and id = ?1 AND branch = ?2 AND card_number = ?3)\n" +
-            "   or (?1 IS NULL AND ?2 IS NOT NULL AND ?3 IS NULL and branch = ?2)\n" +
-            "   or (?1 IS NULL AND ?2 IS NOT NULL AND ?3 IS NOT NULL and branch = ?2 AND card_number = ?3)\n" +
-            "   or (?1 IS NOT NULL AND ?2 IS NULL AND ?3 IS NOT NULL and id = ?1 AND card_number = ?3)\n" +
-            "   or (?1 IS NULL AND ?2 IS NULL AND ?3 IS NOT NULL and card_number = ?3)\n" +
-            "UNION\n" +
-            "SELECT id,\n" +
-            "       branch,\n" +
-            "       card_number,\n" +
-            "       expiry_date,\n" +
-            "       name,\n" +
-            "       phone,\n" +
-            "       sign_card,\n" +
-            "       sign_client,\n" +
-            "       sms,\n" +
-            "       state\n" +
-            "FROM ld_sv_gate lg\n" +
-            "WHERE (?4 IS NOT NULL AND ?5 IS NULL AND ?6 IS NULL and id = ?4)\n" +
-            "   or (?4 IS NOT NULL AND ?5 IS NOT NULL AND ?6 IS NULL and id = ?4 AND branch = ?5)\n" +
-            "   or (?4 IS NOT NULL AND ?5 IS NOT NULL AND ?6 IS NOT NULL and id = ?4 AND branch = ?5 AND card_number = ?6)\n" +
-            "   or (?4 IS NULL AND ?5 IS NOT NULL AND ?6 IS NULL and branch = ?5)\n" +
-            "   or (?4 IS NULL AND ?5 IS NOT NULL AND ?6 IS NOT NULL and branch = ?5 AND card_number = ?6)\n" +
-            "   or (?4 IS NOT NULL AND ?5 IS NULL AND ?6 IS NOT NULL and id = ?4 AND card_number = ?6)\n" +
-            "   or (?4 IS NULL AND ?5 IS NULL AND ?6 IS NOT NULL and card_number = ?6)\n" +
-            "ORDER BY id\n" +
-            "OFFSET ?8 ROWS FETCH NEXT ?7 ROWS ONLY")
-    List<LdSvGate> findAllActiveUnion(Long id, String branch, String cardNumber, Long id2, String branch2, String cardNumber2, Integer size, Integer offset);
+@Repository
+@RequiredArgsConstructor
+public class LdSvGateRepository implements LdSvGateRepositoryImp {
+    private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @Query(nativeQuery = true, value = "select count(ID)  from (SELECT la.ID\n" +
-            "               FROM ld_sv_gate_add la\n" +
-            "               WHERE (?1 IS NOT NULL AND ?2 IS NULL AND ?3 IS NULL and id = ?1)\n" +
-            "                  or (?1 IS NOT NULL AND ?2 IS NOT NULL AND ?3 IS NULL and id = ?1 AND branch = ?2)\n" +
-            "                  or (?1 IS NOT NULL AND ?2 IS NOT NULL AND ?3 IS NOT NULL and id = ?1 AND branch = ?2 AND card_number = ?3)\n" +
-            "                  or (?1 IS NULL AND ?2 IS NOT NULL AND ?3 IS NULL and branch = ?2)\n" +
-            "                  or (?1 IS NULL AND ?2 IS NOT NULL AND ?3 IS NOT NULL and branch = ?2 AND card_number = ?3)\n" +
-            "                  or (?1 IS NOT NULL AND ?2 IS NULL AND ?3 IS NOT NULL and id = ?1 AND card_number = ?3)\n" +
-            "                  or (?1 IS NULL AND ?2 IS NULL AND ?3 IS NOT NULL and card_number = ?3)\n" +
-            "               UNION\n" +
-            "               SELECT lg.ID\n" +
-            "               FROM ld_sv_gate lg\n" +
-            "               WHERE (?4 IS NOT NULL AND ?5 IS NULL AND ?6 IS NULL and id = ?4)\n" +
-            "                  or (?4 IS NOT NULL AND ?5 IS NOT NULL AND ?6 IS NULL and id = ?4 AND branch = ?5)\n" +
-            "                  or (?4 IS NOT NULL AND ?5 IS NOT NULL AND ?6 IS NOT NULL and id = ?4 AND branch = ?5 AND card_number = ?6)\n" +
-            "                  or (?4 IS NULL AND ?5 IS NOT NULL AND ?6 IS NULL and branch = ?5)\n" +
-            "                  or (?4 IS NULL AND ?5 IS NOT NULL AND ?6 IS NOT NULL and branch = ?5 AND card_number = ?6)\n" +
-            "                  or (?4 IS NOT NULL AND ?5 IS NULL AND ?6 IS NOT NULL and id = ?4 AND card_number = ?6)\n" +
-            "                  or (?4 IS NULL AND ?5 IS NULL AND ?6 IS NOT NULL and card_number = ?6))")
-    Integer findAllActiveCountUnion(Long id, String branch, String cardNumber, Long id2, String branch2, String cardNumber2);
+    @Override
+    public List<LdSvGate> findAllActiveUnion(Long id, String branch, String cardNumber, Integer size, Integer offset) {
+        try {
+            String sql="SELECT id,\n" +
+                    "       branch,\n" +
+                    "       card_number,\n" +
+                    "       expiry_date,\n" +
+                    "       name,\n" +
+                    "       phone,\n" +
+                    "       sign_card,\n" +
+                    "       sign_client,\n" +
+                    "       sms,\n" +
+                    "       state\n" +
+                    "FROM ld_sv_gate_add la\n" +
+                    "WHERE (:id IS NOT NULL AND :branch IS NULL AND :cardNumber IS NULL and id = :id)\n" +
+                    "   or (:id IS NOT NULL AND :branch IS NOT NULL AND :cardNumber IS NULL and id = :id AND branch = :branch)\n" +
+                    "   or (:id IS NOT NULL AND :branch IS NOT NULL AND :cardNumber IS NOT NULL and id = :id AND branch = :branch AND card_number = :cardNumber)\n" +
+                    "   or (:id IS NULL AND :branch IS NOT NULL AND :cardNumber IS NULL and branch = :branch)\n" +
+                    "   or (:id IS NULL AND :branch IS NOT NULL AND :cardNumber IS NOT NULL and branch = :branch AND card_number = :cardNumber)\n" +
+                    "   or (:id IS NOT NULL AND :branch IS NULL AND :cardNumber IS NOT NULL and id = :id AND card_number = :cardNumber)\n" +
+                    "   or (:id IS NULL AND :branch IS NULL AND :cardNumber IS NOT NULL and card_number = :cardNumber)\n" +
+                    "UNION ALL \n" +
+                    "SELECT id,\n" +
+                    "       branch,\n" +
+                    "       card_number,\n" +
+                    "       expiry_date,\n" +
+                    "       name,\n" +
+                    "       phone,\n" +
+                    "       sign_card,\n" +
+                    "       sign_client,\n" +
+                    "       sms,\n" +
+                    "       state\n" +
+                    "FROM ld_sv_gate lg\n" +
+                    "WHERE (:id2 IS NOT NULL AND :branch2 IS NULL AND :cardNumber2 IS NULL and id = :id2)\n" +
+                    "   or (:id2 IS NOT NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NULL and id = :id2 AND branch = :branch2)\n" +
+                    "   or (:id2 IS NOT NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NOT NULL and id = :id2 AND branch = :branch2 AND card_number = :cardNumber2)\n" +
+                    "   or (:id2 IS NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NULL and branch = :branch2)\n" +
+                    "   or (:id2 IS NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NOT NULL and branch = :branch2 AND card_number = :cardNumber2)\n" +
+                    "   or (:id2 IS NOT NULL AND :branch2 IS NULL AND :cardNumber2 IS NOT NULL and id = :id2 AND card_number = :cardNumber2)\n" +
+                    "   or (:id2 IS NULL AND :branch2 IS NULL AND :cardNumber2 IS NOT NULL and card_number = :cardNumber2)\n" +
+                    "ORDER BY id\n" +
+                    "OFFSET :offset ROWS FETCH NEXT :size ROWS ONLY";
+
+            MapSqlParameterSource params=new MapSqlParameterSource();
+            params.addValue("id",id);
+            params.addValue("id2",id);
+            params.addValue("branch",branch);
+            params.addValue("branch2",branch);
+            params.addValue("cardNumber",cardNumber);
+            params.addValue("cardNumber2",cardNumber);
+            params.addValue("offset",offset);
+            params.addValue("size",size);
+            return namedParameterJdbcTemplate.query(sql,params, new LdSvGateRowMapper());
+        }catch (Exception e){
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Integer findAllActiveCountUnion(Long id, String branch, String cardNumber) {
+        try {
+            String sql="select count(ID)  from (SELECT la.ID \n" +
+                    "               FROM ld_sv_gate_add la\n" +
+                    "               WHERE (:id IS NOT NULL AND :branch IS NULL AND :cardNumber IS NULL and id = :id)\n" +
+                    "                  or (:id IS NOT NULL AND :branch IS NOT NULL AND :cardNumber IS NULL and id = :id AND branch = :branch)\n" +
+                    "                  or (:id IS NOT NULL AND :branch IS NOT NULL AND :cardNumber IS NOT NULL and id = :id AND branch = :branch AND card_number = :cardNumber)\n" +
+                    "                  or (:id IS NULL AND :branch IS NOT NULL AND :cardNumber IS NULL and branch = :branch)\n" +
+                    "                  or (:id IS NULL AND :branch IS NOT NULL AND :cardNumber IS NOT NULL and branch = :branch AND card_number = :cardNumber)\n" +
+                    "                  or (:id IS NOT NULL AND :branch IS NULL AND :cardNumber IS NOT NULL and id = :id AND card_number = :cardNumber)\n" +
+                    "                  or (:id IS NULL AND :branch IS NULL AND :cardNumber IS NOT NULL and card_number = :cardNumber)\n" +
+                    "               UNION ALL \n" +
+                    "               SELECT lg.ID\n" +
+                    "               FROM ld_sv_gate lg\n" +
+                    "               WHERE (:id2 IS NOT NULL AND :branch2 IS NULL AND :cardNumber2 IS NULL and id = :id2)\n" +
+                    "                  or (:id2 IS NOT NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NULL and id = :id2 AND branch = :branch2)\n" +
+                    "                  or (:id2 IS NOT NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NOT NULL and id = :id2 AND branch = :branch2 AND card_number = :cardNumber2)\n" +
+                    "                  or (:id2 IS NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NULL and branch = :branch2)\n" +
+                    "                  or (:id2 IS NULL AND :branch2 IS NOT NULL AND :cardNumber2 IS NOT NULL and branch = :branch2 AND card_number = :cardNumber2)\n" +
+                    "                  or (:id2 IS NOT NULL AND :branch2 IS NULL AND :cardNumber2 IS NOT NULL and id = :id2 AND card_number = :cardNumber2 )\n" +
+                    "                  or (:id2 IS NULL AND :branch2 IS NULL AND :cardNumber2 IS NOT NULL and card_number = :cardNumber2))";
+            MapSqlParameterSource params=new MapSqlParameterSource();
+            params.addValue("id",id);
+            params.addValue("id2",id);
+            params.addValue("branch",branch);
+            params.addValue("branch2",branch);
+            params.addValue("cardNumber",cardNumber);
+            params.addValue("cardNumber2",cardNumber);
+            return namedParameterJdbcTemplate.queryForObject(sql,params,Integer.class);
+        }catch (Exception e){
+           throw  new UniversalException("Server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Override
+    public int delete(LdSvGateAdd ldSvGateAdd) {
+        String sql="DELETE from LD_SV_GATE where ID=:id and BRANCH=:branch and CARD_NUMBER=:cardNumber and EXPIRY_DATE=:expiryDate";
+        MapSqlParameterSource params=new MapSqlParameterSource();
+        params.addValue("id",ldSvGateAdd.getId());
+        params.addValue("branch",ldSvGateAdd.getBranch());
+        params.addValue("cardNumber",ldSvGateAdd.getCardNumber());
+        params.addValue("expiryDate",ldSvGateAdd.getExpiryDate());
+        return namedParameterJdbcTemplate.update(sql,params);
+    }
+
 }

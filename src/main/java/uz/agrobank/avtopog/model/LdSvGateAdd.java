@@ -57,19 +57,29 @@ public class LdSvGateAdd {
     @Column(name = "RG_USER")
     private Long rg_user;
 
-    public LdSvGateAdd(Long id, String branch, String cardNumber, String expiryDate, Long rg_user) {
+    public LdSvGateAdd(Long id, String branch, String cardNumber, String expiryDate, Long rg_user,String phone) {
         this.id = id;
         this.branch = branch;
         this.cardNumber = cardNumber;
         this.expiryDate = expiryDate;
         this.rg_user = rg_user;
+        if (phone==null || phone.isEmpty())
+            this.phone=null;
+        else
+            this.phone=phone;
         name = "test";
         signClient = 2;
         signCard = 1;
-        phone = "+998";
         state = 1;
         sms = "sms";
         smsRecv = "sms";
         status = 0;
+    }
+
+    public LdSvGateAdd(Long id, String branch, String cardNumber, String expiryDate) {
+        this.id = id;
+        this.branch = branch;
+        this.cardNumber = cardNumber;
+        this.expiryDate = expiryDate;
     }
 }

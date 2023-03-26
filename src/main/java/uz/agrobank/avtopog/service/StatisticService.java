@@ -34,7 +34,7 @@ public class StatisticService {
             StatisticFewDays statisticFewDays=new StatisticFewDays();
             LocalDate localDate = minDate.plusDays(i);
             statisticFewDays.setLocalDate(localDate);
-            long amount= (long) (12000+Math.random()*5000-5000);
+            long amount= (long) (12000+Math.random()*6000-1000);
             if(amount>max) max=amount;
             if (i==0) min=amount;
             else if(amount<min) min=amount;

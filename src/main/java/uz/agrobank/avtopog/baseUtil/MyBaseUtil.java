@@ -7,6 +7,9 @@ import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 @Service
@@ -49,4 +52,19 @@ public class MyBaseUtil {
         return integerList;
     }
 
+    public List<Integer> getUntilYears(int i) {
+        List<Integer>list=new ArrayList<>();
+        int year = LocalDate.now().getYear();
+        for (int j = 0; j <= i; j++) {
+            list.add(year+j);
+        }
+        return list;
+    }
+    public List<Integer> getOtDo(int start,int end) {
+        List<Integer>list=new ArrayList<>();
+        for (int j = start; j <= end; j++) {
+            list.add(j);
+        }
+        return list;
+    }
 }

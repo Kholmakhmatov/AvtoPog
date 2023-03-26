@@ -15,7 +15,6 @@ import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.model.enums.RoleEnum;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.JwtService;
-import uz.agrobank.avtopog.service.StatisticService;
 import uz.agrobank.avtopog.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class BaseController {
     private final UserService userService;
     private final MyBaseUtil myBaseUtil;
     private final JwtService jwtService;
-    private final StatisticService statisticService;
+
 
     @GetMapping(path = "/")
     public String homePage(Model model, @CookieValue(value = "user", defaultValue = "") String token) {
@@ -42,14 +41,7 @@ public class BaseController {
         if (responseDto.getSuccess()) {
             UserDto userDto = myBaseUtil.userDto();
             model.addAttribute("user", userDto);
-            String fewDays = statisticService.getFewDays();
-            String fewMonth=statisticService.getFewMonth();
-            String fewYear=statisticService.getFewYear();
-            model.addAttribute("user",userDto);
-            model.addAttribute("fewDays", fewDays);
-            model.addAttribute("fewMonth", fewMonth);
-            model.addAttribute("fewYear", fewYear);
-            return "homeStatistic";
+            return "navbar";
         } else
             return "index";
     }

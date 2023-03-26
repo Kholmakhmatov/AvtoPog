@@ -3,6 +3,7 @@ package uz.agrobank.avtopog.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -13,7 +14,10 @@ import javax.persistence.Table;
 @Table(name = "BRANCH")
 public class Branch {
     @Id
-    private Long id;
-    private String branch;
+    private String id;
+    @Column(name = "REG_NAME")
+    private String regName;
+    @Column(name = "REG_ID")
+    private String regId;
 
 }

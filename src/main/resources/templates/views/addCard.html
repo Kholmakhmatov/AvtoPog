@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-    <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/style/navbarHome.css}"/>
     <title>Add card</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
     <meta charset="UTF-8">
@@ -103,21 +103,21 @@
     <!-- Asosiy code qism -->
     <div class="page-wrapper bg-gra-02 p-t-20 p-b-100 font-poppins">
         <div class="wrapper wrapper--w680">
-
-
             <div class="card card-4">
                 <div class="card-body">
                     <div id="info" class="alert alert-success align-content-center" role="alert"
                          style="text-align: center;font-size: 18px"
                     ></div>
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
-                         class="alert alert-success align-content-center" role="alert"
-                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
-                    ></div>
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
-                         class="alert alert-danger align-content-center" role="alert"
-                         style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
-                    ></div>
+                    <div id="message">
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                             class="alert alert-success align-content-center" role="alert"
+                             style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                        ></div>
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                             class="alert alert-danger align-content-center" role="alert"
+                             style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                        ></div>
+                    </div>
                     <h2 class="title">YANGI KARTA ULASH</h2>
                     <form th:action="@{/card/add}" method="POST" th:object="${addCard}" enctype="multipart/form-data">
 
@@ -131,8 +131,8 @@
 <!--                                <div class="select-dropdown"></div>-->
                                 <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}" required>
                                     <option th:value="*{branch}" selected>Select a Branch or search...</option>
-                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
-                                            th:text="${branch.getBranch()}"></option>
+                                    <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                            th:text="${branch.getId()}"></option>
                                 </select>
                             </div>
                         </div>
@@ -178,10 +178,17 @@
                                     <label class="label">ANKETA NOMER</label>
                                     <input class="input--style-4" type="number" th:field="*{id}" required min="1">
                                 </div>
-                                <button class="btn btn--radius btn--blue" style="margin-top: 40px" type="submit">Add
-                                    card
-                                </button>
+
+                                    <div class="input-group" style="margin-top: 35px">
+                                        <label class="label">Phone</label>
+                                        <input class="input--style-4" type="text"   th:field="*{phone}" placeholder="+998901234569">
+                                    </div>
+
                             </div>
+                            <button class="btn btn--radius btn--blue" style="margin-top: 40px;width: 200px;margin-left: 30%" type="submit">Add
+                                card
+                            </button>
+
                         </div>
                     </form>
                     <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
@@ -254,7 +261,14 @@
 //change selectboxes to selectize mode to be searchable
         $("select").select2();
     });
+    window.onload
+    {
+        setTimeout(() => {
+            let message = document.getElementById("message");
+            message.style.display = "none";
+        }, 8000);
 
+    }
 </script>
 </body>
 </html>

@@ -14,6 +14,7 @@
 body {
     font-family: sans-serif;
 
+
 }
 
 .logo {
@@ -22,7 +23,7 @@ body {
 }
 
 .logo span {
-    color: var(--color-primary);
+    color: #0fd90f;
 }
 
 .menu-bar {

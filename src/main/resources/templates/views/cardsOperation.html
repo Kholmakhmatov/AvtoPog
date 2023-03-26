@@ -32,7 +32,7 @@
     <!-- Main CSS-->
     <link th:href="@{/style/deleteCard.css}" rel="stylesheet" media="all">
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 
 </head>
@@ -66,7 +66,8 @@
                         <div class="dropdown-menu-1">
                             <ul>
                                 <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -96,43 +97,54 @@
     </ul>
 </div>
 <div class="hero">
+
     <!-- Asosiy code qism -->
     <div class="page-wrapper bg-gra-02 p-t-20 p-b-100 font-poppins">
         <div class="wrapper wrapper--w680">
 
             <div class="card card-4">
                 <div class="card-body">
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"  class="alert alert-success align-content-center" role="alert" style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
-                    ></div>
-                    <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"  th:text="${message.getMessage()}"
-                    ></div>
-                    <div th:if="${cards.size()==0 and firstPage.toString()!='true'}"  class="alert alert-danger align-content-center" role="alert" style="text-align: center;font-size: 18px"
-                    >Nothing not found</div>
-                    <form th:action="@{'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}" method="GET" th:object="${searchCard}"
+                    <div id="message">
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                             class="alert alert-success align-content-center" role="alert"
+                             style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                        ></div>
+                        <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                             class="alert alert-danger align-content-center" role="alert"
+                             style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+                        ></div>
+                    </div>
+                    <div th:if="${cards.size()==0 and firstPage.toString()!='true'}"
+                         class="alert alert-danger align-content-center" role="alert"
+                         style="text-align: center;font-size: 18px"
+                    >Nothing not found
+                    </div>
+                    <form th:action="@{'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}}"
+                          method="GET" th:object="${searchCard}"
                           enctype="multipart/form-data">
 
                         <div class="row row-space">
                             <div class="col-2">
                                 <label class="label">FILIALNI TANLANG</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-<!--                                    <select class="form-control" name="subject" th:field="*{branch}">-->
-<!--                                        <option th:value="${message.getObj()}" selected >Choose here</option>-->
-<!--                                        <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
-<!--                                                th:text="${branch.getBranch()}"></option>-->
-<!--                                    </select>-->
-                                    <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}" >
+                                    <!--                                    <select class="form-control" name="subject" th:field="*{branch}">-->
+                                    <!--                                        <option th:value="${message.getObj()}" selected >Choose here</option>-->
+                                    <!--                                        <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+                                    <!--                                                th:text="${branch.getBranch()}"></option>-->
+                                    <!--                                    </select>-->
+                                    <select id="select_page" style="width:200px;" class="operator" th:field="*{branch}">
                                         <option th:value="null" selected>Nothing</option>
-                                        <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"
-                                                th:text="${branch.getBranch()}"></option>
+                                        <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                                th:text="${branch.getId()}"></option>
                                     </select>
-<!--                                    <div class="select-dropdown"></div>-->
+                                    <!--                                    <div class="select-dropdown"></div>-->
                                 </div>
                             </div>
                             <div class="col-2">
                                 <div class="input-group">
                                     <label class="label">ANKETA NOMER</label>
 
-                                        <input class="input--style-4" type="number" th:field="*{id}">
+                                    <input class="input--style-4" type="number" th:field="*{id}">
 
                                 </div>
                             </div>
@@ -141,8 +153,8 @@
                                     <label class="label">KARTA RAQAMI</label>
                                     <!--                                        required min="1000000000000000" max="9999999999999999"-->
 
-                                        <input class="input--style-4" type="number" th:field="*{cardNumber}"
-                                               placeholder="8600 1234 4567 8912">
+                                    <input class="input--style-4" type="number" th:field="*{cardNumber}"
+                                           placeholder="8600 1234 4567 8912">
 
                                 </div>
                             </div>
@@ -171,7 +183,7 @@
                             </thead>
                             <tbody class="topline">
                             <tr th:each="card,state:${cards}">
-                                <td  th:text="${state.count + page*10 - 10 }"></td>
+                                <td th:text="${state.count + page*10 - 10 }"></td>
                                 <td style="font-size: 18px;color: green" scope="row" th:text="${card.getId()}"></td>
                                 <td>
                                     <label style="font-size: 16px;color: #2c6ed5"
@@ -188,7 +200,7 @@
                                            th:text="${card.getExpiryDate().substring(0,2)+' / '+card.getExpiryDate().substring(2,4)}"></label>
                                 </td>
 
-                                <td >
+                                <td>
                                     <a th:if="${card.getState().toString()=='0'}" class="btn btn-danger"
                                        style="width: 160px;height: 45px;font-size: 14px">Passive</a>
                                     <a th:if="${card.getState().toString()=='1'}" class="btn btn-info"
@@ -197,7 +209,8 @@
                                 </td>
                                 <td th:if="${user.getRole().toString()!='USER'}">
                                     <a th:if="${card.getState().toString()=='1'}"
-                                       th:href="'/card/delete/'+${card.getId()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}" class="btn btn-danger"
+                                       th:href="'/card/delete/'+${card.getId()+'/'+card.getBranch()+'/'+card.getCardNumber()+'/'+card.getExpiryDate()}+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${page}"
+                                       class="btn btn-danger"
                                        style="width: 160px;height: 45px;font-size: 16px">DELETE</a>
                                 </td>
 
@@ -205,9 +218,11 @@
 
                             </tbody>
                         </table>
-                        <div  class="counter">
+                        <div class="counter">
 
-                            <a th:each="i:${count}"  th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"  th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}" ></a>
+                            <a th:each="i:${count}"
+                               th:href="'/card/operation'+'?branch='+${searchCard.getBranch()}+'&id='+${searchCard.getId()==null?'':searchCard.getId()}+'&cardNumber='+${searchCard.getCardNumber()}+'&page='+${i}"
+                               th:style="${page==i} ?  'color: red' : '' " th:text="${i+'  '}"></a>
 
                         </div>
                     </div>
@@ -232,14 +247,22 @@
     <!-- Asosiy code qism tugashi  -->
 </div>
 <script>
-    var loader=document.getElementById("preloader");
-    window.addEventListener("load",function (){
-        loader.style.display="none";
+    var loader = document.getElementById("preloader");
+    window.addEventListener("load", function () {
+        loader.style.display = "none";
     })
     $(document).ready(function () {
 //change selectboxes to selectize mode to be searchable
         $("select").select2();
     });
+    window.onload
+    {
+        setTimeout(() => {
+            let message = document.getElementById("message");
+            message.style.display = "none";
+        }, 8000);
+
+    }
 </script>
 </body>
 </html>

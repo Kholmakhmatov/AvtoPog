@@ -62,7 +62,7 @@ public class ExcelGeneratorService {
         CellStyle styleDanger = workbook.createCellStyle();
         XSSFFont font2 = workbook.createFont();
         font2.setFontHeight(14);
-        font2.setColor(IndexedColors.RED.index);
+        font2.setColor(IndexedColors.RED.getIndex());
         styleDanger.setFont(font2);
         for (ResponseDto<LdSvGateAdd> record : responseDtoList) {
             LdSvGateAdd ldSvGateAdd = record.getObj();

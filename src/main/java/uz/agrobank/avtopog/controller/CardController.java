@@ -45,7 +45,7 @@ public class CardController {
         model.addAttribute("branches", branchList);
         model.addAttribute("addCard", new LdSvGateAddCreate());
         model.addAttribute("months", List.of("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
-        model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32"));
+        model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38"));
         model.addAttribute("message", "");
         model.addAttribute("message", new ResponseDto<String>());
         model.addAttribute("user", userDto);
@@ -65,13 +65,12 @@ public class CardController {
             model.addAttribute("branches", branchList);
             model.addAttribute("addCard", ldSvGateAddCreate);
             model.addAttribute("months", List.of("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
-            model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32"));
+            model.addAttribute("years", List.of("23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38"));
             model.addAttribute("message", response);
             UserDto userDto = myBaseUtil.userDto();
             model.addAttribute("user", userDto);
         }
         return "addCard";
-
     }
 
     @PostMapping(path = "/addCardFromFile")
@@ -83,6 +82,7 @@ public class CardController {
 
     @GetMapping(path = "/operation")
     public String deleteCard(Model model, @RequestParam(name = "id", required = false) Long id, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "cardNumber", required = false) String cardNumber, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page) {
+
         List<Branch> branchList = cardService.getBranches();
         model.addAttribute("branches", branchList);
         model.addAttribute("message", "");
@@ -93,32 +93,46 @@ public class CardController {
         model.addAttribute("message", response);
         model.addAttribute("user", userDto);
         model.addAttribute("searchCard", new LdSvGateAddSearch(id, branch, cardNumber));
-        if (page==0)
-            model.addAttribute("firstPage",true);
-        else
-            model.addAttribute("firstPage",false);
         ContentList<LdSvGate> allActive = cardService.getAllActive(id, branch, cardNumber, page);
         model.addAttribute("cards", allActive.getList());
         TreeSet<Integer> integers = myBaseUtil.generateCount(allActive.getCount(), page + 1);
         model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
-        if ((branch==null && cardNumber==null && id==null))
-            model.addAttribute("firstPage",true);
+        if ((branch == null && cardNumber == null && id == null))
+            model.addAttribute("firstPage", true);
         else
-            model.addAttribute("firstPage",false);
+            model.addAttribute("firstPage", false);
         return "cardsOperation";
     }
 
-    @GetMapping(path = "/delete/{id}")
+    @GetMapping(path = "/delete/{id}/{branch}/{card}/{exp}")
     @CheckRole({RoleEnum.ADMIN})
-    public String deleteCardById(@PathVariable(name = "id") Long cardId, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page) {
-        cardService.deleteCadById(cardId);
-        return "redirect:/card/operation?page="+page+"&branch="+branch+"&id="+cardId;
+    public String deleteCardById(@PathVariable(name = "exp") String exp,@PathVariable(name = "card") String card,@PathVariable(name = "branch") String br,@PathVariable(name = "id") Long id, @RequestParam(name = "branch", required = false) String branch, @RequestParam(name = "page", defaultValue = SecretKeys.PAGE, required = false) Integer page, Model model) {
+        LdSvGateAdd ldSvGateAdd=new LdSvGateAdd(id,br,card,exp);
+        cardService.deleteCrad(ldSvGateAdd);
+        List<Branch> branchList = cardService.getBranches();
+        model.addAttribute("branches", branchList);
+        model.addAttribute("message", new ResponseDto<String>(true, "Delete card"));
+        UserDto userDto = myBaseUtil.userDto();
+        if (page > 0) page--;
+        model.addAttribute("user", userDto);
+        model.addAttribute("searchCard", new LdSvGateAddSearch(null, branch, null));
+        if (page == 0)
+            model.addAttribute("firstPage", true);
+        else
+            model.addAttribute("firstPage", false);
+        ContentList<LdSvGate> allActive = cardService.getAllActive(null, branch, null, page);
+        model.addAttribute("cards", allActive.getList());
+        TreeSet<Integer> integers = myBaseUtil.generateCount(allActive.getCount(), page + 1);
+        model.addAttribute("count", integers);
+        model.addAttribute("page", page + 1);
+        return "cardsOperation";
 
     }
+
     @GetMapping(path = "/downloadTemplate")
-    @CheckRole({RoleEnum.ADMIN,RoleEnum.USER})
-    public void downloadTemplate(HttpServletResponse response){
+    @CheckRole({RoleEnum.ADMIN, RoleEnum.USER})
+    public void downloadTemplate(HttpServletResponse response) {
         cardService.downloadTemplate(response);
     }
 

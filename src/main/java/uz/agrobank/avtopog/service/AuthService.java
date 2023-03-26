@@ -6,10 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.exceptions.UniversalException;
-import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
-
-import java.util.Optional;
+import uz.agrobank.avtopog.model.User;
 
 @Service
 @RequiredArgsConstructor
@@ -18,9 +16,10 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        Optional<User> byUserName = userRepository.getUserByUsernameAndActive(username, true);
-        if (byUserName.isPresent())
-            return byUserName.get();
+        User userByUsernameAndActive = userRepository.findUserByUsernameAndActive(username, true);
+
+        if (userByUsernameAndActive!=null)
+            return userByUsernameAndActive;
         else throw new UniversalException("Not Found User", HttpStatus.FORBIDDEN);
     }
 }

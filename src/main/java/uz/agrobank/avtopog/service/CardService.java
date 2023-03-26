@@ -10,13 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.dto.LdSvGateAddCreate;
 import uz.agrobank.avtopog.exceptions.UniversalException;
-import uz.agrobank.avtopog.mapper.MyMapper;
-import uz.agrobank.avtopog.model.Branch;
-import uz.agrobank.avtopog.model.LdSvGate;
-import uz.agrobank.avtopog.model.LdSvGateAdd;
 import uz.agrobank.avtopog.repository.BranchRepository;
 import uz.agrobank.avtopog.repository.LdSvGateAddRepository;
 import uz.agrobank.avtopog.repository.LdSvGateRepository;
+import uz.agrobank.avtopog.model.Branch;
+import uz.agrobank.avtopog.model.LdSvGate;
+import uz.agrobank.avtopog.model.LdSvGateAdd;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 
@@ -28,7 +27,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by Kholmakhmatov_A on 3/13/2023
@@ -41,43 +39,44 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class CardService {
     private final BranchRepository branchRepository;
-    private final LdSvGateAddRepository ldSvGateAddRepository;
+
+    private final LdSvGateAddRepository jdbcldSvGateAddRepository;
     private final LdSvGateRepository ldSvGateRepository;
-    private final MyMapper mapper;
     private final FileService fileService;
 
     public List<Branch> getBranches() {
-        return branchRepository.getBranchList();
+        return branchRepository.findBranchList();
     }
 
     public ResponseDto<LdSvGateAdd> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
         ResponseDto<LdSvGateAdd> responseDto = new ResponseDto<>();
         try {
             ///Branch ga check
-            LdSvGateAdd ldSvGateAdd = new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth() + ldSvGateAddCreate.getExpiryYear(), userId);
-            Optional<Branch> byBranch = branchRepository.findByBranch(ldSvGateAddCreate.getBranch());
-            if (byBranch.isEmpty()) {
+            LdSvGateAdd ldSvGateAdd = new LdSvGateAdd(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getBranch(), ldSvGateAddCreate.getCardNumber(), ldSvGateAddCreate.getExpiryMonth() + ldSvGateAddCreate.getExpiryYear(), userId, ldSvGateAddCreate.getPhone());
+            Branch byBranch = branchRepository.findById(ldSvGateAddCreate.getBranch());
+            if (byBranch == null) {
                 responseDto.setMessage("Branch not found");
                 responseDto.setObj(ldSvGateAdd);
                 return responseDto;
             }
 
-            Integer existsById = ldSvGateAddRepository.existsById(ldSvGateAddCreate.getId(), ldSvGateAddCreate.getId());
-            responseDto.setObj(ldSvGateAdd);
-            if (existsById > 0) {
-                responseDto.setMessage("Anketa Id avvaldan mavjud");
-                responseDto.setObj(ldSvGateAdd);
-                return responseDto;
-            }
             boolean checkExpired = checkExpired(ldSvGateAddCreate);
             if (!checkExpired) {
                 responseDto.setMessage("Check card Expired date");
+                responseDto.setObj(ldSvGateAdd);
                 return responseDto;
             }
-            LdSvGateAdd save = ldSvGateAddRepository.save(ldSvGateAdd);
+            /// Bitta anketada 1 xil card bo'lmasligi kerak
+
+
+            int save = jdbcldSvGateAddRepository.save(ldSvGateAdd);
+            if (save == 0) {
+                responseDto.setMessage("Serverda nosozlik adminga murojaat qiling");
+                return responseDto;
+            }
             responseDto.setSuccess(true);
             responseDto.setMessage("Add new card");
-            responseDto.setObj(save);
+            responseDto.setObj(ldSvGateAdd);
             return responseDto;
         } catch (Exception e) {
             responseDto.setMessage("Serverda nosozlik adminga murojaat qiling");
@@ -104,9 +103,9 @@ public class CardService {
         if (id == null || id == -1) id = null;
         if (cardNumber == null || cardNumber.length() < 14) cardNumber = null;
         Integer offset = size * page;
-        List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber, id, brach, cardNumber, size, offset);
+        List<LdSvGate> allActive = ldSvGateRepository.findAllActiveUnion(id, brach, cardNumber, size, offset);
         contentList.setPage(page);
-        Integer allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber, id, brach, cardNumber);
+        Integer allActiveCountList = ldSvGateRepository.findAllActiveCountUnion(id, brach, cardNumber);
         contentList.setList(allActive);
         double div = allActiveCountList / 10.0;
         Integer a = (int) Math.ceil(div);
@@ -114,23 +113,16 @@ public class CardService {
         return contentList;
     }
 
-    public boolean deleteCadById(Long id) {
-        Optional<LdSvGateAdd> byId = ldSvGateAddRepository.findById(id);
-        if (byId.isPresent()) {
-            LdSvGateAdd ldSvGateAdd = byId.get();
-            ldSvGateAdd.setState(0);
-            ldSvGateAddRepository.save(ldSvGateAdd);
-            return true;
-        } else {
-            Optional<LdSvGate> byIdGate = ldSvGateRepository.findById(id);
-            if (byIdGate.isPresent()) {
-                LdSvGate ldSvGate = byIdGate.get();
-                ldSvGate.setState(0);
-                ldSvGateRepository.save(ldSvGate);
-                return true;
-            }
-        }
-        throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
+    public boolean deleteCrad(LdSvGateAdd ldSvGateAdd) {
+        int delete=0;
+        delete=delete + ldSvGateRepository.delete(ldSvGateAdd);
+        delete=delete + jdbcldSvGateAddRepository.delete(ldSvGateAdd);
+        if (delete==0){
+            throw new UniversalException("Card not found", HttpStatus.NOT_FOUND);
+        }else  return true;
+
+
+
     }
 
     public void addCardFromFile(MultipartFile[] files, HttpServletResponse response, Long userId) {
@@ -141,11 +133,11 @@ public class CardService {
             responseDtoList.add(responseDto);
         }
         response.setContentType("application/octet-stream");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss");
         String currentDateTime = dateFormatter.format(new Date());
 
         String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=Cards_response" + currentDateTime + ".xlsx";
+        String headerValue = "attachment; filename=Cards_" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
 
         ExcelGeneratorService generator = new ExcelGeneratorService(responseDtoList);

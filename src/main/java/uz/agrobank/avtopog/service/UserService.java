@@ -9,17 +9,15 @@ import uz.agrobank.avtopog.dto.UserDroCreate;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.dto.UserUpdate;
 import uz.agrobank.avtopog.exceptions.UniversalException;
+import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.mapper.MyMapper;
 import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.model.enums.RoleEnum;
-import uz.agrobank.avtopog.repository.UserRepository;
 import uz.agrobank.avtopog.response.ContentList;
 import uz.agrobank.avtopog.response.ResponseDto;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
-import java.util.Optional;
-import java.util.TreeSet;
 
 /**
  * Created by Kholmakhmatov_A on 2/21/2023
@@ -31,18 +29,18 @@ import java.util.TreeSet;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-    private final UserRepository userRepository;
     private final MyPasswordEncoder encoder;
     private final MyMapper myMapper;
     private final JwtService jwtService;
+    private final UserRepository userRepository;
 
     public ResponseDto<String> hasUserForLogin(User userCreate) {
+
         ResponseDto<String> responseDto = new ResponseDto<>();
-        Optional<User> userByUsername = userRepository.getUserByUsername(userCreate.getUsername());
-        if (userByUsername.isPresent()) {
-            User user = userByUsername.get();
-            if (user.getActive()) {
-                boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), user.getPassword());
+        User userByUsername = userRepository.findByUserName(userCreate.getUsername());
+        if (userByUsername!=null) {
+            if (userByUsername.getActive()) {
+                boolean matches = encoder.passwordEncoder().matches(userCreate.getPassword(), userByUsername.getPassword());
                 if (matches) {
                     responseDto.setSuccess(true);
                     responseDto.setMessage("User find");
@@ -73,13 +71,17 @@ public class UserService {
         ResponseDto<User> responseDto = new ResponseDto<>();
         User user = parseToUser(userDroCreate);
         // check username
-        Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
-        if (byUsername.isEmpty()) {
+        User byUsername = userRepository.findByUserName(user.getUsername());
+        if (byUsername==null) {
             Long maxId = userRepository.findMaxId();
             user.setId(++maxId);
-            User save = userRepository.save(user);
+            int save = userRepository.save(user);
+            if (save==0){
+                responseDto.setMessage("Serverda nosozlik adminga murojaat qiling");
+                return responseDto;
+            }
             responseDto.setMessage("Add new user");
-            responseDto.setObj(save);
+            responseDto.setObj(userRepository.findByUserName(user.getUsername()));
             responseDto.setSuccess(true);
 
         } else {
@@ -112,10 +114,10 @@ public class UserService {
     }
 
     public ResponseDto<UserUpdate> findById(Long id) {
-        Optional<User> byId = userRepository.findById(id);
+        User byId = userRepository.findById(id);
         ResponseDto<UserUpdate> responseDto = new ResponseDto<>();
-        if (byId.isPresent()) {
-            UserUpdate userDto = myMapper.toUpdate(byId.get());
+        if (byId!=null) {
+            UserUpdate userDto = myMapper.toUpdate(byId);
             userDto.setPassword(null);
             responseDto.setSuccess(true);
             responseDto.setMessage("ok");
@@ -127,22 +129,20 @@ public class UserService {
     }
 
     public ResponseDto<UserUpdate> updateUser(UserUpdate userUpdate, UserDto userDto, HttpServletResponse response) {
-        Optional<User> byId = userRepository.findById(userUpdate.getId());
+        User user = userRepository.findById(userUpdate.getId());
         ResponseDto<UserUpdate> responseDto = new ResponseDto<>();
-        if (byId.isPresent()) {
-            User user = byId.get();
+        if (user!=null) {
             //check username
-
-            Optional<User> byUsernameAndIdNot = userRepository.findByUsernameAndIdNot(userUpdate.getUsername(), userUpdate.getId());
-            if (byUsernameAndIdNot.isPresent()) {
+            User byUsernameAndIdNot = userRepository.findByUsernameAndIdNot(userUpdate.getUsername(), userUpdate.getId());
+            if (byUsernameAndIdNot!=null) {
                 responseDto.setMessage("This username already exist");
                 responseDto.setObj(userUpdate);
                 return responseDto;
             }
 
             //check phone
-            Optional<User> byPhoneAndIdNot = userRepository.findByPhoneAndIdNot(userUpdate.getPhone(), userUpdate.getId());
-            if (byPhoneAndIdNot.isPresent()) {
+            User byPhoneAndIdNot = userRepository.findByPhoneAndIdNot(userUpdate.getPhone(), userUpdate.getId());
+            if (byPhoneAndIdNot!=null) {
                 responseDto.setMessage("This phone already exist");
                 responseDto.setObj(userUpdate);
                 return responseDto;
@@ -163,15 +163,14 @@ public class UserService {
                 return responseDto;
             }
             User userSave = toUser(userUpdate, user);
-            User save = userRepository.save(userSave);
-            userUpdate = myMapper.toUpdate(save);
-            userUpdate.setPassword(null);
+            int save = userRepository.update(userSave);
+            userSave.setPassword(null);
             responseDto.setSuccess(true);
             responseDto.setMessage("Edite user info");
             responseDto.setObj(userUpdate);
             // cookies ni almashtirish
             if (userSave.getId().equals(userDto.getId()) ) {
-                jwtService.createTokenAndSaveCookies(save, response);
+                jwtService.createTokenAndSaveCookies(userRepository.findById(userSave.getId()), response);
             }
         } else {
             throw new UniversalException("User not found", HttpStatus.NOT_FOUND);
@@ -181,13 +180,13 @@ public class UserService {
 
     private Integer hasAnotherAdmin(User userLast, UserUpdate userNow) {
         if ( userLast.getRole().equals(RoleEnum.ADMIN) && userNow.getRole().equals(RoleEnum.USER)){
-           return  userRepository.hasAnotherAdmin(userNow.getId());
+           return  userRepository.findAnotherAdmin(userNow.getId());
         }
         return 1;
     }
     private Integer hasAnotherAdmin(User userLast, Boolean userNow) {
         if (userLast.getRole().equals(RoleEnum.ADMIN) && !userNow){
-            return userRepository.hasAnotherAdmin(userLast.getId());
+            return userRepository.findAnotherAdmin(userLast.getId());
         }
         return 1;
     }
@@ -200,7 +199,7 @@ public class UserService {
         if (userUpdate.getPassword() != null && !userUpdate.getPassword().isEmpty()) {
             user.setPassword(encoder.passwordEncoder().encode(userUpdate.getPassword()));
         }
-        if (userUpdate.getPhone() != null && !userUpdate.getPhone().isEmpty()) {
+        if (userUpdate.getPhone() != null) {
             user.setPhone(userUpdate.getPhone());
         }
         user.setCreatedAt(user.getCreatedAt());

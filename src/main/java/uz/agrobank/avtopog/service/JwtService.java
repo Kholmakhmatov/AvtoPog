@@ -9,15 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import uz.agrobank.avtopog.config.SecretKeys;
 import uz.agrobank.avtopog.exceptions.UniversalException;
-import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.repository.UserRepository;
+import uz.agrobank.avtopog.model.User;
 import uz.agrobank.avtopog.response.ResponseDto;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-import java.util.Optional;
 
 import static uz.agrobank.avtopog.config.SecretKeys.secretWord;
 
@@ -50,8 +49,8 @@ public class JwtService {
         try {
             Claims body = Jwts.parser().setSigningKey(SecretKeys.secretWord).parseClaimsJws(token).getBody();
             String subject = body.getSubject();
-            Optional<User> byEmailOrUserName = userRepository.getUserByUsernameAndActive(subject, true);
-            if (byEmailOrUserName.isPresent()) {
+            User byEmailOrUserName = userRepository.findUserByUsernameAndActive(subject, true);
+            if (byEmailOrUserName!=null) {
                 userResponseDto.setMessage("Find User");
                 userResponseDto.setSuccess(true);
                 return userResponseDto;

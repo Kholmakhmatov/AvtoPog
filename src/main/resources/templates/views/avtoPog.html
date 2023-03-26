@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+    <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
+    <title>Add card</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- Icons font CSS-->
+    <link th:href="@{/vendor/mdi-font/css/material-design-iconic-font.min.css}" rel="stylesheet" media="all">
+    <link th:href="@{/vendor/font-awesome-4.7/css/font-awesome.min.css}" rel="stylesheet" media="all">
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS-->
+    <link th:href="@{/vendor/datepicker/daterangepicker.css}" rel="stylesheet" media="all">
+    <link th:href="@{/vendor/select2/select2.min.css}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link th:href="@{/style/avtoPogRegister.css}" rel="stylesheet" media="all">
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+</head>
+<body>
+<div id="preloader"></div>
+<div class="menu-bar">
+    <h1 class="logo">Agro<span>bank.</span></h1>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
+                                class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="/user/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add user</a></li>
+                                <li><a href="/user/all"><i class="fa-solid fa-users"></i>&nbsp;Users</a></li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Card <i
+                                class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog <i class="fas fa-caret-right"></i></a>
+
+                        <div class="dropdown-menu-1">
+                            <ul>
+                                <li><a href="#">UzCard</a></li>
+                                <li><a href="#">Humo</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li><a href="/contact/us">Contact us</a></li>
+        <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
+
+            <div class="dropdown-menu">
+                <ul>
+                    <li><a href="/user/profile">My profile</a></li>
+                    <li><a href="/logOut">Logout</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="hero">
+    <!-- Asosiy code qism -->
+    <div class="page-wrapper bg-gra-02 p-t-20 p-b-100 font-poppins">
+        <div id="message">
+            <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='true'}"
+                 class="alert alert-success align-content-center" role="alert"
+                 style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+            ></div>
+            <div th:if="${message.getMessage().length()>0 and message.getSuccess().toString()=='false'}"
+                 class="alert alert-danger align-content-center" role="alert"
+                 style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
+            ></div>
+        </div>
+        <div id="divHumo">
+
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+
+                        <h2 class="title">HUMO</h2>
+
+                        <form th:action="@{/avtoPog/humo/branch}" method="POST" th:object="${addCard}"
+                              enctype="multipart/form-data">
+                            <div class="row row-space">
+
+                                <div class="col-2">
+                                    <label class="label">FILIALNI TANLANG</label>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <!--                                <select class="form-control" name="subject" th:field="*{branch}">-->
+                                        <!--                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+                                        <!--                                            th:text="${branch.getBranch()}"></option>-->
+                                        <!--                                </select>-->
+                                        <!--                                <div class="select-dropdown"></div>-->
+                                        <select  style="width:200px;" class="operator" th:field="*{branch}"
+                                                 required>
+                                            <option th:value="*{branch}" selected>Search..</option>
+                                            <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                                    th:text="${branch.getId()}"></option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
+
+                        <form th:action="@{/avtoPog/humo/region}" method="POST" th:object="${addCard}"
+                              enctype="multipart/form-data">
+                            <div class="row row-space" >
+
+                                <div class="col-2">
+                                    <label class="label">FILIALNI NOMINI TANLANG </label>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <!--                                <select class="form-control" name="subject" th:field="*{branch}">-->
+                                        <!--                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+                                        <!--                                            th:text="${branch.getBranch()}"></option>-->
+                                        <!--                                </select>-->
+                                        <!--                                <div class="select-dropdown"></div>-->
+                                        <select  style="width:200px;" class="operator" th:field="*{branch}"
+                                                 required>
+                                            <option th:value="*{branch}" selected>Search..</option>
+                                            <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                                    th:text="${branch.getId()}"></option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue" type="submit" style="background: aqua;color: black">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
+
+                        <form th:action="@{/avtoPog/humo/all}" method="POST" th:object="${addCard}" enctype="multipart/form-data">
+
+                            <div class="row row-space" >
+
+                                <div class="col-2" style="margin-top: 30px;">
+                                    <label class="label" style="color: red;font-size: 16px">Umumiy holda ishga tushurish hamma filiallar bo'yicha </label>
+
+                                </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue"  type="submit" style="background: #01d28e">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="divuzCard">
+            <div class="wrapper wrapper--w680">
+                <div class="card card-4">
+                    <div class="card-body">
+
+                        <h2 class="title">UZ CARD</h2>
+
+                        <form th:action="@{/avtoPog/uzcard/branch}" method="POST" th:object="${addCard}"
+                              enctype="multipart/form-data">
+                            <div class="row row-space">
+
+                            <div class="col-2">
+                                <label class="label">FILIALNI TANLANG</label>
+                                <div class="rs-select2 js-select-simple select--no-search">
+                                    <!--                                <select class="form-control" name="subject" th:field="*{branch}">-->
+                                    <!--                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+                                    <!--                                            th:text="${branch.getBranch()}"></option>-->
+                                    <!--                                </select>-->
+                                    <!--                                <div class="select-dropdown"></div>-->
+                                    <select  style="width:200px;" class="operator" th:field="*{branch}"
+                                            required>
+                                        <option th:value="*{branch}" selected>Search..</option>
+                                        <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                                th:text="${branch.getId()}"></option>
+                                    </select>
+                                </div>
+
+                            </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue" type="submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
+
+                        <form th:action="@{/avtoPog/uzcard/region}" method="POST" th:object="${addCard}"
+                              enctype="multipart/form-data">
+                            <div class="row row-space" >
+
+                                <div class="col-2">
+                                    <label class="label">FILIALNI NOMINI TANLANG </label>
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <!--                                <select class="form-control" name="subject" th:field="*{branch}">-->
+                                        <!--                                    <option th:each="branch: ${branches}" th:value="${branch.getBranch()}"-->
+                                        <!--                                            th:text="${branch.getBranch()}"></option>-->
+                                        <!--                                </select>-->
+                                        <!--                                <div class="select-dropdown"></div>-->
+                                        <select  style="width:200px;" class="operator" th:field="*{branch}"
+                                                 required>
+                                            <option th:value="*{branch}" selected>Search..</option>
+                                            <option th:each="branch: ${branches}" th:value="${branch.getId()}"
+                                                    th:text="${branch.getId()}"></option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue" type="submit" style="background: aqua;color: black">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr style="height:10px;border-width:0;color:#30a927;background-color:#30a927;margin-top: 30px;margin-bottom: 20px">
+
+                        <form th:action="@{/avtoPog/uzcard/all}" method="POST" th:object="${addCard}" enctype="multipart/form-data">
+
+                            <div class="row row-space" >
+
+                                <div class="col-2" style="margin-top: 30px;">
+                                    <label class="label" style="color: red;font-size: 16px">Umumiy holda ishga tushurish hamma filiallar bo'yicha </label>
+
+                                </div>
+                                <div class="col-2" style="margin-top: 25px">
+                                    <button class="btn btn--radius-2 btn--blue"  type="submit" style="background: #01d28e">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+    <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <!-- Vendor JS-->
+    <script th:src="@{/vendor/select2/select2.min.js}"></script>
+    <script th:src="@{/vendor/datepicker/moment.min.js}"></script>
+    <script th:src="@{/vendor/datepicker/daterangepicker.js}"></script>
+
+    <!-- Main JS-->
+    <script th:src="@{/js/documentGlobal.js}"></script>
+    <!-- Asosiy code qism tugashi  -->
+
+</div>
+<script>
+    var loader = document.getElementById("preloader");
+    var info = document.getElementById("info");
+    var form = document.getElementById("form");
+    window.addEventListener("load", function () {
+        loader.style.display = "none";
+        info.style.display = "none";
+    })
+
+
+    $(document).ready(function () {
+//change selectboxes to selectize mode to be searchable
+        $("select").select2();
+    });
+    window.onload
+    {
+        setTimeout(() => {
+            let message = document.getElementById("message");
+            message.style.display = "none";
+        }, 8000);
+
+    }
+</script>
+</body>
+</html>
+

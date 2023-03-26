@@ -31,5 +31,13 @@ public class LdSvGateAddCreate {
     private String expiryMonth;
 
     private String expiryYear;
+    private String phone;
 
+    public LdSvGateAddCreate(Long id, String branch, String cardNumber, String expiryMonth, String expiryYear) {
+        this.id = id;
+        this.branch = branch;
+        this.cardNumber = cardNumber;
+        this.expiryMonth = expiryMonth;
+        this.expiryYear = expiryYear;
+    }
 }

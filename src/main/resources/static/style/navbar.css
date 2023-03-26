@@ -22,7 +22,7 @@ body {
 }
 
 .logo span {
-  color: var(--color-primary);
+  color: #0fd90f;
 }
 
 .menu-bar {
@@ -104,11 +104,13 @@ body {
 }
 
 .hero {
+
   height: calc(100vh - 80px);
-  /*background-image: url(/images/AgroBank_mini.png);*/
-  /*background-position: center;*/
-  /*background-repeat: no-repeat, repeat;*/
-  background-color: whitesmoke;
+  width: 100%;
+  background-image: url(/images/AgroBank_mini.png);
+  background-position: center;
+  background-repeat: no-repeat, repeat;
+  /*background-color: whitesmoke;*/
 }
 #preloader{
   background: #000 url(/images/circle-loader-gif-2.gif) no-repeat center center;
@@ -118,4 +120,20 @@ body {
   position: fixed;
   z-index: 100;
   animation-delay: 2s;
+  display: block;
+}
+
+
+#divuzCard {
+
+  width: 50%;
+  display: block;
+  height: 50%;
+  float: left;
+}
+#divHumo {
+
+  width: 50%;
+  height: 50%;
+  float: left;
 }
