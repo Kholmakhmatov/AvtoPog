@@ -125,8 +125,8 @@ public class StatisticService {
             list.add(statisticFewMonth);
         }
         for (StatisticFewMonth statisticFewMonth : list) {
-            if (statisticFewMonth.getAmount().equals(max)) statisticFewMonth.setIndexLabel("★ Highest");
-            if (statisticFewMonth.getAmount().equals(min)) statisticFewMonth.setIndexLabel("⚑ Lowest");
+            if (statisticFewMonth.getAmount().equals(max)) statisticFewMonth.setIndexLabel("★ Highest (Humo)");
+            if (statisticFewMonth.getAmount().equals(min)) statisticFewMonth.setIndexLabel("⚑ Lowest (Humo)");
         }
         ObjectMapper objectMapper=new ObjectMapper();
         try {
@@ -154,8 +154,8 @@ public class StatisticService {
             list.add(statisticFewMonth);
         }
         for (StatisticFewMonth statisticFewMonth : list) {
-            if (statisticFewMonth.getAmount().equals(max)) statisticFewMonth.setIndexLabel("★ Highest");
-            if (statisticFewMonth.getAmount().equals(min)) statisticFewMonth.setIndexLabel("⚑ Lowest");
+            if (statisticFewMonth.getAmount().equals(max)) statisticFewMonth.setIndexLabel("★ Highest (UzCard)");
+            if (statisticFewMonth.getAmount().equals(min)) statisticFewMonth.setIndexLabel("⚑ Lowest (UzCard)");
         }
         ObjectMapper objectMapper=new ObjectMapper();
         try {

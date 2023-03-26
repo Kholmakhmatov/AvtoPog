@@ -21,7 +21,7 @@ public class MessageController {
     @PostMapping("/send")
     public String sendMessage( @RequestBody MyMessage message) {
         jmsTemplate.convertAndSend(message.getQueue(), message.getContent());
-       int messageCount = queueManager.getMessageCount(uzcard);
+       long messageCount = queueManager.getMessagesHumo();
         System.out.println("messageCount = " + messageCount);
         //int humoCount = queueManager.getMessageCount(humo);
         return " uzcard = "  + messageCount +"\nMessage= "+message;

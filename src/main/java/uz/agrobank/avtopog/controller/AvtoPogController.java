@@ -25,11 +25,6 @@ public class AvtoPogController {
     private final MyBaseUtil myBaseUtil;
     private final BranchService branchService;
     private final QueueManager queueManager;
-    @Value("${jms.queues.uzcard-queue.name}")
-    public String uzcardQueue;
-
-    @Value("${jms.queues.humo-queue.name}")
-    public String humoQueue;
 
     @GetMapping(path = "/start")
     public String startPage(Model model) {
@@ -40,10 +35,10 @@ public class AvtoPogController {
         model.addAttribute("branches", branchList);
         model.addAttribute("regions", regions);
         model.addAttribute("dto", new AvtoPogDto());
-        int messageCountUzcard = queueManager.getMessageCount(uzcardQueue);
+        long messageCountUzcard = queueManager.getMessagesUzCard();
         model.addAttribute("uzcardQueue", messageCountUzcard);
         ResponseDto<String> responseMessage = new ResponseDto<>();
-        int messageCountHumo = queueManager.getMessageCount(humoQueue);
+        long messageCountHumo = queueManager.getMessagesHumo();
         if (messageCountUzcard != 0 || messageCountHumo != 0) {
             responseMessage.setMessage("Uzcard = " + messageCountUzcard + " Humo=" + messageCountHumo);
         }

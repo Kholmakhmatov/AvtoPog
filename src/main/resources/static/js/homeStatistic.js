@@ -56,7 +56,7 @@ window.onload = function () {
     var chartDaily = new CanvasJS.Chart("chartDaily", {
         animationEnabled: true,
         title: {
-            text: "Kunlar kesimida"
+            text: "Company Revenue by Daily"
         },
         axisX: {
             minimum: new Date(uzCardJson.minimum[0] - 1, uzCardJson.minimum[1] - 1, uzCardJson.minimum[2] - 1),
@@ -139,12 +139,14 @@ window.onload = function () {
 
     var chartMonthly = new CanvasJS.Chart("chartMonthly", {
         animationEnabled: true,
+        exportEnabled: true,
         title: {
-            text: "Company Revenue by Year"
+            text: "Company Revenue by Month"
+
         },
         axisY: {
             title: "Revenue in USD",
-            valueFormatString: "#0,,.",
+            valueFormatString: "#0,.",
             suffix: "mn",
             prefix: "$"
         },
@@ -159,7 +161,9 @@ window.onload = function () {
             shared: true
         },
         legend: {
-            fontSize: 13
+            verticalAlign: "top",
+            horizontalAlign: "right",
+            dockInsidePlotArea: true
         },
         data: [{
 

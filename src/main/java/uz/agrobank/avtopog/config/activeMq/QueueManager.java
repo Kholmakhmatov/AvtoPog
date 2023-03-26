@@ -39,9 +39,9 @@ public class QueueManager {
 
     @Value("${jms.queues.humo-queue.name}")
     public String humo;
-    public int getMessageCount(String queueName) {
+    private long getMessageCount(String queueName) {
         return jmsTemplate.browse(queueName, (session, browser) -> {
-            int count = 0;
+            long count = 0;
             Enumeration<?> enumeration = browser.getEnumeration();
             while (enumeration.hasMoreElements()) {
                 enumeration.nextElement();
@@ -52,12 +52,12 @@ public class QueueManager {
     }
     public String mqList(){
         List<StatisticMQ>list=new ArrayList<>();
-        int messageCount = getMessageCount(uzcard);
+        long messageCount = getMessageCount(uzcard);
         StatisticMQ uzcard=new StatisticMQ();
-        uzcard.setAmount((long) messageCount);
+        uzcard.setAmount(messageCount);
         uzcard.setLabel("UzCard");
         list.add(uzcard);
-        int messageCountHumo = getMessageCount(humo);
+        long messageCountHumo = getMessageCount(humo);
         StatisticMQ humo=new StatisticMQ();
         humo.setAmount((long) messageCountHumo);
         humo.setLabel("Humo");
@@ -71,5 +71,11 @@ public class QueueManager {
             throw new UniversalException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return  s;
+    }
+    public long getMessagesUzCard(){
+        return getMessageCount(uzcard);
+    }
+    public long getMessagesHumo(){
+        return getMessageCount(humo);
     }
 }
