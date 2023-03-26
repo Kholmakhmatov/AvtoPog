@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import uz.agrobank.avtopog.baseUtil.MyBaseUtil;
+import uz.agrobank.avtopog.config.activeMq.QueueManager;
 import uz.agrobank.avtopog.dto.UserDto;
 import uz.agrobank.avtopog.response.ResponseDto;
 import uz.agrobank.avtopog.service.StatisticService;
@@ -18,6 +19,7 @@ import uz.agrobank.avtopog.service.UserService;
 public class StatisticController {
     private final UserService userService;
     private final MyBaseUtil myBaseUtil;
+    private final QueueManager queueManager;
     private final StatisticService statisticService;
     @GetMapping(path = "/home")
     public String homePage(Model model, @CookieValue(value = "user", defaultValue = "") String token) {
@@ -25,15 +27,17 @@ public class StatisticController {
         if (responseDto.getSuccess()) {
             UserDto userDto = myBaseUtil.userDto();
             model.addAttribute("user", userDto);
-            String fewDays = statisticService.getFewDays();
-            String fewDays2 = statisticService.getFewDays();
-            String fewMonth=statisticService.getFewMonth();
-            String fewYear=statisticService.getFewYear();
+            String fewDaysHumo = statisticService.getFewDaysHumo();
+            String fewDaysUzCard = statisticService.getFewDaysUzcard();
+            String fewMonthHumo=statisticService.getFewMonthHumo();
+            String fewMonthUzCard=statisticService.getFewMonthUzCard();
             model.addAttribute("user",userDto);
-            model.addAttribute("fewDays", fewDays);
-            model.addAttribute("fewDays2", fewDays2);
-            model.addAttribute("fewMonth", fewMonth);
-            model.addAttribute("fewYear", fewYear);
+            model.addAttribute("humo", fewDaysHumo);
+            model.addAttribute("uzCard", fewDaysUzCard);
+            model.addAttribute("fewMonthHumo", fewMonthHumo);
+            model.addAttribute("fewMonthUzCard", fewMonthUzCard);
+            String list = queueManager.mqList();
+            model.addAttribute("MQ", list);
             return "homeStatistic";
         } else
             return "index";

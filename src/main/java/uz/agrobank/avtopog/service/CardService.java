@@ -44,10 +44,6 @@ public class CardService {
     private final LdSvGateRepository ldSvGateRepository;
     private final FileService fileService;
 
-    public List<Branch> getBranches() {
-        return branchRepository.findBranchList();
-    }
-
     public ResponseDto<LdSvGateAdd> addCard(LdSvGateAddCreate ldSvGateAddCreate, Long userId) {
         ResponseDto<LdSvGateAdd> responseDto = new ResponseDto<>();
         try {

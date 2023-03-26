@@ -18,12 +18,28 @@
 <div class="menu-bar">
     <h1 class="logo">Agro<span>bank.</span></h1>
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Pages <i class="fas fa-caret-down"></i></a>
+        <li><a href="/"><i class="fa-solid fa-house"></i>&nbsp;Home</a></li>
+        <li><a href="/statistic/home"><i class="fa-solid fa-chart-line"></i>&nbsp;Statistic</a></li>
+
+        <!--        <li><a href="#">Statistic <i class="fas fa-caret-down"></i></a>-->
+
+        <!--            <div class="dropdown-menu">-->
+        <!--                <ul>-->
+        <!--                    <li><a href="/statistic/operation">Optional</a></li>-->
+        <!--                    <li><a href="/statistic/month">Shu oy</a></li>-->
+        <!--                    <li><a href="/statistic/year">Shu yil</a></li>-->
+        <!--                </ul>-->
+        <!--            </div>-->
+        <!--        </li>-->
+
+        <li><a href="#">&nbsp;Pages <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
+                    <li>
+                        <a href="/avtoPog/start"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog </a>
+
+                    </li>
                     <li th:if="${user.getRole().name()=='ADMIN'}">
                         <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;User <i
                                 class="fas fa-caret-right"></i></a>
@@ -37,36 +53,28 @@
                         </div>
                     </li>
                     <li>
-                        <a href="#"><i class="fa-sharp fa-regular fa-address-card"></i>&nbsp;Card <i
+                        <a href="#"><i class="fa-regular fa-credit-card"></i>&nbsp;Card <i
                                 class="fas fa-caret-right"></i></a>
 
                         <div class="dropdown-menu-1">
                             <ul>
                                 <li><a href="/card/add"> <i class="fa-solid fa-plus"></i>&nbsp;Add</a></li>
-                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a></li>
+                                <li><a href="/card/operation"><i class="fa-solid fa-sliders"></i>&nbsp;Operation</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
-                    <li>
-                        <a href="#"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog <i class="fas fa-caret-right"></i></a>
 
-                        <div class="dropdown-menu-1">
-                            <ul>
-                                <li><a href="#">UzCard</a></li>
-                                <li><a href="#">Humo</a></li>
-                            </ul>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </li>
-        <li><a href="/contact/us">Contact us</a></li>
-        <li><a href="#">Profile <i class="fas fa-caret-down"></i></a>
+        <li><a href="/contact/us"><i class="fa-solid fa-address-book"></i>&nbsp;Contact us</a></li>
+        <li><a href="#"><i class="fa-regular fa-user"></i>&nbsp;Profile <i class="fas fa-caret-down"></i></a>
 
             <div class="dropdown-menu">
                 <ul>
                     <li><a href="/user/profile">My profile</a></li>
-                    <li><a href="/logOut">Logout</a></li>
+                    <li><a href="/logOut">Logout&nbsp;<i class="fa-solid fa-right-from-bracket"></i></a></li>
                 </ul>
             </div>
         </li>

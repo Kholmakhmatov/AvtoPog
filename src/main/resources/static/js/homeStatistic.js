@@ -1,83 +1,74 @@
 window.onload = function () {
-    const valueFewDays = document.getElementById("fewDays").value;
-    const valueFewDays2 = document.getElementById("fewDays2").value;
-    var fewDays = JSON.parse(valueFewDays);
-    var fewDays2 = JSON.parse(valueFewDays2);
-    var listFewdats = [];
-    var listFewdats2 = [];
-    let list = fewDays.list;
-    let list2 = fewDays2.list;
-    list.forEach(element =>{
-        let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
-        listFewdats.push(obj)
+    const uzCard = document.getElementById("uzCard").value;
+    const humo = document.getElementById("humo").value;
+    var uzCardJson = JSON.parse(uzCard);
+    var humoJson = JSON.parse(humo);
+    var listFewDaysUzCard = [];
+    var listFewDaysHumo = [];
+    let listUzCard = uzCardJson.list;
+    let listHumo = humoJson.list;
+    listUzCard.forEach(element => {
+        let obj = {
+            x: new Date(element.localDate[0] - 1, element.localDate[1] - 1, element.localDate[2] - 1),
+            y: element.amount,
+            indexLabel: element.indexLabel,
+            markerColor: element.markerColor
+        }
+        listFewDaysUzCard.push(obj)
     })
-    list2.forEach(element =>{
-        let obj= { x: new Date(element.localDate[0]-1,element.localDate[1]-1 ,element.localDate[2]-1), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
-        listFewdats2.push(obj)
+    listHumo.forEach(element => {
+        let obj = {
+            x: new Date(element.localDate[0] - 1, element.localDate[1] - 1, element.localDate[2] - 1),
+            y: element.amount,
+            indexLabel: element.indexLabel,
+            markerColor: element.markerColor
+        }
+        listFewDaysHumo.push(obj)
     })
     // 2
-    const valueFewMonth = document.getElementById("fewMonth").value;
-    var fewMonth= JSON.parse(valueFewMonth);
-    var listFewMonth = [];
-    fewMonth.forEach(element =>{
-        let obj= { y: element.amount, label: element.label ,indexLabel:element.indexLabel}
-        listFewMonth.push(obj)
+    const MQValue = document.getElementById("MQ").value;
+    var MQ = JSON.parse(MQValue);
+    var listMQ = [];
+    MQ.forEach(element => {
+        let obj = {y: element.amount, label: element.label, indexLabel: element.indexLabel}
+        listMQ.push(obj)
     })
 
     /// 3
 
-    const valueFewYear = document.getElementById("fewYear").value;
-    var fewYear= JSON.parse(valueFewYear);
-    var listFewYear = [];
-    fewYear.forEach(element =>{
-        let obj= { x: new Date(element.localDate[0],element.localDate[1] ,element.localDate[2]), y: element.amount ,indexLabel:element.indexLabel,markerColor:element.markerColor}
-        listFewYear.push(obj)
+    const valueFewMonthHumo = document.getElementById("fewMonthHumo").value;
+    var fewMonthHumo = JSON.parse(valueFewMonthHumo);
+    var listFewMonthHumo = [];
+    fewMonthHumo.forEach(element => {
+        let obj = {y: element.amount, label: element.label, indexLabel: element.indexLabel}
+        listFewMonthHumo.push(obj)
     })
 
-    // var chart = new CanvasJS.Chart("chartContainer", {
-    //
-    //     exportEnabled: true,
-    //     animationEnabled: true,
-    //     title: {
-    //         text: "Kunlar kesimida"
-    //     },
-    //     axisX: {
-    //         minimum: new Date(fewDays.minimum[0]-1, fewDays.minimum[1]-1, fewDays.minimum[2]-1),
-    //         maximum: new Date(fewDays.maximum[0]-1, fewDays.maximum[1]-1, fewDays.maximum[2]-1),
-    //         valueFormatString: "DD MMM",
-    //
-    //     },
-    //     axisY: {
-    //         title: "Umumiy miqdor",
-    //         titleFontColor: "#4F81BC",
-    //         includeZero: true,
-    //         suffix: "mn"
-    //     },
-    //     data: [{
-    //         indexLabelFontColor: "dark",
-    //         indexLabelFontSize: 18,
-    //         name: "views",
-    //         type: "area",
-    //         yValueFormatString: "#,##0.0mn",
-    //         markerSize: 8,
-    //         dataPoints:listFewdats,
-    //
-    //     }]
-    // });
-    // chart.render();
+    const valueFewMonthUzCard = document.getElementById("fewMonthUzCard").value;
+    var fewMonthUzCard = JSON.parse(valueFewMonthUzCard);
+    var listFewMonthUzCard = [];
+    fewMonthUzCard.forEach(element => {
+        let obj = {y: element.amount, label: element.label, indexLabel: element.indexLabel}
+        listFewMonthUzCard.push(obj)
+    })
 
-    var chart = new CanvasJS.Chart("chartContainer", {
+
+    var chartDaily = new CanvasJS.Chart("chartDaily", {
         animationEnabled: true,
         title: {
-            text: "Daily Email Analysis"
+            text: "Kunlar kesimida"
         },
         axisX: {
-            minimum: new Date(fewDays.minimum[0]-1, fewDays.minimum[1]-1, fewDays.minimum[2]-1),
-            maximum: new Date(fewDays.maximum[0]-1, fewDays.maximum[1]-1, fewDays.maximum[2]-1),
+            minimum: new Date(uzCardJson.minimum[0] - 1, uzCardJson.minimum[1] - 1, uzCardJson.minimum[2] - 1),
+            maximum: new Date(humoJson.maximum[0] - 1, humoJson.maximum[1] - 1, humoJson.maximum[2] - 1),
             valueFormatString: "DD MMM",
+            labelFontSize: 18,
+            labelFontWeight: "bold",
+            labelFontColor: "black"
+
         },
         axisY: {
-            title: "Number of Messages"
+            title: "Umumiy miqdor"
         },
         legend: {
             verticalAlign: "top",
@@ -91,75 +82,111 @@ window.onload = function () {
             name: "UZCARD",
             showInLegend: true,
             legendMarkerType: "square",
-            type: "area",
+            indexLabelFontColor: "blue",
+            indexLabelFontSize: 16,
+            type: "splineArea",
             color: "rgba(40,175,101,0.6)",
-            markerSize: 0,
-            dataPoints: listFewdats
+            markerSize: 2,
+            dataPoints: listFewDaysUzCard
         },
             {
                 name: "HUMO",
                 showInLegend: true,
                 legendMarkerType: "square",
-                type: "area",
+                indexLabelFontColor: "dark",
+                indexLabelFontSize: 16,
+                type: "splineArea",
                 color: "rgba(0,75,141,0.7)",
-                markerSize: 0,
-                dataPoints: listFewdats2
+                markerSize: 2,
+                dataPoints: listFewDaysHumo
             }]
     });
-    chart.render();
+    chartDaily.render();
 
     // chart 2
 
-    var chart2 = new CanvasJS.Chart("chartContainer2", {
+    var chartMQ = new CanvasJS.Chart("chartMQ", {
         animationEnabled: true,
         exportEnabled: true,
         theme: "light2", // "light1", "light2", "dark1", "dark2"
-        title:{
-            text: "Oylar kesimida"
+        title: {
+            text: "ActiveMQ Artemis"
+
         },
         axisY: {
-            title: "Umumiy miqdor"
+            title: "Number of Messages"
+
+        },
+        axisX: {
+            labelFontSize: 18,
+            labelFontWeight: "bold",
+            labelFontColor: "black"
         },
         data: [{
             type: "column",
             showInLegend: true,
-            indexLabelFontSize: 14,
             legendMarkerColor: "grey",
-            indexLabelFontColor: "dark",
-            legendText: "Qandeydur yozuv",
-            dataPoints: listFewMonth
+            indexLabelFontColor: "blue",
+            indexLabelFontSize: 18,
+            legendText: "Real time",
+            dataPoints: listMQ
         }]
     });
-    chart2.render();
+    chartMQ.render();
 
 
     /// 3
 
-    var chart3 = new CanvasJS.Chart("chartContainer3", {
-        exportEnabled: true,
+    var chartMonthly = new CanvasJS.Chart("chartMonthly", {
         animationEnabled: true,
-        title:{
-            text: "Yillar kesimida"
-        },
-        axisX: {
-            valueFormatString: "YYYY",
-
+        title: {
+            text: "Company Revenue by Year"
         },
         axisY: {
             title: "Revenue in USD",
-            valueFormatString: "#,###,###,###",
+            valueFormatString: "#0,,.",
             suffix: "mn",
             prefix: "$"
         },
+        axisX: {
+            valueFormatString: "MMMM",
+            labelFontSize: 18,
+            labelFontWeight: "bold",
+            labelFontColor: "black"
+
+        },
+        toolTip: {
+            shared: true
+        },
+        legend: {
+            fontSize: 13
+        },
         data: [{
+
             type: "splineArea",
-            color: "rgba(54,158,173,.7)",
-            markerSize: 10,
-            indexLabelFontSize: 20,
-            xValueFormatString: "YYYY",
+            showInLegend: true,
+            color: "rgba(0,75,141,0.7)",
+            markerSize: 5,
+            name: "Humo",
+            indexLabelFontColor: "dark",
+            indexLabelFontSize: 16,
+            xValueFormatString: "MMMM",
             yValueFormatString: "$#,##0.##",
-            dataPoints: listFewYear
-        }]
+            dataPoints: listFewMonthHumo
+        },
+            {
+                type: "splineArea",
+                showInLegend: true,
+                color: "rgba(40,175,101,0.6)",
+                markerSize: 5,
+                name: "UzCard",
+                xValueFormatString: "MMMM",
+                yValueFormatString: "$#,##0.##",
+                indexLabelFontColor: "blue",
+                indexLabelFontSize: 16,
+                dataPoints: listFewMonthUzCard
+            }
+        ]
     });
-    chart3.render();
+    chartMonthly.render();
 }
