@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <script src="https://kit.fontawesome.com/6d7c436d02.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
-    <link rel="stylesheet" th:href="@{/style/navbar.css}"/>
+    <link rel="stylesheet" th:href="@{/style/navbarHome.css}"/>
     <title>Users table</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
@@ -36,7 +36,7 @@
 
             <div class="dropdown-menu">
                 <ul>
-                    <li>
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
                         <a href="/avtoPog/start"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog </a>
 
                     </li>
@@ -109,11 +109,11 @@
                                 <th>Operation</th>
                             </tr>
                             </thead>
-                            <tbody class="topline">
+                            <tbody style="text-align: center">
                             <tr th:each="u,state:${users}">
                                 <td  th:text="${state.count + page*10 - 10 }"></td>
-                                <td scope="row" class="text-danger" th:text="${u.getId()}"></td>
-                                <td class="text-info" style="color: blue;font-size: 16px" th:text="${u.getFirstName()}"></td>
+                                <td style="color: red" th:text="${u.getId()}"></td>
+                                <td  style="color: blue" th:text="${u.getFirstName()}"></td>
                                 <td th:text="${u.getUsername()}"></td>
                                 <td th:text="${u.getPhone()}"></td>
                                 <td>

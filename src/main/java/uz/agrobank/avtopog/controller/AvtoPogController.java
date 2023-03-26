@@ -39,9 +39,6 @@ public class AvtoPogController {
         model.addAttribute("uzcardQueue", messageCountUzcard);
         ResponseDto<String> responseMessage = new ResponseDto<>();
         long messageCountHumo = queueManager.getMessagesHumo();
-        if (messageCountUzcard != 0 || messageCountHumo != 0) {
-            responseMessage.setMessage("Uzcard = " + messageCountUzcard + " Humo=" + messageCountHumo);
-        }
         model.addAttribute("humoQueue", messageCountHumo);
         model.addAttribute("message", responseMessage);
 

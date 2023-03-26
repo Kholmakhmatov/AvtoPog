@@ -128,10 +128,8 @@ public class CardController {
         TreeSet<Integer> integers = myBaseUtil.generateCount(allActive.getCount(), page + 1);
         model.addAttribute("count", integers);
         model.addAttribute("page", page + 1);
-        return "cardsOperation";
-
+        return "redirect:/card/operation?id=" + id + "&branch=" + branch;
     }
-
     @GetMapping(path = "/downloadTemplate")
     @CheckRole({RoleEnum.ADMIN, RoleEnum.USER})
     public void downloadTemplate(HttpServletResponse response) {

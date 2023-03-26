@@ -55,15 +55,19 @@ public class CardService {
                 responseDto.setObj(ldSvGateAdd);
                 return responseDto;
             }
-
+            /// Bitta anketada 1 xil card bo'lmasligi kerak
+            int sameCard = jdbcldSvGateAddRepository.findSameCard(ldSvGateAdd);
+            if (sameCard>0){
+                responseDto.setMessage("This card add already this account");
+                responseDto.setObj(ldSvGateAdd);
+                return responseDto;
+            }
             boolean checkExpired = checkExpired(ldSvGateAddCreate);
             if (!checkExpired) {
                 responseDto.setMessage("Check card Expired date");
                 responseDto.setObj(ldSvGateAdd);
                 return responseDto;
             }
-            /// Bitta anketada 1 xil card bo'lmasligi kerak
-
 
             int save = jdbcldSvGateAddRepository.save(ldSvGateAdd);
             if (save == 0) {

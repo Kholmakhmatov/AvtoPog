@@ -34,7 +34,7 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 0 5%;
-
+    margin: 0;
     position: relative;
 }
 
@@ -110,8 +110,8 @@ body {
 }
 
 .hero {
-    height: calc(100vh - 80px);
-    width: 100%;
+    min-height: calc(100vh - 80px);
+
     /*background-image: url(/images/AgroBank_mini.png);*/
     /*background-position: center;*/
     /*background-repeat: no-repeat, repeat;*/
@@ -124,6 +124,6 @@ body {
     background-size: 25%;
     width: 100%;
     position: fixed;
-    z-index: 100;
+    z-index: 9;
     animation-delay: 2s;
 }

@@ -61,7 +61,7 @@
 
             <div class="dropdown-menu">
                 <ul>
-                    <li>
+                    <li th:if="${user.getRole().name()=='ADMIN'}">
                         <a href="/avtoPog/start"><i class="fa-solid fa-play"></i>&nbsp;AvtoPog </a>
 
                     </li>
@@ -119,9 +119,49 @@
                  style="text-align: center;font-size: 18px" th:text="${message.getMessage()}"
             ></div>
         </div>
-        <div id="divHumo" th:if="${humoQueue==0}">
-
-            <div class="wrapper wrapper--w680">
+        <div th:if="${humoQueue>0 and uzcardQueue>0}">
+        <table class="table" style="background: whitesmoke;width: 60%;margin: 0 auto;font-size: 20px;text-align: center">
+            <thead>
+            <tr>
+                <th scope="col">T/r</th>
+                <th scope="col">Type</th>
+                <th scope="col">Queue</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">1</th>
+                <td>UzCard</td>
+                <td style="color: red;font-size: 22px" th:text="${uzcardQueue}"></td>
+            </tr>
+            <tr>
+                <th scope="row">2</th>
+                <td>Humo</td>
+                <td style="color: red;font-size: 22px" th:text="${humoQueue}">Thornton</td>
+            </tr>
+            </tbody>
+        </table>
+        </div>
+        <div id="divHumo" >
+            <div th:if="${humoQueue>0}">
+                <table class="table" style="background: whitesmoke;width: 70%;margin: 0 auto;font-size: 20px;text-align: center">
+                    <thead>
+                    <tr>
+                        <th scope="col">T/r</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Queue</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Humo</td>
+                        <td style="color: red;font-size: 22px" th:text="${humoQueue}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="wrapper wrapper--w680" th:if="${humoQueue==0}">
                 <div class="card card-4">
                     <div class="card-body">
 
@@ -203,8 +243,26 @@
                 </div>
             </div>
         </div>
-        <div id="divuzCard" th:if="${uzcardQueue==0}">
-            <div class="wrapper wrapper--w680">
+        <div id="divuzCard">
+            <div th:if="${uzcardQueue>0}">
+                <table class="table" style="background: whitesmoke;width: 70%;margin: 0 auto;font-size: 20px;text-align: center">
+                    <thead>
+                    <tr>
+                        <th scope="col">T/r</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Queue</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>UzCard</td>
+                        <td style="color: red;font-size: 22px" th:text="${uzcardQueue}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="wrapper wrapper--w680"  th:if="${uzcardQueue==0}">
                 <div class="card card-4">
                     <div class="card-body">
 

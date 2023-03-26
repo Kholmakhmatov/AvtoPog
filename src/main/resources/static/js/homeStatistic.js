@@ -9,7 +9,7 @@ window.onload = function () {
     let listHumo = humoJson.list;
     listUzCard.forEach(element => {
         let obj = {
-            x: new Date(element.localDate[0] - 1, element.localDate[1] - 1, element.localDate[2] - 1),
+            x: new Date(element.localDate[0] , element.localDate[1] - 1, element.localDate[2] ),
             y: element.amount,
             indexLabel: element.indexLabel,
             markerColor: element.markerColor
@@ -18,7 +18,7 @@ window.onload = function () {
     })
     listHumo.forEach(element => {
         let obj = {
-            x: new Date(element.localDate[0] - 1, element.localDate[1] - 1, element.localDate[2] - 1),
+            x: new Date(element.localDate[0] , element.localDate[1] - 1, element.localDate[2] ),
             y: element.amount,
             indexLabel: element.indexLabel,
             markerColor: element.markerColor
@@ -59,8 +59,8 @@ window.onload = function () {
             text: "Company Revenue by Daily"
         },
         axisX: {
-            minimum: new Date(uzCardJson.minimum[0] - 1, uzCardJson.minimum[1] - 1, uzCardJson.minimum[2] - 1),
-            maximum: new Date(humoJson.maximum[0] - 1, humoJson.maximum[1] - 1, humoJson.maximum[2] - 1),
+            minimum: new Date(uzCardJson.minimum[0] , uzCardJson.minimum[1] - 1, uzCardJson.minimum[2] ),
+            maximum: new Date(humoJson.maximum[0] , humoJson.maximum[1] - 1, humoJson.maximum[2] ),
             valueFormatString: "DD MMM",
             labelFontSize: 18,
             labelFontWeight: "bold",
@@ -68,7 +68,9 @@ window.onload = function () {
 
         },
         axisY: {
-            title: "Umumiy miqdor"
+            title: "Umumiy miqdor",
+            labelFontSize: 18,
+            labelFontColor: "black"
         },
         legend: {
             verticalAlign: "top",
@@ -94,7 +96,7 @@ window.onload = function () {
                 showInLegend: true,
                 legendMarkerType: "square",
                 indexLabelFontColor: "dark",
-                indexLabelFontSize: 16,
+                indexLabelFontSize: 18,
                 type: "splineArea",
                 color: "rgba(0,75,141,0.7)",
                 markerSize: 2,
@@ -114,7 +116,10 @@ window.onload = function () {
 
         },
         axisY: {
-            title: "Number of Messages"
+            title: "Number of Messages",
+            labelFontSize: 18,
+
+            labelFontColor: "black"
 
         },
         axisX: {
@@ -148,12 +153,13 @@ window.onload = function () {
             title: "Revenue in USD",
             valueFormatString: "#0,.",
             suffix: "mn",
-            prefix: "$"
+            prefix: "$",
+            labelFontSize: 16,
+            labelFontColor: "black"
         },
         axisX: {
             valueFormatString: "MMMM",
             labelFontSize: 18,
-            labelFontWeight: "bold",
             labelFontColor: "black"
 
         },
@@ -173,7 +179,7 @@ window.onload = function () {
             markerSize: 5,
             name: "Humo",
             indexLabelFontColor: "dark",
-            indexLabelFontSize: 16,
+            indexLabelFontSize: 14,
             xValueFormatString: "MMMM",
             yValueFormatString: "$#,##0.##",
             dataPoints: listFewMonthHumo
@@ -187,7 +193,7 @@ window.onload = function () {
                 xValueFormatString: "MMMM",
                 yValueFormatString: "$#,##0.##",
                 indexLabelFontColor: "blue",
-                indexLabelFontSize: 16,
+                indexLabelFontSize: 14,
                 dataPoints: listFewMonthUzCard
             }
         ]

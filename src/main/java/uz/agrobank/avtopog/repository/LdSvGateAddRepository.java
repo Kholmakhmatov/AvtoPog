@@ -41,4 +41,21 @@ public class LdSvGateAddRepository implements LdSvGateAddRepositoryImp {
         params.addValue("expiryDate",ldSvGateAdd.getExpiryDate());
         return namedParameterJdbcTemplate.update(sql,params);
     }
+
+    @Override
+    public int findSameCard(LdSvGateAdd ldSvGateAdd) {
+        String sql="select COUNT(ID)  from (\n" +
+                "    select ID from LD_SV_GATE where ID=:id and BRANCH=:branch  and CARD_NUMBER=:cardNumber\n" +
+                "                            union all\n" +
+                "    select ID from LD_SV_GATE_ADD where ID=:id2 and BRANCH=:branch2  and CARD_NUMBER=:cardNumber2\n" +
+                "              )";
+        MapSqlParameterSource params=new MapSqlParameterSource();
+        params.addValue("id",ldSvGateAdd.getId());
+        params.addValue("id2",ldSvGateAdd.getId());
+        params.addValue("branch",ldSvGateAdd.getBranch());
+        params.addValue("branch2",ldSvGateAdd.getBranch());
+        params.addValue("cardNumber",ldSvGateAdd.getCardNumber());
+        params.addValue("cardNumber2",ldSvGateAdd.getCardNumber());
+        return namedParameterJdbcTemplate.queryForObject(sql,params,Integer.class);
+    }
 }
